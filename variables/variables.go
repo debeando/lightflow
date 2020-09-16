@@ -7,7 +7,6 @@ import (
 	"github.com/swapbyt3s/lightflow/common"
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/config"
-	"github.com/swapbyt3s/lightflow/register"
 )
 
 // Items is a collection of map:
@@ -16,9 +15,7 @@ type List struct{
 	// by date.
 	CurrentTime time.Time
 	// Variables to use in the template.
-	Items map[string]string
-	// Specific variables used in the pipe,  this used to flush each variables.
-	Pipe map[string]string
+	Items map[string]interface{}
 }
 
 var list *List
@@ -27,7 +24,7 @@ var list *List
 func Load() *List {
 	if list == nil {
 		list = &List{
-			Items: make(map[string]string),
+			Items: make(map[string]interface{}),
 		}
 	}
 
@@ -36,7 +33,7 @@ func Load() *List {
 	list.system()
 	list.config()
 	list.args()
-	list.register()
+	// list.register()
 
 	return list
 }
@@ -66,15 +63,8 @@ func (l *List) args() {
 	}
 }
 
-func (l *List) register() {
-	r := register.Load()
-	for index, value := range r.Get() {
-		l.Items[index] = value
-	}
-}
-
 // Set variables use in the pipe:
-func (l *List) Set(variables map[string]string) {
+func (l *List) Set(variables map[string]interface{}) {
 	for index, value := range variables {
 		l.Items[index] = value
 	}
@@ -90,7 +80,7 @@ func (l *List) Exist(name string) bool {
 }
 
 // Update value on specific variable:
-func (l *List) Update(name string, value string) {
+func (l *List) Update(name string, value interface{}) {
 	if _, ok := l.Items[name]; ok {
 		l.Items[name] = value
 	}

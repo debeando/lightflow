@@ -28,4 +28,7 @@ tasks:
       command: echo -e "{{ .register_test }}"
     - name: print-loop-variable
       command: echo -e "{{ .name }}"
+    - name: curl
+      command: curl --silent ifconfig.me/all.json
+      format: JSON
 `

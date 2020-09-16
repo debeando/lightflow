@@ -1,12 +1,14 @@
 package flow
 
 import (
+	"fmt"
+	"encoding/json"
+
 	"github.com/swapbyt3s/lightflow/command"
 	"github.com/swapbyt3s/lightflow/common"
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/config"
 	"github.com/swapbyt3s/lightflow/flow/template"
-	"github.com/swapbyt3s/lightflow/register"
 	"github.com/swapbyt3s/lightflow/variables"
 )
 
@@ -42,19 +44,33 @@ func Pipe(task int, pipe int, looping int) {
 	tasks := config.File.Tasks
 
 	if pipe >=0 && pipe < len(tasks[task].Pipes) {
-		var r = register.Load()
 		var v = variables.Load()
 		var c string
+		var title string
+		var looping_name string
+		var looping_log_name string
 
 		name := tasks[task].Pipes[pipe].Name
 		cmd := tasks[task].Pipes[pipe].Command
 		cmd = common.TrimNewlines(cmd)
 
+		// Define default value for format:
+		if format := tasks[task].Pipes[pipe].Format; len(format) == 0 {
+			tasks[task].Pipes[pipe].Format = "TEXT"
+		}
+
+		// Define looping name:
+		if looping >=0 && looping < len(tasks[task].Loops) {
+			if name := tasks[task].Loops[looping]["name"]; len(name) > 0 {
+				looping_name = name
+				looping_log_name = fmt.Sprintf("Looping[%s] ", name)
+			}
+		}
 
 		// Add variables from Loops:
 		if len(tasks[task].Loops) > 0 {
 			for variable, value := range tasks[task].Loops[looping] {
-				v.Set(map[string]string{variable: template.Render(string(value))})
+				v.Set(map[string]interface{}{variable: template.Render(string(value))})
 			}
 		}
 
@@ -62,45 +78,71 @@ func Pipe(task int, pipe int, looping int) {
 		v.Set(tasks[task].Pipes[pipe].Variables)
 
 		// Add task and pipe name into variables memory:
-		v.Set(map[string]string {
+		v.Set(map[string]interface{} {
 			"task_name": tasks[task].Name,
+			"looping_name": looping_name,
 			"pipe_name": tasks[task].Pipes[pipe].Name,
 		})
 
-		// Render variables:
+		// Render only variables with variables:
 		for variable, value := range tasks[task].Pipes[pipe].Variables {
-			v.Set(map[string]string{variable: template.Render(string(value))})
+			v.Set(map[string]interface{}{variable: template.Render(value.(string))})
 		}
 
-		// Validate to have all variables defined:
+		// Validate to have all template variables defined:
 		for _, varInTmpl := range template.Variables(cmd) {
 			if v.Exist(varInTmpl) == false {
-				log.Warning("Template", map[string]interface{}{
+				log.Warning(title, map[string]interface{}{
 					"Message": "This variable is not defined",
 					"VariableName": varInTmpl,
 				})
 			}
 		}
 
-		// Render command:
+		// Render command with variables:
 		c = template.Render(cmd)
 
-		// Logging debug details before excute command:
-		log.Debug("Pipe", map[string]interface{}{
-			"Name": name,
-			"Variables": v.Items,
-			"Command": cmd,
-			"Rendered": c,
-		})
+		// Define title for logs:
+		title = fmt.Sprintf(
+			"Task[%s] %sPipe[%s]",
+			tasks[task].Name,
+			looping_log_name,
+			tasks[task].Pipes[pipe].Name,
+		)
 
 		// Execute command:
 		stdout, exit_code := command.Execute(c)
 		stdout = common.TrimNewlines(stdout)
 
 		// Save the stdout on the register:
-		if reg := tasks[task].Pipes[pipe].Register; len(reg) > 0 {
-			r.Save(reg, stdout)
+		switch tasks[task].Pipes[pipe].Format {
+		case "TEXT":
+			if reg := tasks[task].Pipes[pipe].Register; len(reg) > 0 {
+				v.Set(map[string]interface{}{reg: stdout})
+			}
+		case "JSON":
+			var raw map[string]interface{}
+			if err := json.Unmarshal([]byte(stdout), &raw); err != nil {
+				log.Error(title, map[string]interface{}{
+					"Message": "Format JSON invalid or Format type is invalid",
+					"Error": err,
+				})
+			} else {
+				for variable, value := range raw {
+					v.Set(map[string]interface{}{variable: value})
+				}
+			}
+		default:
+			log.Warning(title, map[string]interface{}{
+				"Message": "Format option is invalid, please use; TEXT (default) or JSON",
+				"Format": tasks[task].Pipes[pipe].Format,
+			})
 		}
+
+		// Logging debug details before excute command:
+		log.Debug(title, map[string]interface{}{
+			"Variables": v.Items,
+		})
 
 		// Print command output logging by error code:
 		msg := map[string]interface{}{
@@ -110,9 +152,9 @@ func Pipe(task int, pipe int, looping int) {
 		}
 
 		if exit_code == 0 {
-			log.Info("Pipe", msg)
+			log.Info(title, msg)
 		} else {
-			log.Error("Pipe", msg)
+			log.Error(title, msg)
 		}
 	}
 }

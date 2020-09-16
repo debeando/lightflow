@@ -2,7 +2,6 @@ package flow
 
 import (
 	"github.com/swapbyt3s/lightflow/common"
-	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/config"
 )
 
@@ -30,8 +29,6 @@ func Task(index int) {
 	tasks := config.File.Tasks
 
 	if index >=0 && index < len(tasks) {
-		log.Info("Task", map[string]interface{}{"Name": tasks[index].Name })
-
 		LoadLoops(index)
 	}
 }
