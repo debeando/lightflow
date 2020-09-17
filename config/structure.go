@@ -1,9 +1,5 @@
 package config
 
-import (
-	"time"
-)
-
 // All is a struct to contain all configuration imported or loaded from config file.
 type Structure struct {
 	Path    string
@@ -24,7 +20,7 @@ type Structure struct {
 			Format string `yaml:"format"`                       // Formato de la variable, si es JSON, un MySQL stdout, CSV, etc... que se anade luego a las variables.
 			While string `yaml:"while"`                         // Condición para salir del reintento, se usan las variables, por eso el format.
 			Retry int `yaml:"retry"`                            // Cuantas veces se reintenta el comando.
-			Wait time.Duration `yaml:"wait"`                    // Cuando tiempo debe transcurrir entre reintento.
+			Wait int `yaml:"wait"`                              // Cuando tiempo debe transcurrir entre reintento.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
 		}
 	}
