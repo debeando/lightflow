@@ -40,7 +40,7 @@ func Load() *List {
 
 // Load variables in the config file:
 func (l *List) config() {
-	l.Items["path"] = config.File.General.Temporary_Directory
+	l.Items["path"] = config.Load().General.Temporary_Directory
 }
 
 // Build standard variables:

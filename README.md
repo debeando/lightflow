@@ -1,5 +1,7 @@
 # lightflow
 
+Creo que debería renombrar el proyecto a Helium, vamos a ver que otro nombre hay mejor.
+
 ## Todo:
 
 - Validate name of variable use lowercase

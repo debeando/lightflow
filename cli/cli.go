@@ -70,7 +70,7 @@ func Run() {
 		fmt.Printf(example.GetConfigFile())
 	}
 
-	if err := config.File.Load(*fConfig); err != nil {
+	if err := config.Load().Read(*fConfig); err != nil {
 		log.Error("Config", map[string]interface{}{"error": err})
 		os.Exit(1)
   	}

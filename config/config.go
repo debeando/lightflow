@@ -9,28 +9,30 @@ import (
 	"github.com/go-yaml/yaml"
 )
 
-var File Config
+var config *Structure
 
-// Init does any initialization necessary for the module.
-func init() {
-	File = Config{
-		Path: "/etc/lightflow/lightflow.yaml",
+func Load() *Structure {
+	if config == nil {
+		config = &Structure{
+			Path: "/etc/lightflow/lightflow.yaml",
+		}
 	}
+	return config
 }
 
-func (c *Config) Load(file_name string) error {
+func (s *Structure) Read(file_name string) error {
 	if len(file_name) == 0 {
 		file_name = "lightflow.yaml"
 	}
 
-	source, err := ioutil.ReadFile(c.Path)
+	source, err := ioutil.ReadFile(s.Path)
 	if err != nil {
 		source, err = ioutil.ReadFile(file_name)
 		if err != nil {
 			return errors.New(fmt.Sprintf(
 				"Fail to read config file: %s, %s or %s",
 				file_name,
-				c.Path,
+				s.Path,
 				"./lightflow.yaml"),
 			)
 		}
@@ -38,7 +40,7 @@ func (c *Config) Load(file_name string) error {
 
 	source = []byte(os.ExpandEnv(string(source)))
 
-	if err := yaml.Unmarshal(source, &c); err != nil {
+	if err := yaml.Unmarshal(source, &s); err != nil {
 		errors.New(fmt.Sprintf("Imposible to parse config file - %s", err))
 	}
 
