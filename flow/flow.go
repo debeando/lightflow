@@ -83,7 +83,6 @@ func Execute() {
 
 	cmd  = common.TrimNewlines(cmd)
 
-
 	// Define default values:
 	if format := registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Format; len(format) == 0 {
 		registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Format = "TEXT"
