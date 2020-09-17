@@ -31,7 +31,7 @@ func Configure() {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 
-	if config.File.General.Debug {
+	if config.Load().General.Debug {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 }

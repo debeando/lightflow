@@ -3,6 +3,8 @@ package command
 import (
 	"os/exec"
 	"syscall"
+
+	"github.com/swapbyt3s/lightflow/common"
 )
 
 func Execute(cmd string) (stdout string, exitcode int) {
@@ -15,6 +17,7 @@ func Execute(cmd string) (stdout string, exitcode int) {
 		}
 	}
 	stdout = string(out[:])
+	stdout = common.TrimNewlines(stdout)
 
 	return
 }
