@@ -41,6 +41,9 @@ func Run() {
 					}
 
 					if status := v.Get(registry.Load().GetRetryStatus()); common.InterfaceToString(status) == registry.Load().GetRetryDone() {
+						log.Info(Title(), map[string]interface{}{
+							"Message": "Finish retry, apparently everything is fine.",
+						})
 						return false
 					}
 
