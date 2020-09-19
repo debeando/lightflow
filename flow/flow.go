@@ -28,8 +28,17 @@ func Run() {
 
 				retry.Retry(3, func() bool {
 					Execute()
-					// fmt.Println("Test")
-					return true
+
+					// Log and retry by error:
+					var v = variables.Load()
+					if error := v.Items["error"]; error != nil && len(fmt.Sprintf("%v", error)) > 0 {
+						log.Error(Title(), map[string]interface{}{
+							"Message": error,
+						})
+						return true
+					}
+
+					return false
 				})
 			})
 		})
@@ -128,15 +137,6 @@ func Execute() {
 		log.Warning(Title(), map[string]interface{}{
 			"Message": "Format option is invalid, please use; TEXT (default) or JSON",
 			"Format": registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Format,
-		})
-	}
-
-	// Evaluate to retry:
-	if v.Items["status"] == "error" {
-		v.Set(map[string]interface{}{"retry_command": false})
-
-		log.Error(Title(), map[string]interface{}{
-			"Message": v.Items["errors"],
 		})
 	}
 
