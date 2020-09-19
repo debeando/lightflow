@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/swapbyt3s/lightflow/flow/expression"
+	"github.com/swapbyt3s/lightflow/variables"
 )
 
 type Case struct {
@@ -12,10 +13,14 @@ type Case struct {
 }
 
 func TestEvaluate(t *testing.T) {
+	variables.Load().Set(map[string]interface{}{
+		"X": "Z",
+		"Y": "Z",
+	})
+
 	var cases = []Case{
-		{ Expression: `true == true`,  Result: true },
-		// Se comenta, porque aún no se ha podido resolver este caso.
-		// { Expression: `true == false`, Result: false },
+		{ Expression: `X == "Z"`,      Result: true },
+		{ Expression: `"Z" == Y`,      Result: true },
 		{ Expression: `1 == 1`,        Result: true },
 		{ Expression: `1 == 2`,        Result: false },
 		{ Expression: `"A" == "A"`,    Result: true },
@@ -32,9 +37,3 @@ func TestEvaluate(t *testing.T) {
 		}
 	}
 }
-
-/*
- * Links a revisar:
- * https://github.com/dave/brenda
- * https://blog.gopheracademy.com/advent-2014/parsers-lexers/
- */

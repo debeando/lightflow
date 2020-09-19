@@ -7,6 +7,7 @@ import (
 	"github.com/swapbyt3s/lightflow/common"
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/command"
+	"github.com/swapbyt3s/lightflow/flow/expression"
 	"github.com/swapbyt3s/lightflow/flow/loops"
 	"github.com/swapbyt3s/lightflow/flow/pipes"
 	"github.com/swapbyt3s/lightflow/flow/retry"
@@ -26,19 +27,19 @@ func Run() {
 			p.Run(func(){
 				Populate()
 
-				retry.Retry(3, func() bool {
+				retry.Retry(registry.Load().GetRetryAttempts(), func() bool {
+					// Execute the command:
 					Execute()
 
-					// Log and retry by error:
+					// Log possible error and retry it is true the error:
 					var v = variables.Load()
-					if error := v.Items["error"]; error != nil && len(fmt.Sprintf("%v", error)) > 0 {
+					if error := v.Get(registry.Load().GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
 						log.Error(Title(), map[string]interface{}{
 							"Message": error,
 						})
-						return true
 					}
 
-					return false
+					return ! expression.Evaluate(registry.Load().GetRetryWhile())
 				})
 			})
 		})

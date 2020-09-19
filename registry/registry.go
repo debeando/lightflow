@@ -1,6 +1,8 @@
 package registry
 
 import (
+	"time"
+
 	"github.com/swapbyt3s/lightflow/config"
 )
 
@@ -43,4 +45,26 @@ func (r *Registry) GetPipeName() string {
 		return name
 	}
 	return ""
+}
+
+func (r *Registry) GetRetryAttempts() int {
+	return r.Config.Tasks[r.Task].Pipes[r.Pipe].Retry.Attempts
+}
+
+func (r *Registry) GetRetryWait() time.Duration {
+	return time.Duration(r.Config.Tasks[r.Task].Pipes[r.Pipe].Retry.Wait)
+}
+
+func (r *Registry) GetRetryError() string {
+	value := r.Config.Tasks[r.Task].Pipes[r.Pipe].Retry.Error
+
+	if len(value) == 0 {
+		value = "error"
+	}
+
+	return value
+}
+
+func (r *Registry) GetRetryWhile() string {
+	return r.Config.Tasks[r.Task].Pipes[r.Pipe].Retry.While
 }

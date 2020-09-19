@@ -70,6 +70,13 @@ func (l *List) Set(variables map[string]interface{}) {
 	}
 }
 
+func (l *List) Get(name string) interface{} {
+	if value, ok := l.Items[name]; ok {
+		return value
+	}
+	return nil
+}
+
 // Verify the variable name exist on the list:
 func (l *List) Exist(name string) bool {
 	if _, ok := l.Items[name]; ok {

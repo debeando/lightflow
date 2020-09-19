@@ -1,6 +1,7 @@
 package common
 
 import (
+	"fmt"
 	"flag"
 )
 
@@ -17,6 +18,10 @@ func IsArgDefined(name string) bool {
 	}
 
 	return true
+}
+
+func InterfaceToString(value interface{}) string {
+	return fmt.Sprintf("%v", value)
 }
 
 func TrimNewlines(text string) string {
