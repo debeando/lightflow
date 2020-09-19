@@ -7,7 +7,6 @@ import (
 	"github.com/swapbyt3s/lightflow/common"
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/command"
-	"github.com/swapbyt3s/lightflow/flow/expression"
 	"github.com/swapbyt3s/lightflow/flow/loops"
 	"github.com/swapbyt3s/lightflow/flow/pipes"
 	"github.com/swapbyt3s/lightflow/flow/retry"
@@ -31,15 +30,21 @@ func Run() {
 					// Execute the command:
 					Execute()
 
+
 					// Log possible error and retry it is true the error:
 					var v = variables.Load()
 					if error := v.Get(registry.Load().GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
 						log.Error(Title(), map[string]interface{}{
 							"Message": error,
 						})
+						return false
 					}
 
-					return ! expression.Evaluate(registry.Load().GetRetryWhile())
+					if status := v.Get(registry.Load().GetRetryStatus()); common.InterfaceToString(status) == registry.Load().GetRetryDone() {
+						return false
+					}
+
+					return true
 				})
 			})
 		})
@@ -78,7 +83,7 @@ func Populate() {
 		}
 	}
 
-	// Store variables in memory:
+	// Store config variables in memory:
 	v.Set(registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Variables)
 
 	// Render only variables with variables:
@@ -132,6 +137,9 @@ func Execute() {
 		} else {
 			for variable, value := range raw {
 				v.Set(map[string]interface{}{variable: value})
+				log.Debug(Title(), map[string]interface{}{
+					variable: value,
+				})
 			}
 		}
 	default:

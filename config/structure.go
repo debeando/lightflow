@@ -20,8 +20,8 @@ type Structure struct {
 			Format string `yaml:"format"`                       // Formato de la variable, si es JSON, un MySQL stdout, CSV, etc... que se anade luego a las variables.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
 			Retry struct {
-				While string `yaml:"while"`                     // Condición para salir del reintento, se usan las variables, por eso el format.
-				                                                // Conditions: (status == "done") si la condición es == true sale del Retry.
+				Status string `yaml:"status"`                   //
+				Done string `yaml:"done"`                       //
 				Attempts int `yaml:"attempts"`                  // Cuantas veces se reintenta el comando.
 				Wait int `yaml:"wait"`                          // Cuando tiempo debe transcurrir entre reintentos.
 				Error string `yaml:"error"`                     // Variable que indica la existencia de un error, incluso se usa para volver hacer el reintento.

@@ -65,6 +65,22 @@ func (r *Registry) GetRetryError() string {
 	return value
 }
 
-func (r *Registry) GetRetryWhile() string {
-	return r.Config.Tasks[r.Task].Pipes[r.Pipe].Retry.While
+func (r *Registry) GetRetryStatus() string {
+	value := r.Config.Tasks[r.Task].Pipes[r.Pipe].Retry.Status
+
+	if len(value) == 0 {
+		value = "status"
+	}
+
+	return value
+}
+
+func (r *Registry) GetRetryDone() string {
+	value := r.Config.Tasks[r.Task].Pipes[r.Pipe].Retry.Done
+
+	if len(value) == 0 {
+		value = "done"
+	}
+
+	return value
 }
