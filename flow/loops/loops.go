@@ -5,12 +5,12 @@ import (
 	"github.com/swapbyt3s/lightflow/registry"
 )
 
-type Looping struct {
+type Loop struct {
 	Index int
 }
 
-func (l *Looping) Run(fn func()) {
-	if common.IsArgDefined("looping") {
+func (l *Loop) Run(fn func()) {
+	if common.IsArgDefined("loop") {
 		l.Position()
 		l.One(fn)
 	} else {
@@ -22,18 +22,18 @@ func (l *Looping) Run(fn func()) {
 	}
 }
 
-func (l *Looping) Set(index int) {
+func (l *Loop) Set(index int) {
 	l.Index = index
-	registry.Load().Looping = index
+	registry.Load().Loop = index
 }
 
-func (l *Looping) Position() {
-	arg := common.GetArgVal("looping")
+func (l *Loop) Position() {
+	arg := common.GetArgVal("loop")
 
-	for looping := range registry.Load().Config.Tasks[registry.Load().Task].Loops {
-		if name := registry.Load().Config.Tasks[registry.Load().Task].Loops[looping]["name"]; len(name) > 0 {
+	for loop := range registry.Load().Config.Tasks[registry.Load().Task].Loops {
+		if name := registry.Load().Config.Tasks[registry.Load().Task].Loops[loop]["name"]; len(name) > 0 {
 			if name == arg {
-				l.Set(looping)
+				l.Set(loop)
 				return
 			}
 		}
@@ -42,13 +42,13 @@ func (l *Looping) Position() {
 	l.Set(0)
 }
 
-func (l *Looping) All(fn func()) {
+func (l *Loop) All(fn func()) {
 	for index := range registry.Load().Config.Tasks[registry.Load().Task].Loops {
 		l.Set(index)
 		l.One(fn)
 	}
 }
 
-func (l *Looping) One(fn func()) {
+func (l *Loop) One(fn func()) {
  	fn()
 }

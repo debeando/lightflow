@@ -2,6 +2,7 @@ package flow
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 
 	"github.com/swapbyt3s/lightflow/common"
@@ -18,7 +19,7 @@ import (
 
 func Run() {
 	t := tasks.Task{}
-	l := loops.Looping{}
+	l := loops.Loop{}
 	p := pipes.Pipe{}
 
 	t.Run(func() {
@@ -27,27 +28,44 @@ func Run() {
 				Populate()
 
 				retry.Retry(registry.Load().GetRetryAttempts(), func() bool {
-					// Execute the command:
-					Execute()
+					if flag.Lookup("dry-run") != nil && flag.Lookup("dry-run").Value.(flag.Getter).Get().(bool) {
+						var cmd = registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Command
 
+						// Render command with variables:
+						cmd = template.Render(cmd)
+						cmd = common.TrimNewlines(cmd)
 
-					// Log possible error and retry it is true the error:
-					var v = variables.Load()
-					if error := v.Get(registry.Load().GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
-						log.Error(Title(), map[string]interface{}{
-							"Message": error,
+						log.Warning(Title(), map[string]interface{}{
+							"Safe Command (dry-run)": cmd,
 						})
-						return false
-					}
 
-					if status := v.Get(registry.Load().GetRetryStatus()); common.InterfaceToString(status) == registry.Load().GetRetryDone() {
-						log.Info(Title(), map[string]interface{}{
-							"Message": "Finish retry, apparently everything is fine.",
+						return false
+					} else {
+						// Execute the command:
+						log.Info(Title() + " Start", nil)
+						diff := common.Duration(func(){
+							Execute()
 						})
-						return false
-					}
+						log.Info(Title() + " End", map[string]interface{}{"ExecutionTime": diff})
 
-					return true
+						// Log possible error and retry it is true the error:
+						var v = variables.Load()
+						if error := v.Get(registry.Load().GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
+							log.Error(Title(), map[string]interface{}{
+								"Message": error,
+							})
+							return false
+						}
+
+						if status := v.Get(registry.Load().GetRetryStatus()); common.InterfaceToString(status) == registry.Load().GetRetryDone() {
+							log.Info(Title(), map[string]interface{}{
+								"Message": "Finish retry, apparently everything is fine.",
+							})
+							return false
+						}
+
+						return true
+					}
 				})
 			})
 		})
@@ -56,17 +74,17 @@ func Run() {
 
 func Title() string {
 	var task string
-	var looping string
+	var loop string
 	var pipe string
 
 	task = fmt.Sprintf("Task[%s]", registry.Load().GetTaskName())
-	looping = fmt.Sprintf(" Looping[%s]", registry.Load().GetLoopingName())
+	loop = fmt.Sprintf(" Loop[%s]", registry.Load().GetLoopName())
 	pipe = fmt.Sprintf(" Pipe[%s]", registry.Load().GetPipeName())
 
 	return fmt.Sprintf(
 		"%s%s%s",
 		task,
-		looping,
+		loop,
 		pipe,
 	)
 }
@@ -74,15 +92,15 @@ func Title() string {
 func Populate() {
 	var v = variables.Load()
 
-	// Set default variables abour flow: task, looping, pipe.
+	// Set default variables abour flow: task, loop, pipe.
 	v.Set(map[string]interface{} {"task_name": registry.Load().GetTaskName()})
-	v.Set(map[string]interface{} {"looping_name": registry.Load().GetLoopingName()})
+	v.Set(map[string]interface{} {"loop_name": registry.Load().GetLoopName()})
 	v.Set(map[string]interface{} {"pipe_name": registry.Load().GetPipeName()})
 
 	// Add variables from Loops:
 	if len(registry.Load().Config.Tasks[registry.Load().Task].Loops) > 0 {
-		for variable, value := range registry.Load().Config.Tasks[registry.Load().Task].Loops[registry.Load().Looping] {
-			v.Set(map[string]interface{}{variable: string(value)})
+		for variable, value := range registry.Load().Config.Tasks[registry.Load().Task].Loops[registry.Load().Loop] {
+			v.Set(map[string]interface{}{variable: common.TrimNewlines(string(value))})
 		}
 	}
 
@@ -90,8 +108,15 @@ func Populate() {
 	v.Set(registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Variables)
 
 	// Render only variables with variables:
+	// No me gusta esta parte, hay que mejorarla, los dos for:
 	for variable, value := range registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Variables {
-		v.Set(map[string]interface{}{variable: template.Render(value.(string))})
+		v.Set(map[string]interface{}{variable: template.Render(common.TrimNewlines(value.(string)))})
+	}
+
+	for variable, value := range v.Items {
+		if value, ok := value.(string); ok {
+			v.Set(map[string]interface{}{variable: template.Render(common.TrimNewlines(value))})
+		}
 	}
 }
 
@@ -140,9 +165,6 @@ func Execute() {
 		} else {
 			for variable, value := range raw {
 				v.Set(map[string]interface{}{variable: value})
-				log.Debug(Title(), map[string]interface{}{
-					variable: value,
-				})
 			}
 		}
 	default:
@@ -154,19 +176,16 @@ func Execute() {
 
 	// Log all variables:
 	log.Debug(Title(), map[string]interface{}{
+		"ExitCode": exit_code,
+		"Stdout": stdout,
 		"Variables": variables.Load().Items,
 	})
 
 	// Print command output logging by error code:
-	msg := map[string]interface{}{
-		"Name": Title(),
-		"stdout": stdout,
-		"Exit Code": exit_code,
-	}
-
-	if exit_code == 0 {
-		log.Info(Title(), msg)
-	} else {
-		log.Error(Title(), msg)
+	if exit_code > 0 {
+		log.Error(Title(), map[string]interface{}{
+			"ExitCode": exit_code,
+			"Stdout": stdout,
+		})
 	}
 }

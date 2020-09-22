@@ -9,7 +9,7 @@ tasks:
       - name: A1
         case: case1
       - name: A2
-        case: case2
+        case: "DATE ({{ .year }}-{{ .month }}-{{ .day }})"
     pipes:
     - name: print-path
       command: >
@@ -31,4 +31,8 @@ tasks:
     - name: curl
       command: curl --silent ifconfig.me/all.json
       format: JSON
+    - name: print-loop-case-variable
+      command: echo -e "{{ .casex }}"
+      variables:
+          casex: "XXX {{ .case }}"
 `

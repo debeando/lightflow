@@ -9,7 +9,7 @@ import (
 type Registry struct{
 	Config *config.Structure
 	Task int
-	Looping int
+	Loop int
 	Pipe int
 }
 
@@ -31,9 +31,9 @@ func (r *Registry) GetTaskName() string {
 	return ""
 }
 
-func (r *Registry) GetLoopingName() string {
+func (r *Registry) GetLoopName() string {
 	if len (r.Config.Tasks[r.Task].Loops) > 0 {
-		if name := r.Config.Tasks[r.Task].Loops[r.Looping]["name"]; len(name) > 0 {
+		if name := r.Config.Tasks[r.Task].Loops[r.Loop]["name"]; len(name) > 0 {
 			return name
 		}
 	}

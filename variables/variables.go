@@ -46,9 +46,11 @@ func (l *List) config() {
 // Build standard variables:
 func (l *List) system() {
 	l.CurrentTime = time.Now()
-	l.Items["date"] = l.CurrentTime.Format("2006-01-02")
-	l.Items["year"] = l.CurrentTime.Format("2006")
-	l.Items["hour"] = l.CurrentTime.Format("15")
+	l.Items["date"]  = l.CurrentTime.Format("2006-01-02")
+	l.Items["year"]  = l.CurrentTime.Format("2006")
+	l.Items["month"] = l.CurrentTime.Format("01")
+	l.Items["day"]   = l.CurrentTime.Format("02")
+	l.Items["hour"]  = l.CurrentTime.Format("15")
 }
 
 // Load variables bypass JSON arguments in the command line:

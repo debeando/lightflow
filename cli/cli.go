@@ -23,13 +23,14 @@ Usage:
 
 Options:
 
-  --help       Show this help.
-  --example    Print out full sample configuration to stdout.
   --config     Using specific config file.
-  --task       Task name to execute.
-  --looping    Filter by looping.
-  --pipe       Task name to execute.
   --debug      Enable debug mode.
+  --dry-run    No execute commands.
+  --example    Print out full sample configuration to stdout.
+  --help       Show this help.
+  --loop       Filter by loop name.
+  --pipe       Filter by pipe name.
+  --task       Filter by task name.
   --variables  Passing variables on tasks.
   --version    Print version numbers.
 
@@ -39,9 +40,11 @@ Default variables:
 
 	- date
 	- year
+	- month
+	- day
 	- hour
 
-	You can rewrite default variables by passing on --variables with same name.
+	You can rewrite default variables by passing in JSON on --variables with same name.
 
 For more help, plese visit: https://github.com/swapbyt3s/ligthflow/wiki
 `
@@ -52,9 +55,10 @@ func Run() {
 	fVersion := flag.Bool("version", false, "Show version.")
 	fConfig := flag.String("config", "", "Using specific config file.")
 	_ = flag.Bool("debug", false, "Enable debug mode.")
-	_ = flag.String("task", "", "Task name to execute.")
-	_ = flag.String("looping", "", "Filter by looping.")
-	_ = flag.String("pipe", "", "Pipe name to execute on task.")
+	_ = flag.Bool("dry-run", false, "No execute commands.")
+	_ = flag.String("task", "", "Filter by task name.")
+	_ = flag.String("loop", "", "Filter by loop.")
+	_ = flag.String("pipe", "", "Filter by pipe name.")
 	_ = flag.String("variables", "", "Variables in JSON format.")
 
 	flag.Usage = func() { help(1) }

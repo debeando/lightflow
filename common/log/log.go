@@ -15,6 +15,7 @@ func init() {
 	logrus.SetLevel(logrus.ErrorLevel)
 	logrus.SetFormatter(&logrus.TextFormatter{
 		FullTimestamp: true,
+		DisableQuote: true,
 	})
 
 	if flag.Lookup("test.v") != nil {

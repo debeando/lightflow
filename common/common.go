@@ -1,6 +1,7 @@
 package common
 
 import (
+	"time"
 	"fmt"
 	"flag"
 )
@@ -57,4 +58,14 @@ func TrimNewlines(text string) string {
 	}
 
 	return string(r)
+}
+
+func Duration(fn func()) string {
+	t1 := time.Now()
+	fn()
+	t2 := time.Now()
+	diff := t2.Sub(t1)
+	out := time.Time{}.Add(diff)
+
+	return fmt.Sprintln(out.Format("15:04:05"))
 }
