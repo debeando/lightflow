@@ -10,7 +10,7 @@ type Loop struct {
 }
 
 func (l *Loop) Run(fn func()) {
-	if common.IsArgDefined("loop") {
+	if common.IsArgDefined("loop") && len(common.GetArgVal("loop").(string)) > 0 {
 		l.Position()
 		l.One(fn)
 	} else {

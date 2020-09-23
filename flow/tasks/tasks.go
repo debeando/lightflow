@@ -10,7 +10,7 @@ type Task struct {
 }
 
 func (t *Task) Run(fn func()) {
-	if common.IsArgDefined("task") {
+	if common.IsArgDefined("task") && len(common.GetArgVal("task").(string)) > 0 {
 		t.Position()
 		t.One(fn)
 	} else {

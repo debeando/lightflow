@@ -1,6 +1,8 @@
 package pipes
 
 import (
+	// "fmt"
+
 	"github.com/swapbyt3s/lightflow/common"
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/registry"
@@ -16,12 +18,14 @@ func (p *Pipe) Run(fn func()) {
 		return
 	}
 
-	if common.IsArgDefined("pipe") {
+	if common.IsArgDefined("pipe") && len(common.GetArgVal("pipe").(string)) > 0 {
+		// fmt.Println("p")
 		if len(registry.Load().Config.Tasks[registry.Load().Task].Pipes) >= 1 {
 			p.Position()
 			p.One(fn)
 		}
 	} else {
+		// fmt.Println("all")
 		if len(registry.Load().Config.Tasks[registry.Load().Task].Pipes) > 1 {
 			p.All(fn)
 		} else if len(registry.Load().Config.Tasks[registry.Load().Task].Pipes) == 1 {
@@ -65,12 +69,13 @@ func (p *Pipe) Validate() bool {
 		return false
 	}
 
-	if common.IsArgDefined("pipe") {
+	if common.IsArgDefined("pipe") && len(common.GetArgVal("pipe").(string)) > 0 {
 		p.Name = common.GetArgVal("pipe").(string)
-		if !p.Exist() {
+		if len(p.Name) > 0 && !p.Exist() {
 			log.Error("Pipe name passed by argument does not exist in manifest.", nil)
 			return false
 		}
+
 	}
 
 	return true
