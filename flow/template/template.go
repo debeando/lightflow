@@ -1,5 +1,8 @@
 package template
 
+// NOTES:
+// - Sacar la gestion de errores de aquí.
+
 import (
 	"bytes"
 	"regexp"
@@ -7,11 +10,9 @@ import (
 	"text/template"
 
 	"github.com/swapbyt3s/lightflow/common/log"
-	"github.com/swapbyt3s/lightflow/variables"
 )
 
-func Render(text_template string) string {
-	var v = variables.Load()
+func Render(text_template string, variables map[string]interface{}) string {
 	var b bytes.Buffer
 
 	t, err := template.New("").Parse(text_template)
@@ -19,7 +20,7 @@ func Render(text_template string) string {
 		log.Warning("Render", map[string]interface{}{"Message": err.Error()})
 	}
 
-	if err := t.Execute(&b, v.Items); err != nil {
+	if err := t.Execute(&b, variables); err != nil {
 		log.Warning("Render", map[string]interface{}{"Message": err.Error()})
 	}
 

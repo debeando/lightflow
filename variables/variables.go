@@ -30,7 +30,6 @@ func Load() *List {
 
 	// This method are out singleton declaration to build and rebuild
 	// variables list.
-	list.system()
 	list.config()
 	list.args()
 	// list.register()
@@ -44,7 +43,7 @@ func (l *List) config() {
 }
 
 // Build standard variables:
-func (l *List) system() {
+func (l *List) SetDefaults() {
 	l.CurrentTime = time.Now()
 	l.Items["date"]  = l.CurrentTime.Format("2006-01-02")
 	l.Items["year"]  = l.CurrentTime.Format("2006")
@@ -55,7 +54,7 @@ func (l *List) system() {
 
 // Load variables bypass JSON arguments in the command line:
 func (l *List) args() {
-	args_vars := common.GetArgVal("variables")
+	args_vars := common.GetArgVal("variables").(string)
 
 	if len(args_vars) >= 2 {
 		err := json.Unmarshal([]byte(args_vars), &l.Items)
@@ -93,4 +92,8 @@ func (l *List) Update(name string, value interface{}) {
 	if _, ok := l.Items[name]; ok {
 		l.Items[name] = value
 	}
+}
+
+func (l *List) SetDate(date string) {
+	l.Items["date"] = common.StringToDate(date).Format("2006-01-02")
 }

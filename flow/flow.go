@@ -2,12 +2,13 @@ package flow
 
 import (
 	"encoding/json"
-	"flag"
+	// "flag"
 	"fmt"
 
 	"github.com/swapbyt3s/lightflow/common"
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/command"
+	"github.com/swapbyt3s/lightflow/flow/autoincrement"
 	"github.com/swapbyt3s/lightflow/flow/loops"
 	"github.com/swapbyt3s/lightflow/flow/pipes"
 	"github.com/swapbyt3s/lightflow/flow/retry"
@@ -25,72 +26,78 @@ func Run() {
 	t.Run(func() {
 		l.Run(func() {
 			p.Run(func(){
-				Populate()
+				variables.Load().SetDefaults()
 
-				retry.Retry(registry.Load().GetRetryAttempts(), func() bool {
-					if flag.Lookup("dry-run") != nil && flag.Lookup("dry-run").Value.(flag.Getter).Get().(bool) {
-						var cmd = registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Command
+				err := autoincrement.Date(
+					getAutoIncrementStartDate(),
+					getAutoIncrementEndDate(),
+					func(date string){
+						variables.Load().SetDate(date)
 
-						// Render command with variables:
-						cmd = template.Render(cmd)
-						cmd = common.TrimNewlines(cmd)
+						Populate()
 
-						log.Warning(Title(), map[string]interface{}{
-							"Safe Command (dry-run)": cmd,
-						})
+						retry.Retry(
+							registry.Load().GetRetryAttempts(),
+							registry.Load().GetRetryWait(),
+							func() bool {
+								cmd := RenderCommand()
 
-						return false
-					} else {
-						// Execute the command:
-						log.Info(Title() + " Start", nil)
-						diff := common.Duration(func(){
-							Execute()
-						})
-						log.Info(Title() + " End", map[string]interface{}{"ExecutionTime": diff})
+								if common.GetArgVal("dry-run").(bool) {
+									fmt.Println(cmd)
 
-						// Log possible error and retry it is true the error:
-						var v = variables.Load()
-						if error := v.Get(registry.Load().GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
-							log.Error(Title(), map[string]interface{}{
-								"Message": error,
+									return false
+								} else {
+									// Execute the command:
+									log.Info(Title() + " Start...", nil)
+									diff := common.Duration(func(){
+										Execute(cmd)
+									})
+									log.Info(Title() + " End!", map[string]interface{}{"Execution Time": diff})
+
+									// LogError
+									// Log possible error and retry it is true the error:
+									var v = variables.Load()
+									if error := v.Get(registry.Load().GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
+										log.Error(Title(), map[string]interface{}{
+											"Message": error,
+										})
+										return false
+									}
+
+									// RetryCondition?
+									// Si el status que retorna el stdout es diferente reintenta
+									if status := v.Get(registry.Load().GetRetryStatus()); common.InterfaceToString(status) == registry.Load().GetRetryDone() {
+										return false
+									}
+
+									// Meter todo lo anterior en un RetryPipe() bool { ... return ...}
+									return true
+								}
+
+								return true
 							})
-							return false
-						}
+					})
 
-						if status := v.Get(registry.Load().GetRetryStatus()); common.InterfaceToString(status) == registry.Load().GetRetryDone() {
-							log.Info(Title(), map[string]interface{}{
-								"Message": "Finish retry, apparently everything is fine.",
-							})
-							return false
-						}
-
-						return true
+					if err != nil {
+						log.Error(err.Error(), nil)
 					}
-				})
 			})
 		})
 	})
 }
 
 func Title() string {
-	var task string
-	var loop string
-	var pipe string
-
-	task = fmt.Sprintf("Task[%s]", registry.Load().GetTaskName())
-	loop = fmt.Sprintf(" Loop[%s]", registry.Load().GetLoopName())
-	pipe = fmt.Sprintf(" Pipe[%s]", registry.Load().GetPipeName())
-
 	return fmt.Sprintf(
 		"%s%s%s",
-		task,
-		loop,
-		pipe,
+		fmt.Sprintf("Task[%s]", registry.Load().GetTaskName()),
+		fmt.Sprintf(" Loop[%s]", registry.Load().GetLoopName()),
+		fmt.Sprintf(" Pipe[%s]", registry.Load().GetPipeName()),
 	)
 }
 
 func Populate() {
 	var v = variables.Load()
+	// v.SetDefaults()
 
 	// Set default variables abour flow: task, loop, pipe.
 	v.Set(map[string]interface{} {"task_name": registry.Load().GetTaskName()})
@@ -110,45 +117,29 @@ func Populate() {
 	// Render only variables with variables:
 	// No me gusta esta parte, hay que mejorarla, los dos for:
 	for variable, value := range registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Variables {
-		v.Set(map[string]interface{}{variable: template.Render(common.TrimNewlines(value.(string)))})
+		v.Set(map[string]interface{}{variable: template.Render(common.TrimNewlines(value.(string)), v.Items)})
 	}
 
 	for variable, value := range v.Items {
 		if value, ok := value.(string); ok {
-			v.Set(map[string]interface{}{variable: template.Render(common.TrimNewlines(value))})
+			v.Set(map[string]interface{}{variable: template.Render(common.TrimNewlines(value), v.Items)})
 		}
 	}
-}
-
-func Execute() {
-	var v = variables.Load()
-	var cmd = registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Command
-
-	cmd  = common.TrimNewlines(cmd)
 
 	// Define default values:
 	if format := registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Format; len(format) == 0 {
 		registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Format = "TEXT"
 	}
+}
 
- 	// Validate to have all template variables defined:
- 	for _, variable := range template.Variables(cmd) {
- 		if v.Exist(variable) == false {
- 			log.Warning(Title(), map[string]interface{}{
- 				"Message": "This variable is not defined",
- 				"VariableName": variable,
- 			})
- 		}
- 	}
+func Execute(cmd string) {
+	stdout, exit_code := command.Execute(cmd)
 
-	// Render command with variables:
-	var c = template.Render(cmd)
-
-	// Execute command:
-	stdout, exit_code := command.Execute(c)
-
+	var v = variables.Load()
 	v.Set(map[string]interface{}{"exit_code": exit_code})
+	v.Set(map[string]interface{}{"stdout": stdout})
 
+	// ParseStdOut
 	// Save the stdout on the register:
 	switch registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Format {
 	case "TEXT":
@@ -175,11 +166,7 @@ func Execute() {
 	}
 
 	// Log all variables:
-	log.Debug(Title(), map[string]interface{}{
-		"ExitCode": exit_code,
-		"Stdout": stdout,
-		"Variables": variables.Load().Items,
-	})
+	Debug()
 
 	// Print command output logging by error code:
 	if exit_code > 0 {
@@ -188,4 +175,58 @@ func Execute() {
 			"Stdout": stdout,
 		})
 	}
+}
+
+func Debug() {
+	for variable, value := range variables.Load().Items {
+		log.Debug(Title() + " Variable", map[string]interface{}{
+			variable: value,
+		})
+	}
+}
+
+func getAutoIncrementStartDate() string {
+	val, _ := common.GetArgValJSON("ai-date", "start")
+
+	if len(val) == 0 {
+		return GetDefaultDate()
+	}
+
+	return val
+}
+
+func getAutoIncrementEndDate() string {
+	val, _ := common.GetArgValJSON("ai-date", "end")
+
+	if len(val) == 0 {
+		return GetDefaultDate()
+	}
+
+	return val
+}
+
+func GetDefaultDate() string {
+	return common.InterfaceToString(variables.Load().Get("date"))
+}
+
+func RenderCommand() string {
+	var v = variables.Load()
+
+	// Hay que simplificar esto registry.Load().GetCommand()
+	var cmd = registry.Load().Config.Tasks[registry.Load().Task].Pipes[registry.Load().Pipe].Command
+
+	// Validate to have all template variables defined:
+	for _, variable := range template.Variables(cmd) {
+		if v.Exist(variable) == false {
+			log.Warning(Title(), map[string]interface{}{
+				"Message": "This variable is not defined",
+				"VariableName": variable,
+			})
+		}
+	}
+
+	cmd = template.Render(cmd, v.Items)
+	cmd = common.TrimNewlines(cmd) // <- meterlo dentro del render?
+
+	return cmd
 }

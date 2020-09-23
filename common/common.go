@@ -1,20 +1,21 @@
 package common
 
 import (
-	"time"
-	"fmt"
+	"encoding/json"
 	"flag"
+	"fmt"
+	"time"
 )
 
-func GetArgVal(name string) string {
+func GetArgVal(name string) interface{} {
 	if flag.Lookup(name) != nil {
-		return flag.Lookup(name).Value.(flag.Getter).Get().(string)
+		return flag.Lookup(name).Value.(flag.Getter).Get()
 	}
-	return ""
+	return nil
 }
 
 func IsArgDefined(name string) bool {
-	if GetArgVal(name) == "" {
+	if GetArgVal(name) == nil {
 		return false
 	}
 
@@ -60,6 +61,13 @@ func TrimNewlines(text string) string {
 	return string(r)
 }
 
+func StringToDate(date string) time.Time {
+	layout := "2006-01-02"
+	t, _ := time.Parse(layout, date)
+
+	return t
+}
+
 func Duration(fn func()) string {
 	t1 := time.Now()
 	fn()
@@ -67,5 +75,28 @@ func Duration(fn func()) string {
 	diff := t2.Sub(t1)
 	out := time.Time{}.Add(diff)
 
-	return fmt.Sprintln(out.Format("15:04:05"))
+	return fmt.Sprint(out.Format("15:04:05"))
+}
+
+func GetArgValJSON(arg string, key string) (val string, err error) {
+	attrs, err := GetArgValsJSON(arg)
+
+	if err != nil {
+		return "", err
+	}
+
+	return InterfaceToString(attrs[key]), nil
+}
+
+
+func GetArgValsJSON(name string) (attr map[string]interface{}, err error) {
+	return StringToJSON(GetArgVal(name).(string))
+}
+
+func StringToJSON(text string) (attr map[string]interface{}, err error) {
+	if err = json.Unmarshal([]byte(text), &attr); err != nil {
+		return map[string]interface{}{}, err
+	}
+
+	return attr, nil
 }

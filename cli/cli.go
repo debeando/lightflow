@@ -20,9 +20,11 @@ Usage:
 	lightflow --task=foo --pipe=bar
 	lightflow --variables='{"date": "2019-08-01"}'
 	lightflow --task=foo --pipe=bar --variables='{"query": "SELECT * FROM foo", "date": "2019-08-01"}'
+	lightflow --task=foo --pipe=bar --ai-date='{"start": "2019-08-01", "end":"2019-08-31"}'
 
 Options:
 
+  --ai-date    Auto Increment date, not compatible with --variables.
   --config     Using specific config file.
   --debug      Enable debug mode.
   --dry-run    No execute commands.
@@ -31,7 +33,7 @@ Options:
   --loop       Filter by loop name.
   --pipe       Filter by pipe name.
   --task       Filter by task name.
-  --variables  Passing variables on tasks.
+  --variables  Passing variables on tasks, not compatible with --ai-date.
   --version    Print version numbers.
 
 Default variables:
@@ -50,16 +52,17 @@ For more help, plese visit: https://github.com/swapbyt3s/ligthflow/wiki
 `
 
 func Run() {
-	fHelp := flag.Bool("help", false, "Show this help.")
-	fExample := flag.Bool("example", false, "Print out full sample configuration to stdout.")
-	fVersion := flag.Bool("version", false, "Show version.")
-	fConfig := flag.String("config", "", "Using specific config file.")
-	_ = flag.Bool("debug", false, "Enable debug mode.")
-	_ = flag.Bool("dry-run", false, "No execute commands.")
-	_ = flag.String("task", "", "Filter by task name.")
-	_ = flag.String("loop", "", "Filter by loop.")
-	_ = flag.String("pipe", "", "Filter by pipe name.")
-	_ = flag.String("variables", "", "Variables in JSON format.")
+	fAIDate := flag.String("ai-date", "", "")
+	fConfig := flag.String("config", "", "")
+	fDryRun := flag.Bool("dry-run", false, "")
+	fExample := flag.Bool("example", false, "")
+	fHelp := flag.Bool("help", false, "")
+	fVariables := flag.String("variables", "", "")
+	fVersion := flag.Bool("version", false, "")
+	_ = flag.Bool("debug", false, "")
+	_ = flag.String("loop", "", "")
+	_ = flag.String("pipe", "", "")
+	_ = flag.String("task", "", "")
 
 	flag.Usage = func() { help(1) }
 	flag.Parse()
@@ -72,14 +75,16 @@ func Run() {
 		help(0)
 	case *fExample:
 		fmt.Printf(example.GetConfigFile())
+	case len(*fAIDate) > 0 && len(*fVariables) > 0:
+		help(0)
+	case *fDryRun == true:
+		log.Warning("Safe Command in dry-run mode", nil)
 	}
 
 	if err := config.Load().Read(*fConfig); err != nil {
-		log.Error("Config", map[string]interface{}{"error": err})
+		log.Error(err.Error(), nil)
 		os.Exit(1)
   	}
-
-  	log.Configure()
 
 	flow.Run()
 }

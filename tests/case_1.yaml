@@ -4,10 +4,10 @@ general:
 tasks:
   - name: demo
     loops:
-      - name: A1
-        case: case1
-      - name: A2
-        case: "DATE ({{ .year }}-{{ .month }}-{{ .day }})"
+    - name: A1
+      case: case1
+    - name: A2
+      case: "DATE ({{ .year }}-{{ .month }}-{{ .day }})"
     pipes:
     - name: print-path
       command: >

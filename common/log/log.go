@@ -1,12 +1,16 @@
 package log
 
+// NOTES:
+// - Quitar el flag y usar el common.IsArgDefined()
+
 import (
 	"flag"
 	"io/ioutil"
 	"os"
 
-	"github.com/sirupsen/logrus"
 	"github.com/swapbyt3s/lightflow/config"
+
+	"github.com/sirupsen/logrus"
 )
 
 var debug bool
@@ -14,6 +18,7 @@ var debug bool
 func init() {
 	logrus.SetLevel(logrus.ErrorLevel)
 	logrus.SetFormatter(&logrus.TextFormatter{
+		TimestampFormat: "2006-01-02 15:04:05",
 		FullTimestamp: true,
 		DisableQuote: true,
 	})
@@ -23,14 +28,8 @@ func init() {
 	} else {
 		logrus.SetOutput(os.Stdout)
 	}
-}
 
-func Configure() {
 	logrus.SetLevel(logrus.InfoLevel)
-
-	if flag.Lookup("debug") != nil && flag.Lookup("debug").Value.(flag.Getter).Get().(bool) {
-		logrus.SetLevel(logrus.DebugLevel)
-	}
 
 	if config.Load().General.Debug {
 		logrus.SetLevel(logrus.DebugLevel)
@@ -50,5 +49,8 @@ func Error(m string, f map[string]interface{}) {
 }
 
 func Debug(m string, f map[string]interface{}) {
+	if flag.Lookup("debug") != nil && flag.Lookup("debug").Value.(flag.Getter).Get().(bool) {
+		logrus.SetLevel(logrus.DebugLevel)
+	}
 	logrus.WithFields(f).Debug(m)
 }
