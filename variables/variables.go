@@ -94,6 +94,11 @@ func (l *List) Update(name string, value interface{}) {
 	}
 }
 
-func (l *List) SetDate(date string) {
-	l.Items["date"] = common.StringToDate(date).Format("2006-01-02")
+func (l *List) SetDate(date string) bool {
+	if new_date := common.StringToDate(date).Format("2006-01-02"); l.Items["date"] != new_date {
+		l.Items["date"] = new_date
+		return true
+	}
+
+	return false
 }

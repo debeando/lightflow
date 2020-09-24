@@ -123,7 +123,20 @@ func (f *Flow) AutoIncrement() {
 		getAutoIncrementStartDate(),
 		getAutoIncrementEndDate(),
 		func(date string){
-			variables.Load().SetDate(date)
+			if variables.Load().SetDate(date) {
+				title := fmt.Sprintf(
+					"Task[%s] Loop[%s] Pipe[%s]",
+					f.Config.Tasks[f.Index.Task].Name,
+					f.Config.Tasks[f.Index.Task].Loops[f.Index.Loop].Name,
+					f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Name,
+				)
+				log.Info(
+				title,
+				map[string]interface{}{
+					"AutoIncrement Date": date,
+				})
+			}
+
 			f.PopulateVariables()
 			f.Retry()
 		})
