@@ -5,7 +5,8 @@ tasks:
   - name: demo
     loops:
       - name: A1
-        case_loop_var: "DEMO ({{ .date }})"
+        variables:
+          case_loop_var: "DEMO ({{ .date }})"
     pipes:
       - name: print
         command: echo -e "{{ .case_pipe_var }}"

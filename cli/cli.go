@@ -78,7 +78,7 @@ func Run() {
 	case len(*fAIDate) > 0 && len(*fVariables) > 0:
 		help(0)
 	case *fDryRun == true:
-		log.Warning("Safe Command in dry-run mode", nil)
+		log.Warning("Running in safe mode, not execute any commands, only print commands.", nil)
 	}
 
 	if err := config.Load().Read(*fConfig); err != nil {
@@ -86,6 +86,7 @@ func Run() {
 		os.Exit(1)
   	}
 
+	flow := flow.Flow{}
 	flow.Run()
 }
 

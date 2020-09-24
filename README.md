@@ -7,7 +7,6 @@ Creo que debería renombrar el proyecto a Helium, vamos a ver que otro nombre ha
 - convertirlo en un servicio con cron
 - Permitir varios pipe; a,b,c
 - Hacer un warn si una variable esta declarada y se sobre escribe. valor antes y despues
-- Tener el execution time por task y por looping, y mostrar un resumen al final.
 - agregar --list [all|token|loop|pipes]
 - validar el JSON
 	- formato valido, por el lio del *

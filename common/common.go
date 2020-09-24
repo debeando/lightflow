@@ -14,8 +14,8 @@ func GetArgVal(name string) interface{} {
 	return nil
 }
 
-func IsArgDefined(name string) bool {
-	if GetArgVal(name) == nil {
+func IsArgStringDefined(name string) bool {
+	if len(GetArgVal(name).(string)) == 0 {
 		return false
 	}
 

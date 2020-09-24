@@ -5,14 +5,14 @@ type Structure struct {
 	Path    string
 	General struct {
 		Debug               bool   `yaml:"debug"`
-		AWSRegion           string `yaml:"aws_region"`
-		AWSAccessKeyID      string `yaml:"aws_access_key_id"`
-		AWSSecretAccessKey  string `yaml:"aws_secret_access_key"`
 		Temporary_Directory string `yaml:"tmp_dir"`
 	}
 	Tasks []struct {
 		Name string  `yaml:"name"`                              // Nombre de la task.
-		Loops []map[string]string `yaml:"loops"`                // Lista de ciclos que contiene variables, cada ciclo repite la task.
+		Loops []struct {
+			Name string `yaml:"name"`                           // Nombre del loop, cada loop ejecuta el grupo de pipes.
+			Variables map[string]interface{} `yaml:"variables"` // Lista de variables para usar en el loop.
+		}
 		Pipes []struct {
 			Name string `yaml:"name"`                           // Nombre del pipe.
 			Command string `yaml:"command"`                     // Comando a ejecutar. Si hay que limpiar el stdout en formato JSON, usar tool jq.
