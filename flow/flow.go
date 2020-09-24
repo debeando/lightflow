@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/swapbyt3s/lightflow/command"
 	"github.com/swapbyt3s/lightflow/common"
@@ -136,7 +135,7 @@ func (f *Flow) AutoIncrement() {
 func (f *Flow) Retry() {
 	retry.Retry(
 		f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Attempts,
-		time.Duration(f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Wait),
+		f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Wait,
 		func() bool {
 			return f.ExecuteCommand()
 		})
@@ -156,6 +155,7 @@ func (f *Flow) ExecuteCommand() bool {
 
 		if err := f.ParseStdout(); err != nil {
 			log.Error(err.Error(), nil)
+			return false
 		}
 
 		return f.RetryCommand()
@@ -222,6 +222,7 @@ func (f *Flow) ParseStdout() error {
 func (f *Flow) RetryCommand() bool {
 	// Log possible error and retry it is true the error:
 	var v = variables.Load()
+
 	if error := v.Get(f.GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
 		log.Error(common.InterfaceToString(error), nil)
 		return false
