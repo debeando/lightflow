@@ -8,16 +8,16 @@ tasks:
       - name: T1L2
     pipes:
       - name: T1P1
-        command: sleep 2
+        execute: sleep 2
       - name: T1P2
-        command: sleep 1
+        execute: sleep 1
   - name: T2
     loops:
       - name: T2L1
     pipes:
       - name: T2P1
-        command: sleep 1
+        execute: sleep 1
       - name: T2P2
-        command: sleep 1
+        execute: sleep 1
       - name: T2P3
-        command: sleep 1
+        execute: sleep 1

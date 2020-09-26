@@ -7,13 +7,13 @@ tasks:
           job_url: "https://api.tinybird.co/v0/jobs/2631da76-39a2-451c-9fe1-11f2cf091dd2"
     pipes:
     - name: curl
-      command: curl --silent ifconfig.me/all.json
+      execute: curl --silent ifconfig.me/all.json
       format: JSON
       Retry:
         Attempts: 1
         Wait: 1
     - name: check
-      command: >
+      execute: >
         curl \
           --silent \
           -H "Authorization: Bearer $TINYBIRD_TOKEN" \

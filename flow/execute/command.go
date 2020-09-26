@@ -1,4 +1,4 @@
-package command
+package execute
 
 import (
 	"os/exec"

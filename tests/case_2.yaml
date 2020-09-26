@@ -9,6 +9,6 @@ tasks:
           case_loop_var: "DEMO ({{ .date }})"
     pipes:
       - name: print
-        command: echo -e "{{ .case_pipe_var }}"
+        execute: echo -e "{{ .case_pipe_var }}"
         variables:
           case_pipe_var: "TEST {{ .case_loop_var }}"

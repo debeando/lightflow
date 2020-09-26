@@ -5,7 +5,7 @@ tasks:
       - name: basic
     pipes:
     - name: curl
-      command: curl --silent ifconfig.me/all.json
+      execute: curl --silent ifconfig.me/all.json
       format: JSON
       Retry:
         Attempts: 1

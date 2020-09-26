@@ -1,0 +1,11 @@
+---
+tasks:
+  - name: check
+    loops:
+      - name: main
+    pipes:
+    - name: import
+      execute: echo -e "SELECT * FROM test LIMIT {{ .chunk }} OFFSET {{ .limit }};"
+      chunk:
+        total: 9
+        limit: 2
