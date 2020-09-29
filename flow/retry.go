@@ -1,9 +1,5 @@
 package flow
 
-/*
- * TODO: Meter dentro del command el retry y no al revez.
- */
-
 import (
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/flow/retry"
