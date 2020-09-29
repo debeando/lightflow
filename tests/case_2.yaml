@@ -11,4 +11,4 @@ tasks:
       - name: print
         execute: echo -e "{{ .case_pipe_var }}"
         variables:
-          case_pipe_var: "TEST {{ .case_loop_var }}"
+          case_pipe_var: "TEST {{.case_loop_var}}"

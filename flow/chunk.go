@@ -12,6 +12,7 @@ func (f *Flow) Chunks() {
 	var v = variables.Load()
 
 	if f.IsValidChunk() {
+		log.Info("Starting chunk loop...", nil)
 		c := chunk.Chunk{
 			Total: f.GetChunkTotal(),
 			Limit: f.GetChunkLimit(),

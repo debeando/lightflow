@@ -2,6 +2,9 @@ package flow
 
 import (
 	"fmt"
+
+	"github.com/swapbyt3s/lightflow/common"
+	"github.com/swapbyt3s/lightflow/variables"
 )
 
 func (f *Flow) GetTitle() string {
@@ -50,10 +53,34 @@ func (f *Flow) GetRegister() string {
 }
 
 func (f *Flow) GetChunkTotal() int {
+	var v = variables.Load()
+	total := v.Get("chunk.total")
+
+	if total != nil {
+		if value, ok := total.(string); ok {
+			if value := common.StringToInt(value); value > 0 {
+				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total = value
+			}
+		}
+	}
+
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total
 }
 
 func (f *Flow) GetChunkLimit() int {
+	// validar que sea int y hacer un warn cuando no es un ent
+
+	var v = variables.Load()
+	limit := v.Get("chunk.limit")
+
+	if limit != nil {
+		if value, ok := limit.(string); ok {
+			if value := common.StringToInt(value); value > 0 {
+				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit = value
+			}
+		}
+	}
+
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit
 }
 
@@ -99,7 +126,7 @@ func (f *Flow) IsValidChunk() bool {
 	if f.GetChunkTotal() < 2 {
 		return false
 	}
-	if f.GetChunkLimit() < 2{
+	if f.GetChunkLimit() < 2 {
 		return false
 	}
 

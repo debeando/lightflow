@@ -3,9 +3,12 @@ tasks:
   - name: check
     loops:
       - name: main
+        variables:
+          chunk.limit: 2
     pipes:
+    - name: total
+      execute: echo -n "9"
+      register: chunk.total
     - name: import
       execute: echo -e "SELECT * FROM test LIMIT {{ .limit }} OFFSET {{ .offset }};"
-      chunk:
-        total: 9
-        limit: 2
+      # execute: echo -e "SELECT * FROM test LIMIT {{ .limit }} OFFSET {{ .offset }};"

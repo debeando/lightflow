@@ -70,10 +70,24 @@ func (f *Flow) PopulateVariables() {
 	// Store config variables in memory:
 	v.Set(f.GetPipeVariables())
 
-	// Render only variables with variables:
-	// No me gusta esta parte, hay que mejorarla, los dos for:
-	for variable, value := range f.GetPipeVariables() {
-		rendered, err := template.Render(common.TrimNewlines(value.(string)), v.Items)
+	// ----
+	// Se mete o no en el get de la variable especifica?
+//	total := v.Get("total")
+//
+//	if total.(int) > 0 {
+//		f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total = total.(int)
+//	}
+//
+//	limit := v.Get("limit")
+//
+//	if limit.(int) > 0 {
+//		f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit = limit.(int)
+//	}
+	// ----
+
+	// hay que quitar el render de variables, evitar usarlo, solo usar en el execute
+	for variable, value := range v.Items {
+		rendered, err := template.Render(common.TrimNewlines(common.InterfaceToString(value)), v.Items)
 		if err != nil {
 			log.Warning(err.Error(), nil)
 		}
@@ -81,15 +95,17 @@ func (f *Flow) PopulateVariables() {
 		v.Set(map[string]interface{}{variable: rendered})
 	}
 
-	for variable, value := range v.Items {
-		if value, ok := value.(string); ok {
-			rendered, err := template.Render(common.TrimNewlines(value), v.Items)
-			if err != nil {
-				log.Warning(err.Error(), nil)
-			}
+	// Render only variables with variables:
+	// No me gusta esta parte, hay que mejorarla, los dos for:
+	for variable, value := range f.GetPipeVariables() {
+		// fmt.Println(variable)
 
-			v.Set(map[string]interface{}{variable: rendered})
+		rendered, err := template.Render(common.TrimNewlines(value.(string)), v.Items)
+		if err != nil {
+			log.Warning(err.Error(), nil)
 		}
+
+		v.Set(map[string]interface{}{variable: rendered})
 	}
 
 	// Define default values:

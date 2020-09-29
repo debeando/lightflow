@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -66,6 +67,13 @@ func StringToDate(date string) time.Time {
 	t, _ := time.Parse(layout, date)
 
 	return t
+}
+
+func StringToInt(value string) int {
+	if i, err := strconv.Atoi(value); err == nil {
+	    return i
+	}
+	return 0
 }
 
 func Duration(fn func()) string {
