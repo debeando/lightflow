@@ -28,11 +28,8 @@ func Load() *List {
 		}
 	}
 
-	// This method are out singleton declaration to build and rebuild
-	// variables list.
 	list.config()
 	list.args()
-	// list.register()
 
 	return list
 }

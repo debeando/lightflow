@@ -1,0 +1,21 @@
+---
+variables:
+  foo: 1
+  bar: 2
+  baz: 3
+tasks:
+  - name: main
+    loops:
+      - name: case_i
+        variables:
+          case_a: A
+      - name: case_ii
+        variables:
+          case_a: A
+          baz: 12345
+      - name: case_iII
+        variables:
+          case_a: C
+    pipes:
+    - name: print
+      execute: echo -n "{{ .foo }} {{ .bar }} {{ .baz }} {{ .case_a }}"

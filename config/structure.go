@@ -7,11 +7,12 @@ type Structure struct {
 		Debug               bool   `yaml:"debug"`
 		Temporary_Directory string `yaml:"tmp_dir"`
 	}
+	Variables map[string]interface{} `yaml:"variables"`         // Lista global de variables para usar en los pipes.
 	Tasks []struct {
 		Name string  `yaml:"name"`                              // Nombre de la task.
 		Loops []struct {                                        // Loop pipes
 			Name string `yaml:"name"`                           // Nombre del loop, cada loop ejecuta el grupo de pipes.
-			Variables map[string]interface{} `yaml:"variables"` // Lista de variables para usar en el loop.
+			Variables map[string]interface{} `yaml:"variables"` // Lista de variables para usar en los pipes.
 		}
 		Pipes []struct {
 			Name string `yaml:"name"`                           // Nombre del pipe.
