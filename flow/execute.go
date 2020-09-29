@@ -12,7 +12,6 @@ import (
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/flow/execute"
 	"github.com/swapbyt3s/lightflow/flow/template"
-	"github.com/swapbyt3s/lightflow/variables"
 )
 
 func (f *Flow) ExecuteCommand() bool {
@@ -37,19 +36,17 @@ func (f *Flow) ExecuteCommand() bool {
 }
 
 func (f *Flow) RenderCommand() string {
-	var v = variables.Load()
-
 	var cmd = f.GetExecute()
 
 	for _, variable := range template.Variables(cmd) {
-		if v.Exist(variable) == false {
+		if f.Variables.Exist(variable) == false {
 			log.Warning("Variable not defined", map[string]interface{}{
 				"Variable Name": variable,
 			})
 		}
 	}
 
-	cmd, err := template.Render(cmd, v.Items)
+	cmd, err := template.Render(cmd, f.Variables.Items)
 	if err != nil {
 		log.Warning(err.Error(), nil)
 	}
@@ -60,29 +57,26 @@ func (f *Flow) RenderCommand() string {
 func (f *Flow) Execute(cmd string) {
 	stdout, exit_code := execute.Execute(cmd)
 
-	var v = variables.Load()
-	v.Set(map[string]interface{}{
+	f.Variables.Set(map[string]interface{}{
 		"exit_code": exit_code,
 		"stdout": stdout,
 	})
 }
 
 func (f *Flow) ParseStdout() error {
-	var v = variables.Load()
-
 	switch f.GetFormat() {
 	case "TEXT":
 		if reg := f.GetRegister(); len(reg) > 0 {
-			v.Set(map[string]interface{}{reg: v.Items["stdout"]})
+			f.Variables.Set(map[string]interface{}{reg: f.Variables.Items["stdout"]})
 		}
 	case "JSON":
-		raw, err := common.StringToJSON(common.InterfaceToString(v.Items["stdout"]))
+		raw, err := common.StringToJSON(common.InterfaceToString(f.Variables.Items["stdout"]))
 		if err != nil {
 			return err
 		}
 
 		for variable, value := range raw {
-			v.Set(map[string]interface{}{variable: value})
+			f.Variables.Set(map[string]interface{}{variable: value})
 		}
 	default:
 		return errors.New("Format option is invalid, please use; TEXT (default) or JSON")
@@ -93,15 +87,13 @@ func (f *Flow) ParseStdout() error {
 
 func (f *Flow) RetryCommand() bool {
 	// Log possible error and retry it is true the error:
-	var v = variables.Load()
-
-	if error := v.Get(f.GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
+	if error := f.Variables.Get(f.GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
 		log.Error(common.InterfaceToString(error), nil)
 		return false
 	}
 
 	// Si el status que retorna el stdout es diferente reintenta
-	if status := v.Get(f.GetRetryStatus()); common.InterfaceToString(status) == f.GetRetryDone() {
+	if status := f.Variables.Get(f.GetRetryStatus()); common.InterfaceToString(status) == f.GetRetryDone() {
 		return false
 	}
 

@@ -7,7 +7,6 @@ package flow
 import (
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/flow/retry"
-	"github.com/swapbyt3s/lightflow/variables"
 )
 
 func (f *Flow) Retry() {
@@ -22,7 +21,7 @@ func (f *Flow) Retry() {
 }
 
 func (f *Flow) PrintDebugVariables() {
-	for variable, value := range variables.Load().Items {
+	for variable, value := range f.Variables.Items {
 		switch variable {
 		case "exit_code":
 			if value.(int) > 0 {

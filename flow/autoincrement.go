@@ -3,16 +3,15 @@ package flow
 import (
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/flow/autoincrement"
-	"github.com/swapbyt3s/lightflow/variables"
 )
 
 func (f *Flow) AutoIncrement() error {
-	variables.Load().SetDefaults()
+	f.Variables.SetDefaults()
 	return autoincrement.Date(
-		getAutoIncrementStartDate(),
-		getAutoIncrementEndDate(),
+		f.GetAutoIncrementStartDate(),
+		f.GetAutoIncrementEndDate(),
 		func(date string){
-			if variables.Load().SetDate(date) {
+			if f.Variables.SetDate(date) {
 				log.Info(
 					f.GetTitle(),
 					map[string]interface{}{

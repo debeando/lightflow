@@ -5,12 +5,9 @@ import (
 
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/flow/chunk"
-	"github.com/swapbyt3s/lightflow/variables"
 )
 
 func (f *Flow) Chunks() {
-	var v = variables.Load()
-
 	if f.IsValidChunk() {
 		log.Info("Starting chunk loop...", nil)
 		c := chunk.Chunk{
@@ -25,7 +22,7 @@ func (f *Flow) Chunks() {
 					"Chunk Percentage": fmt.Sprintf("%d%%", pct),
 			})
 
-			v.Set(map[string]interface{}{
+			f.Variables.Set(map[string]interface{}{
 				"offset": offset,
 				"limit": c.Limit,
 			})
