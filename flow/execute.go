@@ -67,10 +67,10 @@ func (f *Flow) ParseStdout() error {
 	switch f.GetFormat() {
 	case "TEXT":
 		if reg := f.GetRegister(); len(reg) > 0 {
-			f.Variables.Set(map[string]interface{}{reg: f.Variables.Items["stdout"]})
+			f.Variables.Set(map[string]interface{}{reg: f.GetStdOut()})
 		}
 	case "JSON":
-		raw, err := common.StringToJSON(common.InterfaceToString(f.Variables.Items["stdout"]))
+		raw, err := common.StringToJSON(common.InterfaceToString(f.GetStdOut()))
 		if err != nil {
 			return err
 		}

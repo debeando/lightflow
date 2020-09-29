@@ -171,3 +171,7 @@ func (f *Flow) PopulateVariables() {
 		f.SetFormat("TEXT")
 	}
 }
+
+func (f *Flow) GetStdOut() interface{} {
+	return f.Variables.Items["stdout"]
+}
