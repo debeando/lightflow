@@ -28,25 +28,28 @@ func Load() *List {
 		}
 	}
 
-	list.config()
-	list.args()
+	// list.SetDefaults()
 
 	return list
 }
 
-// Load variables in the config file:
-func (l *List) config() {
-	l.Items["path"] = config.Load().General.Temporary_Directory
-}
-
 // Build standard variables:
 func (l *List) SetDefaults() {
+	l.Items["path"] = config.Load().General.Temporary_Directory
+
 	l.CurrentTime = time.Now()
 	l.Items["date"]  = l.CurrentTime.Format("2006-01-02")
 	l.Items["year"]  = l.CurrentTime.Format("2006")
 	l.Items["month"] = l.CurrentTime.Format("01")
 	l.Items["day"]   = l.CurrentTime.Format("02")
 	l.Items["hour"]  = l.CurrentTime.Format("15")
+
+	l.args()
+
+	l.Items["stdout"] = ""
+	l.Items["exit_code"] = 0
+	l.Items["error"] = ""
+	l.Items["status"] = ""
 }
 
 // Load variables bypass JSON arguments in the command line:
