@@ -1,0 +1,20 @@
+---
+general:
+  tmp_dir: /tmp
+tasks:
+  - name: T1
+    loops:
+      - name: T1L1
+    pipes:
+      - name: T1P1
+        execute: exit 1
+        retry:
+          attempts: 3
+          wait: 1
+          exit_code: 0
+      - name: T1P1
+        execute: exit 1
+        retry:
+          attempts: 3
+          wait: 1
+          exit_code: 1

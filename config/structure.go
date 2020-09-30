@@ -26,6 +26,7 @@ type Structure struct {
 				Attempts int `yaml:"attempts"`                  // Cuantas veces se reintenta el comando.
 				Wait int `yaml:"wait"`                          // Cuando tiempo debe transcurrir entre reintentos.
 				Error string `yaml:"error"`                     // Variable que indica la existencia de un error, incluso se usa para volver hacer el reintento.
+				ExitCode int `yaml:"exit_code"`                 // Reintenta hasta que el exit code sea diferente al definido.
 			}
 			Chunk struct {                                      // Loop own command by chunk logic.
 				Limit int `yaml:"limit"`                        // Número máximo de elementos por chunk.

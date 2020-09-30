@@ -19,7 +19,7 @@ func (f *Flow) AutoIncrement() error {
 				})
 			}
 
-			f.PopulateVariables()
+			f.SetDefaults()
 			f.Chunks()
 		})
 }

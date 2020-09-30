@@ -10,25 +10,27 @@ import (
 	"github.com/swapbyt3s/lightflow/flow/template"
 )
 
-func (f *Flow) ExecuteCommand() bool {
+func (f *Flow) Execute() {
 	cmd := f.RenderCommand()
 
 	if common.GetArgVal("dry-run").(bool) {
 		fmt.Println(cmd)
-
-		return false
 	} else {
-		f.Execute(cmd)
+		f.Retry(func () bool {
+			stdout, exit_code := execute.Execute(cmd)
 
-		if err := f.ParseStdout(); err != nil {
-			log.Error(err.Error(), nil)
-			return false
-		}
+			f.Variables.Set(map[string]interface{}{
+				"exit_code": exit_code,
+				"stdout": stdout,
+			})
 
-		return f.RetryCommand()
+			if err := f.ParseStdout(); err != nil {
+				log.Error(err.Error(), nil)
+			}
+
+			return f.EvalRetry()
+		})
 	}
-
-	return false
 }
 
 func (f *Flow) RenderCommand() string {
@@ -48,15 +50,6 @@ func (f *Flow) RenderCommand() string {
 	}
 
 	return common.TrimNewlines(cmd)
-}
-
-func (f *Flow) Execute(cmd string) {
-	stdout, exit_code := execute.Execute(cmd)
-
-	f.Variables.Set(map[string]interface{}{
-		"exit_code": exit_code,
-		"stdout": stdout,
-	})
 }
 
 func (f *Flow) ParseStdout() error {
@@ -81,17 +74,34 @@ func (f *Flow) ParseStdout() error {
 	return nil
 }
 
-func (f *Flow) RetryCommand() bool {
-	// Log possible error and retry it is true the error:
-	if error := f.Variables.Get(f.GetRetryError()); error != nil && len(common.InterfaceToString(error)) > 0 {
+func (f *Flow) EvalRetry() bool {
+	exit_code := f.Variables.Get("exit_code").(int)
+	status := common.InterfaceToString(f.Variables.Get(f.GetRetryStatus()))
+	error := common.InterfaceToString(f.Variables.Get(f.GetRetryError()))
+
+	if f.GetRetryExitCode() != exit_code {
+		log.Warning(f.GetTitle() + " Retry", map[string]interface{}{
+			"Exit Code": exit_code,
+		})
+
+		return true
+	} else if exit_code > 0 {
+		log.Error(f.GetTitle(), map[string]interface{}{
+			"Exit Code": exit_code,
+		})
+	}
+
+	if len(status) > 0 && f.GetRetryDone() != status {
+		log.Warning(f.GetTitle() + " Retry", map[string]interface{}{
+			"Status": status,
+		})
+
+		return true
+	}
+
+	if len(error) > 0 {
 		log.Error(common.InterfaceToString(error), nil)
-		return false
 	}
 
-	// Si el status que retorna el stdout es diferente reintenta
-	if status := f.Variables.Get(f.GetRetryStatus()); common.InterfaceToString(status) == f.GetRetryDone() {
-		return false
-	}
-
-	return true
+	return false
 }

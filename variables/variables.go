@@ -28,8 +28,6 @@ func Load() *List {
 		}
 	}
 
-	// list.SetDefaults()
-
 	return list
 }
 

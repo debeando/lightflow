@@ -27,9 +27,9 @@ func (f *Flow) Chunks() {
 				"limit": c.Limit,
 			})
 
-			f.Retry()
+			f.Execute()
 		})
 	} else {
-		f.Retry()
+		f.Execute()
 	}
 }

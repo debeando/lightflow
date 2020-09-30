@@ -91,6 +91,10 @@ func (f *Flow) GetRetryWait() int {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Wait
 }
 
+func (f *Flow) GetRetryExitCode() int {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.ExitCode
+}
+
 func (f *Flow) GetRetryError() string {
 	value := f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Error
 
@@ -156,7 +160,7 @@ func (f *Flow) GetDefaultDate() string {
 	return common.InterfaceToString(f.Variables.Get("date"))
 }
 
-func (f *Flow) PopulateVariables() {
+func (f *Flow) SetDefaults() {
 	f.Variables.Set(map[string]interface{} {
 		"task_name": f.GetTaskName(),
 		"loop_name": f.GetLoopName(),
