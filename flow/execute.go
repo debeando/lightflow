@@ -75,6 +75,14 @@ func (f *Flow) ParseStdout() error {
 }
 
 func (f *Flow) EvalRetry() bool {
+	if f.GetRetryWait() == 0 {
+		return false
+	}
+
+	if f.GetRetryAttempts() == 0 {
+		return false
+	}
+
 	exit_code := f.Variables.Get("exit_code").(int)
 	status := common.InterfaceToString(f.Variables.Get(f.GetRetryStatus()))
 	error := common.InterfaceToString(f.Variables.Get(f.GetRetryError()))
@@ -91,7 +99,7 @@ func (f *Flow) EvalRetry() bool {
 		})
 	}
 
-	if len(status) > 0 && f.GetRetryDone() != status {
+	if exit_code == 0 && len(error) == 0 && len(status) > 0 && len(f.GetRetryDone()) > 0 && f.GetRetryDone() != status {
 		log.Warning(f.GetTitle() + " Retry", map[string]interface{}{
 			"Status": status,
 		})
