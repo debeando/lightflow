@@ -93,8 +93,14 @@ func (l *List) Update(name string, value interface{}) {
 }
 
 func (l *List) SetDate(date string) bool {
-	if new_date := common.StringToDate(date).Format("2006-01-02"); l.Items["date"] != new_date {
-		l.Items["date"] = new_date
+	new_date := common.StringToDate(date);
+
+	if  l.Items["date"] != new_date.Format("2006-01-02") {
+		l.Items["date"]  = new_date.Format("2006-01-02")
+		l.Items["year"]  = new_date.Format("2006")
+		l.Items["month"] = new_date.Format("01")
+		l.Items["day"]   = new_date.Format("02")
+
 		return true
 	}
 
