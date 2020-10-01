@@ -24,6 +24,12 @@ func (f *Flow) Execute() {
 				"stdout": stdout,
 			})
 
+			if exit_code > 0 && f.GetRetryExitCode() == 0 {
+				log.Error(f.GetTitle(), map[string]interface{}{
+					"Exit Code": exit_code,
+				})
+			}
+
 			if err := f.ParseStdout(); err != nil {
 				log.Error(err.Error(), nil)
 			}
@@ -90,13 +96,10 @@ func (f *Flow) EvalRetry() bool {
 	if f.GetRetryExitCode() != exit_code {
 		log.Warning(f.GetTitle() + " Retry", map[string]interface{}{
 			"Exit Code": exit_code,
+			"Expected": f.GetRetryExitCode(),
 		})
 
 		return true
-	} else if exit_code > 0 {
-		log.Error(f.GetTitle(), map[string]interface{}{
-			"Exit Code": exit_code,
-		})
 	}
 
 	if exit_code == 0 && len(error) == 0 && len(status) > 0 && len(f.GetRetryDone()) > 0 && f.GetRetryDone() != status {
