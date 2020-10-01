@@ -34,6 +34,12 @@ func (f *Flow) Execute() {
 				log.Error(err.Error(), nil)
 			}
 
+			for variable, value := range f.Variables.Items {
+				log.Debug(f.GetTitle(), map[string]interface{}{
+					variable: value,
+				})
+			}
+
 			return f.EvalRetry()
 		})
 	}
@@ -103,7 +109,7 @@ func (f *Flow) EvalRetry() bool {
 	}
 
 	if exit_code == 0 && len(error) == 0 && len(status) > 0 && len(f.GetRetryDone()) > 0 && f.GetRetryDone() != status {
-		log.Warning(f.GetTitle() + " Retry", map[string]interface{}{
+		log.Info(f.GetTitle() + " Retry", map[string]interface{}{
 			"Status": status,
 		})
 
