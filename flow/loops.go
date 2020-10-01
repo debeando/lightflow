@@ -27,7 +27,7 @@ func (f *Flow) Loop() {
 		os.Exit(1)
 	} else {
 		log.Info(
-			"Loop",
+			"LOOPS",
 			map[string]interface{}{
 				"Execution Time": loop.ExecutionTime,
 			})

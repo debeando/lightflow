@@ -1,7 +1,6 @@
 package pipes
 
 import (
-	"fmt"
 	"errors"
 
 	"github.com/swapbyt3s/lightflow/common"
@@ -12,7 +11,6 @@ type Pipe struct {
 	Task int
 	Loop int
 	Index int
-	Title string
 	ExecutionTime string
 	Config config.Structure
 }
@@ -57,12 +55,5 @@ func (p *Pipe) All(fn func()) {
 }
 
 func (p *Pipe) One(fn func()) {
-	p.Title = fmt.Sprintf(
-		"Task[%s] Loop[%s] Pipe[%s]",
-		p.Config.Tasks[p.Task].Name,
-		p.Config.Tasks[p.Task].Loops[p.Loop].Name,
-		p.Config.Tasks[p.Task].Pipes[p.Index].Name,
-	)
-
 	fn()
 }

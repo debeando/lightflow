@@ -26,7 +26,7 @@ func (f *Flow) Task() {
 		os.Exit(1)
 	} else {
 		log.Info(
-			"Tasks",
+			"TASKS",
 			map[string]interface{}{
 				"Execution Time": tsk.ExecutionTime,
 			})

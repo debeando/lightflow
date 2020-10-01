@@ -20,7 +20,7 @@ func (f *Flow) Pipes() {
 	}
 
 	err := pipe.Run(func() {
-		log.Info(pipe.Title, nil)
+		log.Info(f.GetTitle(), nil)
 		f.Index.Pipe =  pipe.Index
 		f.AutoIncrement()
 	})
@@ -29,7 +29,7 @@ func (f *Flow) Pipes() {
 		os.Exit(1)
 	} else {
 		log.Info(
-			"Pipe",
+			"PIPES",
 			map[string]interface{}{
 				"Execution Time": pipe.ExecutionTime,
 			})
