@@ -17,6 +17,7 @@ type Structure struct {
 		Pipes []struct {
 			Name string `yaml:"name"`                           // Nombre del pipe.
 			Execute string `yaml:"execute"`                     // Comando a ejecutar. Si hay que limpiar el stdout en formato JSON, usar tool jq.
+			Register string `yaml:"register"`                   // Nombre de la variable donde se guarda el stdout/stderr solo cuando el formato es TEXT, se usa para guardar un valor de un pipe y usarlo en otro pipe.
 			Format string `yaml:"format"`                       // Formato de la variable, por defecto TEXT, si es JSON, un MySQL stdout, CSV, etc... que se anade luego a las variables.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
 			Skip struct {                                       // Skip own pipe block when specific condition, use the variable definied in the Register to compare.

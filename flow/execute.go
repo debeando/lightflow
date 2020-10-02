@@ -67,7 +67,7 @@ func (f *Flow) RenderCommand() string {
 func (f *Flow) ParseStdout() error {
 	switch f.GetFormat() {
 	case "TEXT":
-		if reg := f.GetPipeName(); len(reg) > 0 {
+		if reg := f.GetRegister(); len(reg) > 0 {
 			f.Variables.Set(map[string]interface{}{reg: f.GetStdOut()})
 		}
 	case "JSON":
