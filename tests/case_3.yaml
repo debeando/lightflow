@@ -8,16 +8,8 @@ tasks:
       - name: T1L2
     pipes:
       - name: T1P1
-        execute: echo -e "{{ .date }} {{ .year }}{{ .month }}{{ .day }}"
+        execute: echo -e "T1P1 {{ .date }} {{ .year }}{{ .month }}{{ .day }}"
       - name: T1P2
-        execute: echo -e "{{ .date }}"
-  - name: T2
-    loops:
-      - name: main
-    pipes:
-      - name: T2P1
-        execute: echo -e "{{ .date }}"
-      - name: T2P2
-        execute: echo -e "{{ .abc }}"
-      - name: T2P3
-        execute: exit 123
+        execute: echo -e "T1P2"
+      - name: T1P3
+        execute: echo -e "T1P3"

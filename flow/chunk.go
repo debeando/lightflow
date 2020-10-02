@@ -3,6 +3,7 @@ package flow
 import (
 	"fmt"
 
+	"github.com/swapbyt3s/lightflow/common"
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/flow/chunk"
 )
@@ -32,4 +33,32 @@ func (f *Flow) Chunks() {
 	} else {
 		f.Execute()
 	}
+}
+
+func (f *Flow) GetChunkTotal() int {
+	// Aqui hay que poner un interface to int.
+	if total := f.Variables.Get("chunk.total"); total != nil {
+		if value, ok := total.(string); ok {
+			// fmt.Println(total)
+			if value := common.StringToInt(value); value > 0 {
+				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total = value
+			}
+		}
+	}
+
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total
+}
+
+func (f *Flow) GetChunkLimit() int {
+	limit := f.Variables.Get("chunk.limit")
+
+	if limit != nil {
+		if value, ok := limit.(string); ok {
+			if value := common.StringToInt(value); value > 0 {
+				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit = value
+			}
+		}
+	}
+
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit
 }

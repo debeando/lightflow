@@ -3,6 +3,7 @@ package flow
 import (
 	"fmt"
 
+	"github.com/swapbyt3s/lightflow/config"
 	"github.com/swapbyt3s/lightflow/common"
 )
 
@@ -43,44 +44,19 @@ func (f *Flow) GetExecute() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Execute
 }
 
-func (f *Flow) GetFormat() string {
+func (f *Flow) GetFormat() config.Format {
+	if len(f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Format) == 0 {
+		return config.TEXT
+	}
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Format
 }
 
-func (f *Flow) SetFormat(format string) {
+func (f *Flow) SetFormat(format config.Format) {
 	f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Format = format
 }
 
 func (f *Flow) GetRegister() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Register
-}
-
-func (f *Flow) GetChunkTotal() int {
-	total := f.Variables.Get("chunk.total")
-
-	if total != nil {
-		if value, ok := total.(string); ok {
-			if value := common.StringToInt(value); value > 0 {
-				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total = value
-			}
-		}
-	}
-
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total
-}
-
-func (f *Flow) GetChunkLimit() int {
-	limit := f.Variables.Get("chunk.limit")
-
-	if limit != nil {
-		if value, ok := limit.(string); ok {
-			if value := common.StringToInt(value); value > 0 {
-				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit = value
-			}
-		}
-	}
-
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit
 }
 
 func (f *Flow) GetRetryAttempts() int {
@@ -161,6 +137,8 @@ func (f *Flow) GetDefaultDate() string {
 }
 
 func (f *Flow) SetDefaults() {
+	f.SetFormat("TEXT")
+
 	f.Variables.Set(map[string]interface{} {
 		"task_name": f.GetTaskName(),
 		"loop_name": f.GetLoopName(),
@@ -170,10 +148,6 @@ func (f *Flow) SetDefaults() {
 	f.Variables.Set(f.GetGlobalVariables())
 	f.Variables.Set(f.GetLoopVariables())
 	f.Variables.Set(f.GetPipeVariables())
-
-	if format := f.GetFormat(); len(format) == 0 {
-		f.SetFormat("TEXT")
-	}
 }
 
 func (f *Flow) GetStdOut() interface{} {

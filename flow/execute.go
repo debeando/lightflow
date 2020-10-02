@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"errors"
 
+	"github.com/swapbyt3s/lightflow/config"
 	"github.com/swapbyt3s/lightflow/common"
 	"github.com/swapbyt3s/lightflow/common/log"
 	"github.com/swapbyt3s/lightflow/flow/execute"
@@ -66,11 +67,11 @@ func (f *Flow) RenderCommand() string {
 
 func (f *Flow) ParseStdout() error {
 	switch f.GetFormat() {
-	case "TEXT":
+	case config.TEXT:
 		if reg := f.GetRegister(); len(reg) > 0 {
 			f.Variables.Set(map[string]interface{}{reg: f.GetStdOut()})
 		}
-	case "JSON":
+	case config.JSON:
 		raw, err := common.StringToJSON(common.InterfaceToString(f.GetStdOut()))
 		if err != nil {
 			return err

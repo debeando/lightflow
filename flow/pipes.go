@@ -1,6 +1,7 @@
 package flow
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/swapbyt3s/lightflow/common/log"
@@ -19,17 +20,23 @@ func (f *Flow) Pipes() {
 		os.Exit(1)
 	}
 
+	f.Index.Pipe = 0
+
 	err := pipe.Run(func() {
+		f.Index.Pipe = pipe.Index
 		log.Info(f.GetTitle(), nil)
-		f.Index.Pipe =  pipe.Index
-		f.AutoIncrement()
+		f.Chunks()
 	})
 	if err != nil {
 		log.Error(err.Error(), nil)
 		os.Exit(1)
 	} else {
 		log.Info(
-			"PIPES",
+			fmt.Sprintf(
+				"TASK[%s] LOOP[%s] PIPES",
+				f.GetTaskName(),
+				f.GetLoopName(),
+			),
 			map[string]interface{}{
 				"Execution Time": pipe.ExecutionTime,
 			})

@@ -17,6 +17,10 @@ func (f *Flow) Task() {
 		os.Exit(1)
 	}
 
+	f.Index.Task = 0
+	f.Index.Loop = 0
+	f.Index.Pipe = 0
+
 	err := tsk.Run(func() {
 		f.Index.Task = tsk.Index
 		f.Loop()
