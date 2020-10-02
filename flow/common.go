@@ -51,10 +51,6 @@ func (f *Flow) SetFormat(format string) {
 	f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Format = format
 }
 
-func (f *Flow) GetRegister() string {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Register
-}
-
 func (f *Flow) GetChunkTotal() int {
 	total := f.Variables.Get("chunk.total")
 

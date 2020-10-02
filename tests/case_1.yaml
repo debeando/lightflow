@@ -10,3 +10,5 @@ tasks:
       Retry:
         Attempts: 1
         Wait: 1
+    - name: ip_addr
+      execute: curl --silent ifconfig.me/all.json | jq '.ip_addr' -r
