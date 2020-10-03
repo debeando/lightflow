@@ -33,12 +33,10 @@ func (f *Flow) Pipes() {
 	} else {
 		log.Info(
 			fmt.Sprintf(
-				"TASK[%s] LOOP[%s] PIPES",
+				"TASK[%s] LOOP[%s] PIPES-ET[%s]", // ET is acronym for Execution Time.
 				f.GetTaskName(),
 				f.GetLoopName(),
-			),
-			map[string]interface{}{
-				"Execution Time": pipe.ExecutionTime,
-			})
+				pipe.ExecutionTime,
+			), nil)
 	}
 }
