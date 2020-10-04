@@ -10,7 +10,6 @@ import (
 type Loop struct {
 	Task int
 	Index int
-	Title string
 	ExecutionTime string
 	Config config.Structure
 }

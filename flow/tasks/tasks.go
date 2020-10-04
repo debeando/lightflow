@@ -9,7 +9,6 @@ import (
 
 type Task struct {
 	Index int
-	Title string
 	ExecutionTime string
 	Config config.Structure
 }

@@ -8,11 +8,11 @@ import (
 )
 
 func (f *Flow) Task() {
-	tsk := tasks.Task{
+	task := tasks.Task{
 		Config: f.Config,
 	}
 
-	if err := tsk.Valid(); err != nil {
+	if err := task.Valid(); err != nil {
 		log.Error(err.Error(), nil)
 		os.Exit(1)
 	}
@@ -21,8 +21,8 @@ func (f *Flow) Task() {
 	f.Index.Loop = 0
 	f.Index.Pipe = 0
 
-	err := tsk.Run(func() {
-		f.Index.Task = tsk.Index
+	err := task.Run(func() {
+		f.Index.Task = task.Index
 		f.Loop()
 	})
 	if err != nil {
@@ -32,7 +32,7 @@ func (f *Flow) Task() {
 		log.Info(
 			"TASKS",
 			map[string]interface{}{
-				"Execution Time": tsk.ExecutionTime,
+				"Execution Time": task.ExecutionTime,
 			})
 	}
 }
