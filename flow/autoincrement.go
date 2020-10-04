@@ -8,12 +8,13 @@ import (
 )
 
 func (f *Flow) AutoIncrement() error {
-	f.Variables.SetDefaults()
+	f.SetDefaults()
 
 	return autoincrement.Date(
-		f.GetAutoIncrementStartDate(),
-		f.GetAutoIncrementEndDate(),
+		f.GetArgAutoIncrementStartDate(),
+		f.GetArgAutoIncrementEndDate(),
 		func(date string){
+			f.SetDefaults()
 			if f.Variables.SetDate(date) {
 				log.Info(
 					fmt.Sprintf(
@@ -24,8 +25,6 @@ func (f *Flow) AutoIncrement() error {
 					),
 					nil)
 			}
-
-			f.SetDefaults()
 			f.Pipes()
 		})
 }
