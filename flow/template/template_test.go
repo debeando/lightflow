@@ -26,6 +26,3 @@ func TestRender(t *testing.T) {
 		}
 	}
 }
-
-func TestVariables(t *testing.T) {
-}
