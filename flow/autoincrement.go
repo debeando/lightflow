@@ -18,7 +18,7 @@ func (f *Flow) AutoIncrement() error {
 			if f.Variables.SetDate(date) {
 				log.Info(
 					fmt.Sprintf(
-						"TASK[%s] LOOP[%s] PIPES-AI-DATE[%s]",
+						"TASK[%s] LOOP[%s] PIPES AI DATE[%s]",
 						f.GetTaskName(),
 						f.GetLoopName(),
 						date,

@@ -2,41 +2,33 @@ package flow
 
 import (
 	"fmt"
-	"os"
 
+	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/pipes"
+	"github.com/debeando/lightflow/flow/iterator"
 )
 
 func (f *Flow) Pipes() {
-	pipe := pipes.Pipe{
-		Task: f.Index.Task,
-		Loop: f.Index.Loop,
-		Config: f.Config,
+	name := common.GetArgVal("pipe").(string)
+	itr := iterator.Iterator{
+		Items: f.Config.Tasks[f.Index.Task].Pipes,
 	}
 
-	if err := pipe.Valid(); err != nil {
-		log.Error(err.Error(), nil)
-		os.Exit(1)
+	if len(name) > 0 && ! itr.Exist(name) {
+		return
 	}
 
-	f.Index.Pipe = 0
-
-	err := pipe.Run(func() {
-		f.Index.Pipe = pipe.Index
+	itr.Run(name, func() {
+		f.Index.Pipe = itr.Index
 		log.Info(f.GetTitle(), nil)
 		f.Chunks()
 	})
-	if err != nil {
-		log.Error(err.Error(), nil)
-		os.Exit(1)
-	} else {
-		log.Info(
-			fmt.Sprintf(
-				"TASK[%s] LOOP[%s] PIPES-ET[%s]", // ET is acronym for Execution Time.
-				f.GetTaskName(),
-				f.GetLoopName(),
-				pipe.ExecutionTime,
-			), nil)
-	}
+
+	log.Info(
+		fmt.Sprintf(
+			"TASK[%s] LOOP[%s] PIPES ET[%s]", // ET is acronym for execution time.
+			f.GetTaskName(),
+			f.GetLoopName(),
+			itr.ExecutionTime,
+		), nil)
 }

@@ -27,3 +27,20 @@ func TestAutoincrement(t *testing.T) {
 			counter++
 		})
 }
+
+func TestNoAutoincrement(t *testing.T) {
+	var counter = 0
+	var dates = [...]string{
+	    "2019-12-30",
+	}
+
+	autoincrement.Date(
+		"2019-12-30",
+		"2019-12-30",
+		func(date string){
+			if dates[counter] != date {
+				t.Errorf("Expected %s, got %s.", dates[counter], date)
+			}
+			counter++
+		})
+}

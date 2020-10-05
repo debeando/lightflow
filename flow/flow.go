@@ -20,5 +20,5 @@ type Index struct {
 func (f *Flow) Run() {
 	f.Config = *config.Load()
 	f.Variables = *variables.Load()
-	f.Task()
+	f.Tasks()
 }

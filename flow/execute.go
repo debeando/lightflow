@@ -35,6 +35,7 @@ func (f *Flow) Execute() {
 				log.Error(err.Error(), nil)
 			}
 
+			//f.Variables deberia tener un debug.
 			for variable, value := range f.Variables.Items {
 				log.Debug(f.GetTitle(), map[string]interface{}{
 					variable: value,
@@ -72,6 +73,7 @@ func (f *Flow) ParseStdout() error {
 			f.Variables.Set(map[string]interface{}{reg: f.GetStdOut()})
 		}
 	case config.JSON:
+		//f.Variables puede tener un metodo para salvar en json de forma automatica?
 		raw, err := common.StringToJSON(common.InterfaceToString(f.GetStdOut()))
 		if err != nil {
 			return err
@@ -96,27 +98,30 @@ func (f *Flow) EvalRetry() bool {
 		return false
 	}
 
+	// EvalRetryByExitCode
 	exit_code := f.Variables.Get("exit_code").(int)
 	status := common.InterfaceToString(f.Variables.Get(f.GetRetryStatus()))
 	error := common.InterfaceToString(f.Variables.Get(f.GetRetryError()))
 
 	if f.GetRetryExitCode() != exit_code {
-		log.Warning(f.GetTitle() + " Retry", map[string]interface{}{
-			"Exit Code": exit_code,
-			"Expected": f.GetRetryExitCode(),
-		})
+		// log.Warning(f.GetTitle() + " Retry", map[string]interface{}{
+		// 	"Exit Code": exit_code,
+		// 	"Expected": f.GetRetryExitCode(),
+		// })
 
 		return true
 	}
 
+	// EvalRetryByStatus
 	if exit_code == 0 && len(error) == 0 && len(status) > 0 && len(f.GetRetryDone()) > 0 && f.GetRetryDone() != status {
-		log.Info(f.GetTitle() + " Retry", map[string]interface{}{
-			"Status": status,
-		})
+		// log.Info(f.GetTitle() + " Retry", map[string]interface{}{
+		// 	"Status": status,
+		// })
 
 		return true
 	}
 
+	// meter esto en el debug variables
 	if len(error) > 0 {
 		log.Error(common.InterfaceToString(error), nil)
 	}

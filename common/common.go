@@ -76,16 +76,6 @@ func StringToInt(value string) int {
 	return 0
 }
 
-func Duration(fn func()) string {
-	t1 := time.Now()
-	fn()
-	t2 := time.Now()
-	diff := t2.Sub(t1)
-	out := time.Time{}.Add(diff)
-
-	return fmt.Sprint(out.Format("15:04:05"))
-}
-
 func GetArgValJSON(arg string, key string) (val string, err error) {
 	attrs, err := GetArgValsJSON(arg)
 

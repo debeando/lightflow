@@ -16,7 +16,7 @@ type Structure struct {
 	}
 	Variables map[string]interface{} `yaml:"variables"`         // Lista global de variables para usar en los pipes.
 	Tasks []struct {
-		Name string  `yaml:"name"`                              // Nombre de la task.
+		Name string `yaml:"name"`                               // Nombre de la task.
 		Loops []struct {                                        // Loop pipes
 			Name string `yaml:"name"`                           // Nombre del loop, cada loop ejecuta el grupo de pipes.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables para usar en los pipes.

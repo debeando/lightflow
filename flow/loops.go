@@ -1,42 +1,33 @@
 package flow
 
 import (
-	"os"
 	"fmt"
 
+	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/loops"
+	"github.com/debeando/lightflow/flow/iterator"
 )
 
-func (f *Flow) Loop() {
-	loop := loops.Loop{
-		Task: f.Index.Task,
-		Config: f.Config,
+func (f *Flow) Loops() {
+	name := common.GetArgVal("loop").(string)
+	itr := iterator.Iterator{
+		Items: f.Config.Tasks[f.Index.Task].Loops,
 	}
 
-	if err := loop.Valid(); err != nil {
-		log.Error(err.Error(), nil)
-		os.Exit(1)
+	if len(name) > 0 && ! itr.Exist(name) {
+		return
 	}
 
-	f.Index.Loop = 0
-	f.Index.Pipe = 0
-
-	err := loop.Run(func() {
-		f.Index.Loop = loop.Index
+	itr.Run(name, func() {
+		f.Index.Pipe = 0
+		f.Index.Loop = itr.Index
 		f.AutoIncrement()
 	})
-	if err != nil {
-		log.Error(err.Error(), nil)
-		os.Exit(1)
-	} else {
-		log.Info(
-			fmt.Sprintf(
-				"TASK[%s] LOOPS",
-				f.GetTaskName(),
-			),
-			map[string]interface{}{
-				"Execution Time": loop.ExecutionTime,
-			})
-	}
+
+	log.Info(
+		fmt.Sprintf(
+			"TASK[%s] LOOPS ET[%s]", // ET is acronym for execution time.
+			f.GetTaskName(),
+			itr.ExecutionTime,
+		),nil )
 }
