@@ -140,7 +140,6 @@ func (f *Flow) GetDefaultDate() string {
 }
 
 func (f *Flow) SetDefaults() {
-	f.SetFormat("TEXT")
 	f.Variables.Items["path"] = config.Load().General.Temporary_Directory
 
 	if date, _ := common.GetArgValJSON("variables", "date"); len(date) > 0 {
