@@ -3,8 +3,8 @@ package flow
 import (
 	"fmt"
 
-	"github.com/swapbyt3s/lightflow/common/log"
-	"github.com/swapbyt3s/lightflow/flow/autoincrement"
+	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/flow/autoincrement"
 )
 
 func (f *Flow) AutoIncrement() error {

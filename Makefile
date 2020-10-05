@@ -8,8 +8,8 @@ help: ## Show this help.
 
 build: ## Build binary for local operating system
 	go generate ./...
-	go build -ldflags "-s -w -X github.com/swapbyt3s/lightflow/cli.BuildTime=$(BUILD_DATE)" -o lightflow main.go
+	go build -ldflags "-s -w -X github.com/debeando/lightflow/cli.BuildTime=$(BUILD_DATE)" -o lightflow main.go
 
 build-linux: ## Build binary for linux operating system
 	go generate ./...
-	GOOS=linux go build -ldflags "-s -w -X github.com/swapbyt3s/lightflow/cli.BuildTime=$(BUILD_DATE)" -o lightflow main.go
+	GOOS=linux go build -ldflags "-s -w -X github.com/debeando/lightflow/cli.BuildTime=$(BUILD_DATE)" -o lightflow main.go

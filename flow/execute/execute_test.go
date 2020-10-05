@@ -3,7 +3,7 @@ package execute_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/lightflow/flow/execute"
+	"github.com/debeando/lightflow/flow/execute"
 )
 
 func TestExecute(t *testing.T) {

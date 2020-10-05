@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"syscall"
 
-	"github.com/swapbyt3s/lightflow/common"
+	"github.com/debeando/lightflow/common"
 )
 
 func Execute(cmd string) (stdout string, exitcode int) {

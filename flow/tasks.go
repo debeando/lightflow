@@ -3,8 +3,8 @@ package flow
 import (
 	"os"
 
-	"github.com/swapbyt3s/lightflow/common/log"
-	"github.com/swapbyt3s/lightflow/flow/tasks"
+	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/flow/tasks"
 )
 
 func (f *Flow) Task() {

@@ -3,7 +3,7 @@ package common_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/lightflow/common"
+	"github.com/debeando/lightflow/common"
 )
 
 func TestTrimNewlines(t *testing.T) {

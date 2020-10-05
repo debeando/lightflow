@@ -5,9 +5,9 @@ import (
 	"time"
 	"encoding/json"
 
-	"github.com/swapbyt3s/lightflow/config"
-	"github.com/swapbyt3s/lightflow/common"
-	"github.com/swapbyt3s/lightflow/common/log"
+	"github.com/debeando/lightflow/config"
+	"github.com/debeando/lightflow/common"
+	"github.com/debeando/lightflow/common/log"
 )
 
 func (f *Flow) GetTitle() string {

@@ -3,9 +3,9 @@ package flow
 import (
 	"fmt"
 
-	"github.com/swapbyt3s/lightflow/common"
-	"github.com/swapbyt3s/lightflow/common/log"
-	"github.com/swapbyt3s/lightflow/flow/chunk"
+	"github.com/debeando/lightflow/common"
+	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/flow/chunk"
 )
 
 func (f *Flow) Chunks() {

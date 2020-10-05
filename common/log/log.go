@@ -8,7 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/swapbyt3s/lightflow/config"
+	"github.com/debeando/lightflow/config"
 
 	"github.com/sirupsen/logrus"
 )

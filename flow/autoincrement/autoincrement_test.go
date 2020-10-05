@@ -3,7 +3,7 @@ package autoincrement_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/lightflow/flow/autoincrement"
+	"github.com/debeando/lightflow/flow/autoincrement"
 )
 
 func TestAutoincrement(t *testing.T) {

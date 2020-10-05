@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/swapbyt3s/lightflow/common/log"
-	"github.com/swapbyt3s/lightflow/config"
-	"github.com/swapbyt3s/lightflow/config/example"
-	"github.com/swapbyt3s/lightflow/flow"
+	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/config"
+	"github.com/debeando/lightflow/config/example"
+	"github.com/debeando/lightflow/flow"
 )
 
 // USAGE is a const to have help description for CLI.
@@ -48,7 +48,7 @@ Default variables:
 
 	You can rewrite default variables by passing in JSON on --variables with same name.
 
-For more help, plese visit: https://github.com/swapbyt3s/ligthflow/wiki
+For more help, plese visit: https://github.com/debeando/ligthflow/wiki
 `
 
 func Run() {

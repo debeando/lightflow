@@ -1,8 +1,8 @@
 package flow
 
 import (
-	"github.com/swapbyt3s/lightflow/config"
-	"github.com/swapbyt3s/lightflow/variables"
+	"github.com/debeando/lightflow/config"
+	"github.com/debeando/lightflow/variables"
 )
 
 type Flow struct {

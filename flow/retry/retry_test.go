@@ -3,7 +3,7 @@ package retry_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/lightflow/flow/retry"
+	"github.com/debeando/lightflow/flow/retry"
 )
 
 func TestRetryOK(t *testing.T) {

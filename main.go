@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/swapbyt3s/lightflow/cli"
+	"github.com/debeando/lightflow/cli"
 )
 
 func main() {

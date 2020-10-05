@@ -4,8 +4,8 @@ import (
 	"os"
 	"fmt"
 
-	"github.com/swapbyt3s/lightflow/common/log"
-	"github.com/swapbyt3s/lightflow/flow/loops"
+	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/flow/loops"
 )
 
 func (f *Flow) Loop() {

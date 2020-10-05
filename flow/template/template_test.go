@@ -3,7 +3,7 @@ package template_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/lightflow/flow/template"
+	"github.com/debeando/lightflow/flow/template"
 )
 
 func TestRender(t *testing.T) {

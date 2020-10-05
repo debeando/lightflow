@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/swapbyt3s/lightflow/common/log"
-	"github.com/swapbyt3s/lightflow/flow/pipes"
+	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/flow/pipes"
 )
 
 func (f *Flow) Pipes() {

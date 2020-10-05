@@ -1,7 +1,7 @@
 package flow
 
 import (
-	"github.com/swapbyt3s/lightflow/flow/retry"
+	"github.com/debeando/lightflow/flow/retry"
 )
 
 func (f *Flow) Retry(fn func() bool) {

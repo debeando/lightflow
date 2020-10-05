@@ -4,10 +4,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/swapbyt3s/lightflow/config"
-	"github.com/swapbyt3s/lightflow/flow"
-	"github.com/swapbyt3s/lightflow/variables"
-	// "github.com/swapbyt3s/lightflow/flow/chunk"
+	"github.com/debeando/lightflow/config"
+	"github.com/debeando/lightflow/flow"
+	"github.com/debeando/lightflow/variables"
+	// "github.com/debeando/lightflow/flow/chunk"
 )
 
 var f = flow.Flow{}

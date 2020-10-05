@@ -3,7 +3,7 @@ package chunk_test
 import (
 	"testing"
 
-	"github.com/swapbyt3s/lightflow/flow/chunk"
+	"github.com/debeando/lightflow/flow/chunk"
 )
 
 func TestChunk(t *testing.T) {
