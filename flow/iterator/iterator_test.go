@@ -6,13 +6,8 @@ import (
 	"github.com/debeando/lightflow/flow/iterator"
 )
 
-type Item struct {
-	Value string
-}
-
 type List struct {
 	Name  string
-	Items []Item
 }
 
 var demo = []List{
@@ -26,7 +21,9 @@ func TestExistOk(t *testing.T) {
 		Items: demo,
 	}
 
-	t.Log(itr.Exist("ba"))
+	if exist := itr.Exist("ba"); exist != false {
+		t.Errorf("Expected %t, got %t.", false, exist)
+	}
 }
 
 func TestExistKo(t *testing.T) {
@@ -34,15 +31,22 @@ func TestExistKo(t *testing.T) {
 		Items: demo,
 	}
 
-	t.Log(itr.Exist("bar"))
+	if exist := itr.Exist("baz"); exist != true {
+		t.Errorf("Expected %t, got %t.", true, exist)
+	}
 }
 
 func TestLoop(t *testing.T) {
+	counter := 0
 	itr := iterator.Iterator{
 		Items: demo,
 	}
 
 	itr.Run("", func() {
-		t.Log(itr.Index)
+		counter++
 	})
+
+	if counter != len(demo) {
+		t.Errorf("Expected %d, got %d.", len(demo), counter)
+	}
 }
