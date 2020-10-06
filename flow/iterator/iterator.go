@@ -14,17 +14,9 @@ type Iterator struct {
 }
 
 func (t *Iterator) Exist(name string) bool {
-	items := reflect.ValueOf(t.Items)
-
-	if items.Kind() == reflect.Slice {
-		for i := 0; i < items.Len(); i++ {
-			item := items.Index(i)
-			if item.Kind() == reflect.Struct {
-				v := reflect.Indirect(item)
-				if v.Field(0).Interface() == name {
-					return true
-				}
-			}
+	for i := range t.Next() {
+		if t.Key(i) == name {
+			return true
 		}
 	}
 
@@ -37,26 +29,39 @@ func (t *Iterator) Run(name string, fn func()) {
 	})
 }
 
-func (t *Iterator) Loops(name string, fn func()) {
-	items := reflect.ValueOf(t.Items)
-	if items.Kind() == reflect.Slice {
-		for t.Index = 0; t.Index < items.Len(); t.Index++ {
-			t.Name = t.Key()
+func (t *Iterator) Next() (<-chan int) {
+	chnl := make(chan int)
+	go func() {
+		items := reflect.ValueOf(t.Items)
+		if items.Kind() == reflect.Slice {
+			for i := 0; i < items.Len(); i++ {
+				chnl <- i
+			}
+			close(chnl)
+		}
+	}()
+	return chnl
+}
 
-			if len(name) > 0 && ! t.Exist(name) {
+func (t *Iterator) Loops(name string, fn func()) {
+	for t.Index = range t.Next() {
+		t.Name = t.Key(t.Index)
+
+		if len(name) > 0 {
+			if ! t.Exist(name) {
 				break
-			} else if len(name) > 0 && t.Exist(name) && t.Name != name {
+			} else if t.Exist(name) && t.Name != name {
 				continue
 			}
-
-			fn()
 		}
+
+		fn()
 	}
 }
 
-func (t *Iterator) Key() string {
+func (t *Iterator) Key(index int) string {
 	items := reflect.ValueOf(t.Items)
-	item := items.Index(t.Index)
+	item := items.Index(index)
 	if item.Kind() == reflect.Struct {
 		return reflect.Indirect(item).Field(0).Interface().(string)
 	}
