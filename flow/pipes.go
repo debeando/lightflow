@@ -14,10 +14,6 @@ func (f *Flow) Pipes() {
 		Items: f.Config.Tasks[f.Index.Task].Pipes,
 	}
 
-	if len(name) > 0 && !itr.Exist(name) {
-		return
-	}
-
 	itr.Run(name, func() {
 		f.Index.Pipe = itr.Index
 		log.Info(f.GetTitle(), nil)

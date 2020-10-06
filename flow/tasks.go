@@ -14,10 +14,6 @@ func (f *Flow) Tasks() {
 		Items: f.Config.Tasks,
 	}
 
-	if len(name) > 0 && !itr.Exist(name) {
-		return
-	}
-
 	itr.Run(name, func() {
 		f.Index.Loop = 0
 		f.Index.Pipe = 0
