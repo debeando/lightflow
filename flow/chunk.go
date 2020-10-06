@@ -62,3 +62,14 @@ func (f *Flow) GetChunkLimit() int {
 
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit
 }
+
+func (f *Flow) IsValidChunk() bool {
+	if f.GetChunkTotal() < 2 {
+		return false
+	}
+	if f.GetChunkLimit() < 2 {
+		return false
+	}
+
+	return true
+}

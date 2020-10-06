@@ -104,20 +104,11 @@ func (f *Flow) EvalRetry() bool {
 	error := common.InterfaceToString(f.Variables.Get(f.GetRetryError()))
 
 	if f.GetRetryExitCode() != exit_code {
-		// log.Warning(f.GetTitle() + " Retry", map[string]interface{}{
-		// 	"Exit Code": exit_code,
-		// 	"Expected": f.GetRetryExitCode(),
-		// })
-
 		return true
 	}
 
 	// EvalRetryByStatus
 	if exit_code == 0 && len(error) == 0 && len(status) > 0 && len(f.GetRetryDone()) > 0 && f.GetRetryDone() != status {
-		// log.Info(f.GetTitle() + " Retry", map[string]interface{}{
-		// 	"Status": status,
-		// })
-
 		return true
 	}
 
@@ -127,4 +118,19 @@ func (f *Flow) EvalRetry() bool {
 	}
 
 	return false
+}
+
+func (f *Flow) GetExecute() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Execute
+}
+
+func (f *Flow) GetFormat() config.Format {
+	if len(f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Format) == 0 {
+		return config.TEXT
+	}
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Format
+}
+
+func (f *Flow) GetRegister() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Register
 }
