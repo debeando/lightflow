@@ -8,7 +8,7 @@ import (
 
 const (
 	IntervalbyHours time.Duration = 24
-	DateFormat string = "2006-01-02"
+	DateFormat      string        = "2006-01-02"
 )
 
 type Duration struct {
@@ -18,11 +18,11 @@ type Duration struct {
 func Date(start string, end string, fn func(string)) error {
 	d := Duration{}
 
-	if ok := d.Valid(start); ! ok {
+	if ok := d.Valid(start); !ok {
 		return errors.New("Invalid start date.")
 	}
 
-	if ok := d.Valid(end); ! ok {
+	if ok := d.Valid(end); !ok {
 		return errors.New("Invalid end date.")
 	}
 
@@ -33,7 +33,7 @@ func Date(start string, end string, fn func(string)) error {
 	for {
 		fn(d.ToDate())
 
-		if (d.ToDate() == end) {
+		if d.ToDate() == end {
 			break
 		}
 

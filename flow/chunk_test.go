@@ -36,7 +36,7 @@ func TestGetChunkTotal(t *testing.T) {
 
 	for _, value := range values {
 		// t.Log(value)
-		f.Variables.Set(map[string]interface{} {
+		f.Variables.Set(map[string]interface{}{
 			"chunk.total": value,
 		})
 		t.Log("V: ", f.Variables.Get("chunk.total"))

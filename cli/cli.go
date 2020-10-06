@@ -84,7 +84,7 @@ func Run() {
 	if err := config.Load().Read(*fConfig); err != nil {
 		log.Error(err.Error(), nil)
 		os.Exit(1)
-  	}
+	}
 
 	flow := flow.Flow{}
 	flow.Run()

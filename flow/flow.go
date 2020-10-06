@@ -6,8 +6,8 @@ import (
 )
 
 type Flow struct {
-	Index Index
-	Config config.Structure
+	Index     Index
+	Config    config.Structure
 	Variables variables.List
 }
 

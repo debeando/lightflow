@@ -7,7 +7,7 @@ import (
 )
 
 // Items is a collection of map:
-type List struct{
+type List struct {
 	// This variable is the start value to create each combination related
 	// by date.
 	CurrentTime time.Time
@@ -27,7 +27,6 @@ func Load() *List {
 
 	return list
 }
-
 
 // Set variables use in the pipe:
 func (l *List) Set(variables map[string]interface{}) {
@@ -60,13 +59,13 @@ func (l *List) Update(name string, value interface{}) {
 }
 
 func (l *List) SetDate(date string) bool {
-	new_date := common.StringToDate(date);
+	new_date := common.StringToDate(date)
 
-	if  l.Items["date"] != new_date.Format("2006-01-02") {
-		l.Items["date"]  = new_date.Format("2006-01-02")
-		l.Items["year"]  = new_date.Format("2006")
+	if l.Items["date"] != new_date.Format("2006-01-02") {
+		l.Items["date"] = new_date.Format("2006-01-02")
+		l.Items["year"] = new_date.Format("2006")
 		l.Items["month"] = new_date.Format("01")
-		l.Items["day"]   = new_date.Format("02")
+		l.Items["day"] = new_date.Format("02")
 
 		l.CurrentTime = new_date
 

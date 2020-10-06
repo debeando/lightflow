@@ -11,14 +11,14 @@ type Item struct {
 }
 
 type List struct {
-	Name string
+	Name  string
 	Items []Item
 }
 
 var demo = []List{
-	{ Name: "foo"},
-	{ Name: "bar"},
-	{ Name: "baz"},
+	{Name: "foo"},
+	{Name: "bar"},
+	{Name: "baz"},
 }
 
 func TestExistOk(t *testing.T) {

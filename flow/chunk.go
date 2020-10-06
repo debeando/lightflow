@@ -16,16 +16,16 @@ func (f *Flow) Chunks() {
 			Limit: f.GetChunkLimit(),
 		}
 
-		c.Chunk(func (step int, chunks int, offset int, pct int){
+		c.Chunk(func(step int, chunks int, offset int, pct int) {
 			log.Info(
 				f.GetTitle(),
 				map[string]interface{}{
 					"Chunk Percentage": fmt.Sprintf("%d%%", pct),
-			})
+				})
 
 			f.Variables.Set(map[string]interface{}{
 				"offset": offset,
-				"limit": c.Limit,
+				"limit":  c.Limit,
 			})
 
 			f.Execute()

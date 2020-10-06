@@ -13,7 +13,7 @@ func (f *Flow) AutoIncrement() error {
 	return autoincrement.Date(
 		f.GetArgAutoIncrementStartDate(),
 		f.GetArgAutoIncrementEndDate(),
-		func(date string){
+		func(date string) {
 			f.SetDefaults()
 			if f.Variables.SetDate(date) {
 				log.Info(

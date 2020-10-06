@@ -20,7 +20,7 @@ func (c *Chunk) Chunk(fn func(step int, chunks int, offset int, percentage int))
 }
 
 func percentage(total int, position int) int {
-	pct := ((100 * position) / total);
+	pct := ((100 * position) / total)
 
 	if pct < 0 {
 		return 0

@@ -7,9 +7,9 @@ import (
 )
 
 type Iterator struct {
-	Index int
+	Index         int
 	ExecutionTime string
-	Items interface{}
+	Items         interface{}
 }
 
 func (t *Iterator) Exist(name string) bool {
@@ -31,7 +31,7 @@ func (t *Iterator) Exist(name string) bool {
 }
 
 func (t *Iterator) Run(name string, fn func()) {
-	t.ExecutionTime = duration.Start(func(){
+	t.ExecutionTime = duration.Start(func() {
 		if t.Exist(name) {
 			t.One(fn)
 		} else {

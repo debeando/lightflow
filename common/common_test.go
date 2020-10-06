@@ -8,14 +8,14 @@ import (
 
 func TestTrimNewlines(t *testing.T) {
 	type TestTexts struct {
-		Text string
+		Text   string
 		Result string
 	}
 
 	var testTexts = map[int]TestTexts{}
-	testTexts[0] = TestTexts{Text: "abc123",           Result: "abc123"}
-	testTexts[1] = TestTexts{Text: "\nabc123\n",       Result: "abc123"}
-	testTexts[2] = TestTexts{Text: "\n\nabc123\n\n",   Result: "abc123"}
+	testTexts[0] = TestTexts{Text: "abc123", Result: "abc123"}
+	testTexts[1] = TestTexts{Text: "\nabc123\n", Result: "abc123"}
+	testTexts[2] = TestTexts{Text: "\n\nabc123\n\n", Result: "abc123"}
 	testTexts[3] = TestTexts{Text: "\n\nabc\n123\n\n", Result: "abc\n123"}
 
 	for index, _ := range testTexts {

@@ -1,12 +1,12 @@
 package flow
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 
-	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/flow/execute"
 	"github.com/debeando/lightflow/flow/template"
 )
@@ -17,12 +17,12 @@ func (f *Flow) Execute() {
 	if common.GetArgVal("dry-run").(bool) {
 		fmt.Println(cmd)
 	} else {
-		f.Retry(func () bool {
+		f.Retry(func() bool {
 			stdout, exit_code := execute.Execute(cmd)
 
 			f.Variables.Set(map[string]interface{}{
 				"exit_code": exit_code,
-				"stdout": stdout,
+				"stdout":    stdout,
 			})
 
 			if exit_code > 0 && f.GetRetryExitCode() == 0 {

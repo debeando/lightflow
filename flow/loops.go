@@ -14,7 +14,7 @@ func (f *Flow) Loops() {
 		Items: f.Config.Tasks[f.Index.Task].Loops,
 	}
 
-	if len(name) > 0 && ! itr.Exist(name) {
+	if len(name) > 0 && !itr.Exist(name) {
 		return
 	}
 
@@ -29,5 +29,5 @@ func (f *Flow) Loops() {
 			"TASK[%s] LOOPS ET[%s]", // ET is acronym for execution time.
 			f.GetTaskName(),
 			itr.ExecutionTime,
-		),nil )
+		), nil)
 }

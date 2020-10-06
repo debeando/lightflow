@@ -14,7 +14,7 @@ func (f *Flow) Pipes() {
 		Items: f.Config.Tasks[f.Index.Task].Pipes,
 	}
 
-	if len(name) > 0 && ! itr.Exist(name) {
+	if len(name) > 0 && !itr.Exist(name) {
 		return
 	}
 

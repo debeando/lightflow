@@ -12,7 +12,7 @@ func TestRetryOK(t *testing.T) {
 	retry.Retry(
 		3,
 		1,
-		func () bool {
+		func() bool {
 			counter++
 			return true
 		})
@@ -28,7 +28,7 @@ func TestRetryKO(t *testing.T) {
 	retry.Retry(
 		3,
 		1,
-		func () bool {
+		func() bool {
 			counter++
 			return false
 		})

@@ -42,7 +42,7 @@ func TrimNewlines(text string) string {
 	}
 
 	Previous := func() int {
-		for y := l-1; y >= 0; y-- {
+		for y := l - 1; y >= 0; y-- {
 			if t[y] != '\n' {
 				return y
 			}
@@ -71,7 +71,7 @@ func StringToDate(date string) time.Time {
 
 func StringToInt(value string) int {
 	if i, err := strconv.Atoi(value); err == nil {
-	    return i
+		return i
 	}
 	return 0
 }
@@ -85,7 +85,6 @@ func GetArgValJSON(arg string, key string) (val string, err error) {
 
 	return InterfaceToString(attrs[key]), nil
 }
-
 
 func GetArgValsJSON(name string) (attr map[string]interface{}, err error) {
 	return StringToJSON(GetArgVal(name).(string))

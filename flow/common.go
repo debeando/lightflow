@@ -1,13 +1,13 @@
 package flow
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
-	"encoding/json"
 
-	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/config"
 )
 
 func (f *Flow) GetTitle() string {
@@ -148,7 +148,7 @@ func (f *Flow) SetDefaults() {
 		f.Variables.SetDate(time.Now().Format("2006-01-02"))
 	}
 
-	f.Variables.Set(map[string]interface{} {
+	f.Variables.Set(map[string]interface{}{
 		"task_name": f.GetTaskName(),
 		"loop_name": f.GetLoopName(),
 		"pipe_name": f.GetPipeName(),

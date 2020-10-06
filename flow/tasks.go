@@ -14,7 +14,7 @@ func (f *Flow) Tasks() {
 		Items: f.Config.Tasks,
 	}
 
-	if len(name) > 0 && ! itr.Exist(name) {
+	if len(name) > 0 && !itr.Exist(name) {
 		return
 	}
 
@@ -28,5 +28,5 @@ func (f *Flow) Tasks() {
 	log.Info(fmt.Sprintf(
 		"TASKS ET[%s]", // ET is acronym for execution time.
 		itr.ExecutionTime,
-		), nil)
+	), nil)
 }
