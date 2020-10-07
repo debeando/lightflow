@@ -44,7 +44,6 @@ Default variables:
 	- year
 	- month
 	- day
-	- hour
 
 	You can rewrite default variables by passing in JSON on --variables with same name.
 
