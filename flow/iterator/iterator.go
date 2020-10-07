@@ -8,6 +8,7 @@ import (
 
 type Iterator struct {
 	Name          string
+	Key           string
 	Index         int
 	ExecutionTime string
 	Items         interface{}
@@ -15,7 +16,7 @@ type Iterator struct {
 
 func (t *Iterator) Exist(name string) bool {
 	for i := range t.Next() {
-		if t.Key(i) == name {
+		if t.key(i) == name {
 			return true
 		}
 	}
@@ -23,9 +24,9 @@ func (t *Iterator) Exist(name string) bool {
 	return false
 }
 
-func (t *Iterator) Run(name string, fn func()) {
+func (t *Iterator) Run(fn func()) {
 	t.ExecutionTime = duration.Start(func() {
-		t.Loops(name, fn)
+		t.Loops(fn)
 	})
 }
 
@@ -43,14 +44,14 @@ func (t *Iterator) Next() (<-chan int) {
 	return chnl
 }
 
-func (t *Iterator) Loops(name string, fn func()) {
+func (t *Iterator) Loops(fn func()) {
 	for t.Index = range t.Next() {
-		t.Name = t.Key(t.Index)
+		t.Key = t.key(t.Index)
 
-		if len(name) > 0 {
-			if ! t.Exist(name) {
+		if len(t.Name) > 0 {
+			if ! t.Exist(t.Name) {
 				break
-			} else if t.Exist(name) && t.Name != name {
+			} else if t.Exist(t.Name) && t.Key != t.Name {
 				continue
 			}
 		}
@@ -59,7 +60,7 @@ func (t *Iterator) Loops(name string, fn func()) {
 	}
 }
 
-func (t *Iterator) Key(index int) string {
+func (t *Iterator) key(index int) string {
 	items := reflect.ValueOf(t.Items)
 	item := items.Index(index)
 	if item.Kind() == reflect.Struct {

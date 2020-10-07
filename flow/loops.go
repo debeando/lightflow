@@ -9,12 +9,12 @@ import (
 )
 
 func (f *Flow) Loops() {
-	name := common.GetArgVal("loop").(string)
 	itr := iterator.Iterator{
 		Items: f.Config.Tasks[f.Index.Task].Loops,
+		Name: common.GetArgVal("loop").(string),
 	}
 
-	itr.Run(name, func() {
+	itr.Run(func() {
 		f.Index.Pipe = 0
 		f.Index.Loop = itr.Index
 		f.AutoIncrement()

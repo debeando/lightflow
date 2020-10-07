@@ -9,12 +9,12 @@ import (
 )
 
 func (f *Flow) Tasks() {
-	name := common.GetArgVal("task").(string)
 	itr := iterator.Iterator{
 		Items: f.Config.Tasks,
+		Name: common.GetArgVal("task").(string),
 	}
 
-	itr.Run(name, func() {
+	itr.Run(func() {
 		f.Index.Loop = 0
 		f.Index.Pipe = 0
 		f.Index.Task = itr.Index

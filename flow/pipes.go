@@ -9,12 +9,12 @@ import (
 )
 
 func (f *Flow) Pipes() {
-	name := common.GetArgVal("pipe").(string)
 	itr := iterator.Iterator{
 		Items: f.Config.Tasks[f.Index.Task].Pipes,
+		Name: common.GetArgVal("pipe").(string),
 	}
 
-	itr.Run(name, func() {
+	itr.Run(func() {
 		f.Index.Pipe = itr.Index
 		log.Info(f.GetTitle(), nil)
 		f.Chunks()
