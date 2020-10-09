@@ -5,7 +5,7 @@ variables:
   baz: 3
 tasks:
   - name: main
-    loops:
+    subtask:
       - name: case_i
         variables:
           case_a: A

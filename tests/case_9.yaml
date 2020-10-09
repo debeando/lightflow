@@ -3,7 +3,7 @@ general:
   tmp_dir: /tmp
 tasks:
   - name: T1
-    loops:
+    subtask:
       - name: T1L1
     pipes:
       - name: T1P1
@@ -11,7 +11,7 @@ tasks:
       - name: T1P2
         execute: echo -e "T1P2 {{ .date }}"
   - name: T2
-    loops:
+    subtask:
       - name: T2L1
       - name: T2L2
     pipes:

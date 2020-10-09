@@ -15,10 +15,10 @@ func (f *Flow) Tasks() {
 	}
 
 	itr.Run(func() {
-		f.Index.Loop = 0
+		f.Index.Subtask = 0
 		f.Index.Pipe = 0
 		f.Index.Task = itr.Index
-		f.Loops()
+		f.Subtask()
 	})
 
 	log.Info(fmt.Sprintf(

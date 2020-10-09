@@ -17,11 +17,11 @@ type Structure struct {
 	Variables map[string]interface{} `yaml:"variables"` // Lista global de variables para usar en los pipes.
 	Tasks     []struct {
 		Name  string     `yaml:"name"` // Nombre de la task.
-		Loops []struct { // Loop pipes
+		Subtask []struct { // Subtask
 			Name      string                 `yaml:"name"`      // Nombre del loop, cada loop ejecuta el grupo de pipes.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables para usar en los pipes.
 		}
-		Pipes []struct {
+		Pipes []struct { // Pipes is a common collection for subtask.
 			Name      string                 `yaml:"name"`      // Nombre del pipe.
 			Execute   string                 `yaml:"execute"`   // Comando a ejecutar. Si hay que limpiar el stdout en formato JSON, usar tool jq.
 			Register  string                 `yaml:"register"`  // Nombre de la variable donde se guarda el stdout/stderr solo cuando el formato es TEXT, se usa para guardar un valor de un pipe y usarlo en otro pipe.

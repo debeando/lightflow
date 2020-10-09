@@ -8,21 +8,21 @@ import (
 	"github.com/debeando/lightflow/flow/iterator"
 )
 
-func (f *Flow) Loops() {
+func (f *Flow) Subtask() {
 	itr := iterator.Iterator{
-		Items: f.Config.Tasks[f.Index.Task].Loops,
-		Name: common.GetArgVal("loop").(string),
+		Items: f.Config.Tasks[f.Index.Task].Subtask,
+		Name: common.GetArgVal("subtask").(string),
 	}
 
 	itr.Run(func() {
 		f.Index.Pipe = 0
-		f.Index.Loop = itr.Index
+		f.Index.Subtask = itr.Index
 		f.AutoIncrement()
 	})
 
 	log.Info(
 		fmt.Sprintf(
-			"TASK[%s] LOOPS ET[%s]", // ET is acronym for execution time.
+			"TASK[%s] SUB TASK ET[%s]", // ET is acronym for execution time.
 			f.GetTaskName(),
 			itr.ExecutionTime,
 		), nil)

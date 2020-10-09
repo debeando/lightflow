@@ -3,7 +3,7 @@ general:
   tmp_dir: /tmp
 tasks:
   - name: T1
-    loops:
+    subtask:
       - name: T1L1
       - name: T1L2
     pipes:
@@ -14,7 +14,7 @@ tasks:
       - name: T1P3
         execute: echo -e "!Ok"
   - name: T2
-    loops:
+    subtask:
       - name: T2L1
     pipes:
       - name: T2P1

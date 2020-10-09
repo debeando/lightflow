@@ -30,9 +30,9 @@ Options:
   --dry-run    No execute commands.
   --example    Print out full sample configuration to stdout.
   --help       Show this help.
-  --loop       Filter by loop name.
   --pipe       Filter by pipe name.
   --task       Filter by task name.
+  --subtask    Filter by subtask name.
   --variables  Passing variables on tasks, not compatible with --ai-date.
   --version    Print version numbers.
 
@@ -59,7 +59,7 @@ func Run() {
 	fVariables := flag.String("variables", "", "")
 	fVersion := flag.Bool("version", false, "")
 	_ = flag.Bool("debug", false, "")
-	_ = flag.String("loop", "", "")
+	_ = flag.String("subtask", "", "")
 	_ = flag.String("pipe", "", "")
 	_ = flag.String("task", "", "")
 

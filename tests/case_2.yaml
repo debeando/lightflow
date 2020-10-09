@@ -3,7 +3,7 @@ general:
   tmp_dir: /tmp
 tasks:
   - name: demo
-    loops:
+    subtask:
       - name: A1
         variables:
           case_loop_var: "DEMO ({{ .date }})"

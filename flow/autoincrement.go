@@ -22,7 +22,7 @@ func (f *Flow) AutoIncrement() error {
 			if f.Variables.SetDate(date) {
 				log.Info(
 					fmt.Sprintf(
-						"TASK[%s] LOOP[%s] PIPES AI DATE[%s]",
+						"TASK[%s] SUB TASK[%s] PIPES AI DATE[%s]",
 						f.GetTaskName(),
 						f.GetLoopName(),
 						date,
@@ -68,7 +68,7 @@ func (f *Flow) SetDefaults() {
 
 	f.Variables.Set(map[string]interface{}{
 		"task_name": f.GetTaskName(),
-		"loop_name": f.GetLoopName(),
+		"subtask_name": f.GetLoopName(),
 		"pipe_name": f.GetPipeName(),
 	})
 
@@ -100,7 +100,7 @@ func (f *Flow) GetGlobalVariables() map[string]interface{} {
 }
 
 func (f *Flow) GetLoopVariables() map[string]interface{} {
-	return f.Config.Tasks[f.Index.Task].Loops[f.Index.Loop].Variables
+	return f.Config.Tasks[f.Index.Task].Subtask[f.Index.Subtask].Variables
 }
 
 func (f *Flow) GetPipeVariables() map[string]interface{} {

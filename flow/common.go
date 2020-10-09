@@ -6,7 +6,7 @@ import (
 
 func (f *Flow) GetTitle() string {
 	return fmt.Sprintf(
-		"TASK[%s] LOOP[%s] PIPE[%s]",
+		"TASK[%s] SUB TASK[%s] PIPE[%s]",
 		f.GetTaskName(),
 		f.GetLoopName(),
 		f.GetPipeName(),
@@ -18,7 +18,7 @@ func (f *Flow) GetTaskName() string {
 }
 
 func (f *Flow) GetLoopName() string {
-	return f.Config.Tasks[f.Index.Task].Loops[f.Index.Loop].Name
+	return f.Config.Tasks[f.Index.Task].Subtask[f.Index.Subtask].Name
 }
 
 func (f *Flow) GetPipeName() string {

@@ -1,7 +1,7 @@
 ---
 tasks:
   - name: check
-    loops:
+    subtask:
       - name: main
         variables:
           job_url: "https://api.tinybird.co/v0/jobs/2631da76-39a2-451c-9fe1-11f2cf091dd2"

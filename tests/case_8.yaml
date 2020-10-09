@@ -3,7 +3,7 @@ general:
   tmp_dir: /tmp
 tasks:
   - name: T1
-    loops:
+    subtask:
       - name: T1L1
     pipes:
       - name: T1P1

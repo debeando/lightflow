@@ -13,7 +13,7 @@ type Flow struct {
 
 type Index struct {
 	Task int
-	Loop int
+	Subtask int
 	Pipe int
 }
 

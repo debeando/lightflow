@@ -22,7 +22,7 @@ func (f *Flow) Pipes() {
 
 	log.Info(
 		fmt.Sprintf(
-			"TASK[%s] LOOP[%s] PIPES ET[%s]", // ET is acronym for execution time.
+			"TASK[%s] SUB TASK[%s] PIPES ET[%s]", // ET is acronym for execution time.
 			f.GetTaskName(),
 			f.GetLoopName(),
 			itr.ExecutionTime,
