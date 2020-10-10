@@ -10,7 +10,7 @@ import (
 
 func (f *Flow) Pipes() {
 	for _, pipe_name := range args.Pipes() {
-		if len(pipe_name) > 0 {
+		if (len(args.Pipes()) > 0 && len(pipe_name) > 0) || (len(args.Pipe()) == 0) {
 			itr := iterator.Iterator{
 				Items: f.Config.Tasks[f.Index.Task].Pipes,
 				Name: pipe_name,
