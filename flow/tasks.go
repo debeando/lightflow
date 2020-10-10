@@ -3,7 +3,7 @@ package flow
 import (
 	"fmt"
 
-	"github.com/debeando/lightflow/common"
+	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/flow/iterator"
 )
@@ -11,7 +11,7 @@ import (
 func (f *Flow) Tasks() {
 	itr := iterator.Iterator{
 		Items: f.Config.Tasks,
-		Name: common.GetArgVal("task").(string),
+		Name: args.Task(),
 	}
 
 	itr.Run(func() {

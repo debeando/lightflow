@@ -17,10 +17,10 @@ Usage:
 
 	lightflow [--help | --version | --example ]
 	lightflow --task=foo
-	lightflow --task=foo --pipe=bar
+	lightflow --task=foo --pipes=bar
 	lightflow --variables='{"date": "2019-08-01"}'
-	lightflow --task=foo --pipe=bar --variables='{"query": "SELECT * FROM foo", "date": "2019-08-01"}'
-	lightflow --task=foo --pipe=bar --ai-date='{"start": "2019-08-01", "end":"2019-08-31"}'
+	lightflow --task=foo --pipes=bar --variables='{"query": "SELECT * FROM foo", "date": "2019-08-01"}'
+	lightflow --task=foo --pipes=bar --ai-date='{"start": "2019-08-01", "end":"2019-08-31"}'
 
 Options:
 
@@ -30,9 +30,9 @@ Options:
   --dry-run    No execute commands.
   --example    Print out full sample configuration to stdout.
   --help       Show this help.
-  --pipe       Filter by pipe name.
-  --task       Filter by task name.
+  --pipes      Filter by pipe name.
   --subtask    Filter by subtask name.
+  --task       Filter by task name.
   --variables  Passing variables on tasks, not compatible with --ai-date.
   --version    Print version numbers.
 
@@ -60,7 +60,7 @@ func Run() {
 	fVersion := flag.Bool("version", false, "")
 	_ = flag.Bool("debug", false, "")
 	_ = flag.String("subtask", "", "")
-	_ = flag.String("pipe", "", "")
+	_ = flag.String("pipes", "", "")
 	_ = flag.String("task", "", "")
 
 	flag.Usage = func() { help(1) }
