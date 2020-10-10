@@ -8,12 +8,39 @@ import (
 
 type List struct {
 	Name  string
+	Items []Item
+}
+
+type Item struct {
+	Name string
+	Value string
 }
 
 var demo = []List{
-	{Name: "foo"},
-	{Name: "bar"},
-	{Name: "baz"},
+	{
+		Name: "foo",
+		Items: []Item{
+			{ Name: "L1I1"},
+			{ Name: "L1I2"},
+			{ Name: "L1I3"},
+			{ Name: "L1I4"},
+		},
+	},
+	{
+		Name: "bar",
+		Items: []Item{
+			{ Name: "L2I1"},
+			{ Name: "L2I2"},
+			{ Name: "L2I3"},
+		},
+	},
+	{
+		Name: "baz",
+		Items: []Item{
+			{ Name: "L3I1"},
+			{ Name: "L3I2"},
+		},
+	},
 }
 
 func TestExistOk(t *testing.T) {
@@ -36,17 +63,87 @@ func TestExistKo(t *testing.T) {
 	}
 }
 
-func TestLoop(t *testing.T) {
+func TestLoopCount(t *testing.T) {
 	counter := 0
 	itr := iterator.Iterator{
 		Items: demo,
 	}
 
-	itr.Run("", func() {
+	itr.Run(func() {
 		counter++
 	})
 
 	if counter != len(demo) {
 		t.Errorf("Expected %d, got %d.", len(demo), counter)
+	}
+}
+
+func TestLevelOne(t *testing.T) {
+	counter := 0
+	itrl1 := iterator.Iterator{
+		Items: demo,
+	}
+
+	itrl1.Run(func() {
+		itrl2 := iterator.Iterator{
+			Items: demo[itrl1.Index].Items,
+		}
+
+		itrl2.Run(func() {
+			counter++
+		})
+	})
+
+	if counter != 9 {
+		t.Errorf("Expected %d, got %d.", 9, counter)
+	}
+}
+
+func TestLevelOneMatchItemName(t *testing.T) {
+	counter := 0
+	itrl1 := iterator.Iterator{
+		Items: demo,
+		Name: "bar",
+	}
+
+	itrl1.Run(func() {
+		itrl2 := iterator.Iterator{
+			Items: demo[itrl1.Index].Items,
+			Name: "L2I2",
+		}
+
+		itrl2.Run(func() {
+			counter++
+
+			if itrl2.Index != 1 {
+				t.Errorf("Expected %d, got %d.", 1, itrl2.Index)
+			}
+		})
+	})
+
+	if counter != 1 {
+		t.Errorf("Expected %d, got %d.", 1, counter)
+	}
+}
+
+func TestLevelOneMatchLoopName(t *testing.T) {
+	counter := 0
+	itrl1 := iterator.Iterator{
+		Items: demo,
+		Name: "bar",
+	}
+
+	itrl1.Run(func() {
+		itrl2 := iterator.Iterator{
+			Items: demo[itrl1.Index].Items,
+		}
+
+		itrl2.Run(func() {
+			counter++
+		})
+	})
+
+	if counter != len(demo[1].Items) {
+		t.Errorf("Expected %d, got %d.", len(demo[1].Items), counter)
 	}
 }
