@@ -8,6 +8,10 @@ import (
 	"time"
 )
 
+func CurrentDate() string {
+	return time.Now().Format("2006-01-02")
+}
+
 func GetArgVal(name string) interface{} {
 	if flag.Lookup(name) != nil {
 		return flag.Lookup(name).Value.(flag.Getter).Get()

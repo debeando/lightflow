@@ -74,3 +74,7 @@ func (l *List) SetDate(date string) bool {
 
 	return false
 }
+
+func (l *List) GetDate() string {
+	return common.InterfaceToString(l.Get("date"))
+}

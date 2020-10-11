@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
@@ -14,7 +15,7 @@ import (
 func (f *Flow) Execute() {
 	cmd := f.RenderCommand()
 
-	if common.GetArgVal("dry-run").(bool) {
+	if args.DryRun() {
 		fmt.Println(cmd)
 	} else {
 		f.Retry(func() bool {

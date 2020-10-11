@@ -10,7 +10,6 @@ import (
 
 func (f *Flow) Chunks() {
 	if f.IsValidChunk() {
-		log.Info("Starting chunk loop...", nil)
 		c := chunk.Chunk{
 			Total: f.GetChunkTotal(),
 			Limit: f.GetChunkLimit(),
