@@ -17,7 +17,9 @@ func (f *Flow) Subtask() {
 	itr.Run(func() {
 		f.Index.Pipe = 0
 		f.Index.Subtask = itr.Index
-		f.AutoIncrement()
+		if err := f.AutoIncrement(); err != nil {
+			log.Error(err.Error(), nil)
+		}
 	})
 
 	log.Info(
