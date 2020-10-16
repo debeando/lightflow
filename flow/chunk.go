@@ -9,6 +9,8 @@ import (
 )
 
 func (f *Flow) Chunks() {
+	f.SetDefaults()
+
 	if f.IsValidChunk() {
 		c := chunk.Chunk{
 			Total: f.GetChunkTotal(),

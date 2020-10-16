@@ -38,9 +38,11 @@ func (f *Flow) SetDefaults() {
 	f.Variables.Set(f.GetPipeVariables())
 	f.Variables.Set(args.Variables())
 
-	f.Variables.Items["path"] = config.Load().General.Temporary_Directory
 	f.Variables.Items["error"] = ""
 	f.Variables.Items["exit_code"] = 0
+	f.Variables.Items["limit"] = 0
+	f.Variables.Items["offset"] = 0
+	f.Variables.Items["path"] = config.Load().General.Temporary_Directory
 	f.Variables.Items["status"] = ""
 	f.Variables.Items["stdout"] = ""
 }
