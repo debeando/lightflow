@@ -2,6 +2,9 @@ package flow
 
 import (
 	"fmt"
+
+	"github.com/debeando/lightflow/cli/args"
+	"github.com/debeando/lightflow/config"
 )
 
 func (f *Flow) GetTitle() string {
@@ -56,4 +59,36 @@ func (f *Flow) setPipeName() {
 
 func (f *Flow) getPipeName() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Name
+}
+
+func (f *Flow) GetStdOut() interface{} {
+	return f.Variables.Items["stdout"]
+}
+
+func (f *Flow) GetGlobalVariables() map[string]interface{} {
+	return f.Config.Variables
+}
+
+func (f *Flow) GetSubTaskVariables() map[string]interface{} {
+	return f.Config.Tasks[f.Index.Task].Subtask[f.Index.Subtask].Variables
+}
+
+func (f *Flow) GetPipeVariables() map[string]interface{} {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Variables
+}
+
+func (f *Flow) SetDefaults() {
+	f.Variables.Set(args.Variables())
+	f.Variables.Set(f.GetGlobalVariables())
+	f.Variables.Set(f.GetPipeVariables())
+	f.Variables.Set(f.GetSubTaskVariables())
+	f.Variables.SetDate(args.VariableDate())
+
+	f.Variables.Items["error"] = ""
+	f.Variables.Items["exit_code"] = 0
+	f.Variables.Items["limit"] = 0
+	f.Variables.Items["offset"] = 0
+	f.Variables.Items["path"] = config.Load().General.Temporary_Directory
+	f.Variables.Items["status"] = ""
+	f.Variables.Items["stdout"] = ""
 }

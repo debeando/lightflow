@@ -17,7 +17,7 @@ Usage:
 
 	lightflow [--help | --version | --example ]
 	lightflow --task=foo
-	lightflow --task=foo --pipes=bar
+	lightflow --task=foo --pipes=bar,baz
 	lightflow --variables='{"date": "2019-08-01"}'
 	lightflow --task=foo --pipes=bar --variables='{"query": "SELECT * FROM foo", "date": "2019-08-01"}'
 	lightflow --task=foo --pipes=bar --ai-date='{"start": "2019-08-01", "end":"2019-08-31"}'
@@ -31,7 +31,7 @@ Options:
   --example    Print out full sample configuration to stdout.
   --help       Show this help.
   --list       List tasks, subtask and pipes.
-  --pipes      Filter by pipe name.
+  --pipes      Filter by one or many pipe name.
   --subtask    Filter by subtask name.
   --task       Filter by task name.
   --variables  Passing variables on tasks, not compatible with --ai-date.

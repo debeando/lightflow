@@ -5,7 +5,6 @@ import (
 
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/flow/autoincrement"
 )
 
@@ -29,36 +28,4 @@ func (f *Flow) AutoIncrement() error {
 			}
 			f.Pipes()
 		})
-}
-
-func (f *Flow) SetDefaults() {
-	f.Variables.SetDate(args.VariableDate())
-	f.Variables.Set(f.GetGlobalVariables())
-	f.Variables.Set(f.GetSubTaskVariables())
-	f.Variables.Set(f.GetPipeVariables())
-	f.Variables.Set(args.Variables())
-
-	f.Variables.Items["error"] = ""
-	f.Variables.Items["exit_code"] = 0
-	f.Variables.Items["limit"] = 0
-	f.Variables.Items["offset"] = 0
-	f.Variables.Items["path"] = config.Load().General.Temporary_Directory
-	f.Variables.Items["status"] = ""
-	f.Variables.Items["stdout"] = ""
-}
-
-func (f *Flow) GetStdOut() interface{} {
-	return f.Variables.Items["stdout"]
-}
-
-func (f *Flow) GetGlobalVariables() map[string]interface{} {
-	return f.Config.Variables
-}
-
-func (f *Flow) GetSubTaskVariables() map[string]interface{} {
-	return f.Config.Tasks[f.Index.Task].Subtask[f.Index.Subtask].Variables
-}
-
-func (f *Flow) GetPipeVariables() map[string]interface{} {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Variables
 }
