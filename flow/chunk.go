@@ -19,10 +19,12 @@ func (f *Flow) Chunks() {
 
 		c.Chunk(func(step int, chunks int, offset int, pct int) {
 			log.Info(
-				f.GetTitle(),
-				map[string]interface{}{
-					"Chunk Percentage": fmt.Sprintf("%d%%", pct),
-				})
+				fmt.Sprintf(
+					"TASK[%s] SUB TASK[%s] PIPE CHUNK[%d%%]",
+					f.TaskName(),
+					f.SubTaskName(),
+					pct,
+				), nil)
 
 			f.Variables.Set(map[string]interface{}{
 				"offset": offset,

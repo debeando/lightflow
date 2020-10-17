@@ -29,7 +29,6 @@ func (f *Flow) Pipes() {
 					f.SubTaskName(),
 					itr.ExecutionTime,
 				), nil)
-
 		}
 	}
 }
