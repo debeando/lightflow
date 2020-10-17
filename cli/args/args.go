@@ -6,6 +6,10 @@ import (
 	"github.com/debeando/lightflow/common"
 )
 
+func List() bool {
+	return common.GetArgVal("list").(bool)
+}
+
 func Task() string {
 	return common.GetArgVal("task").(string)
 }
