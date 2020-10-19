@@ -28,10 +28,21 @@ func Load() *List {
 	return list
 }
 
+func Ignored(key string) bool {
+    switch key {
+    case "date", "year", "month", "day":
+        return true
+    }
+
+    return false
+}
+
 // Set variables use in the pipe:
 func (l *List) Set(variables map[string]interface{}) {
 	for index, value := range variables {
-		l.Items[index] = value
+		if ! Ignored(index) {
+			l.Items[index] = value
+		}
 	}
 }
 
