@@ -7,7 +7,8 @@ import (
 )
 
 type List struct {
-	Name  string
+	Name string
+	Ignore bool
 	Items []Item
 }
 
@@ -19,6 +20,7 @@ type Item struct {
 var demo = []List{
 	{
 		Name: "foo",
+		Ignore: true,
 		Items: []Item{
 			{ Name: "L1I1"},
 			{ Name: "L1I2"},
@@ -145,5 +147,21 @@ func TestLevelOneMatchLoopName(t *testing.T) {
 
 	if counter != len(demo[1].Items) {
 		t.Errorf("Expected %d, got %d.", len(demo[1].Items), counter)
+	}
+}
+
+func TestIgnore(t *testing.T) {
+	counter := 0
+	itrl1 := iterator.Iterator{
+		Items: demo,
+		Name: "foo",
+	}
+
+	itrl1.Run(func() {
+		counter++
+	})
+
+	if counter != 0 {
+		t.Errorf("Expected %d, got %d.", 0, counter)
 	}
 }
