@@ -23,6 +23,7 @@ type Structure struct {
 		}
 		Pipes []struct { // Pipes is a common collection for subtask.
 			Name      string                 `yaml:"name"`      // Nombre del pipe.
+			Ignore    bool                   `yaml:"ignore"`    // Ignore this pipe.
 			Execute   string                 `yaml:"execute"`   // Comando a ejecutar. Si hay que limpiar el stdout en formato JSON, usar tool jq.
 			Register  string                 `yaml:"register"`  // Nombre de la variable donde se guarda el stdout/stderr solo cuando el formato es TEXT, se usa para guardar un valor de un pipe y usarlo en otro pipe.
 			Format    Format                 `yaml:"format"`    // Formato de la variable, por defecto TEXT, si es JSON, un MySQL stdout, CSV, etc... que se anade luego a las variables.

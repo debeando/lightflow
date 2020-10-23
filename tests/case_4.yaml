@@ -19,5 +19,6 @@ tasks:
         execute: sleep 0.1
       - execute: sleep 0.2
         name: T2P2
+        ignore: true
       - name: T2P3
         execute: sleep 0.1

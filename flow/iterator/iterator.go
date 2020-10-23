@@ -48,6 +48,12 @@ func (t *Iterator) Loops(fn func()) {
 	for t.Index = range t.Next() {
 		t.Key = t.key(t.Index)
 
+		if len(t.Name) == 0 {
+			if t.ignore(t.Index) {
+				continue
+			}
+		}
+
 		if len(t.Name) > 0 {
 			if ! t.Exist(t.Name) {
 				break
@@ -63,9 +69,26 @@ func (t *Iterator) Loops(fn func()) {
 func (t *Iterator) key(index int) string {
 	items := reflect.ValueOf(t.Items)
 	item := items.Index(index)
-	if item.Kind() == reflect.Struct {
-		return reflect.Indirect(item).Field(0).Interface().(string)
+	if item.Kind() != reflect.Struct {
+		return ""
 	}
 
-	return ""
+	return reflect.Indirect(item).FieldByName("Name").Interface().(string)
+}
+
+func (t *Iterator) ignore(index int) bool {
+	items := reflect.ValueOf(t.Items)
+	item := items.Index(index)
+
+	if item.Kind() != reflect.Struct {
+		return false
+	}
+
+	ignore := reflect.Indirect(item).FieldByName("Ignore")
+
+	if ! ignore.IsValid() {
+		return false
+	}
+
+	return ignore.Bool()
 }
