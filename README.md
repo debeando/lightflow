@@ -35,6 +35,7 @@ tasks:
       # Print variables:
       - name: T1P0
         execute: echo -e "T1P0 {{ .date }} {{ .year }}{{ .month }}{{ .day }}"
+        ignore: true
         variables:
           V3: T1P1.C
       - name: T1P1
