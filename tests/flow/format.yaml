@@ -7,9 +7,6 @@ tasks:
       - name: curl
         execute: curl --silent ifconfig.me/all.json
         format: JSON
-        retry:
-          attempts: 1
-          wait: 1
       - name: print
         execute: echo -n "{{ .forwarded }}"
       - name: ip
