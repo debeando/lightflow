@@ -4,6 +4,8 @@ A flexible, light, easy to use, automation framework for typical data manipulati
 
 ## Components:
 
+![Flow](https://raw.githubusercontent.com/debeando/lightflow/master/assets/flow.png)
+
 - **Tasks:** Collections of subtask and pipes.
 - **Subtask:** Collections of pipes with own variables.
 - **Pipes:** Collections of commands to execute in the bash with many abilities;
