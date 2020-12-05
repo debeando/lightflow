@@ -28,8 +28,9 @@ type Structure struct {
 			Register  string                 `yaml:"register"`  // Nombre de la variable donde se guarda el stdout/stderr solo cuando el formato es TEXT, se usa para guardar un valor de un pipe y usarlo en otro pipe.
 			Format    Format                 `yaml:"format"`    // Formato de la variable, por defecto TEXT, si es JSON, un MySQL stdout, CSV, etc... que se anade luego a las variables.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
-			Skip      struct {               // Skip own pipe block when specific condition, use the variable definied in the Register to compare.
-				Equals int `yaml:"equals"` //
+			Skip      struct {                                  // Skip own pipe block when specific condition, use the variable definied in the Register to compare, by default use stdout variable to compare. And only compare string value.
+				Variable string              `yaml:"variable"`  // Variable name to take value and compare.
+				Equals   string              `yaml:"equals"`    // Condition to evaluate equal value registered to allow skip.
 			}
 			Retry struct { // Retry execution command when it fail, retry found inside Chunk.
 				Status   string `yaml:"status"`    //

@@ -1,6 +1,4 @@
 ---
-general:
-  tmp_dir: /tmp
 tasks:
   - name: T1
     subtask:

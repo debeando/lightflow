@@ -1,3 +1,4 @@
+# ./lightflow --config tests/case_3.yaml --ai-date='{"start": "2020-11-18", "end": "2020-11-20"}' --dry-run | grep echo
 ---
 general:
   tmp_dir: /tmp

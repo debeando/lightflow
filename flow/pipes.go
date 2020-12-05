@@ -16,10 +16,22 @@ func (f *Flow) Pipes() {
 				Name: pipe_name,
 			}
 
-			itr.Run(func() {
+			itr.Run(func() bool {
 				f.Index.Pipe = itr.Index
 				log.Info(f.GetTitle(), nil)
 				f.Chunks()
+
+				if f.Skip {
+					log.Warning(
+						fmt.Sprintf(
+							"TASK[%s] SUB TASK[%s] PIPE[%s] SKIPPED!",
+							f.TaskName(),
+							f.SubTaskName(),
+							f.PipeName(),
+						), nil)
+				}
+
+				return f.Skip
 			})
 
 			log.Info(
