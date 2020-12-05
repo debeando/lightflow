@@ -14,11 +14,13 @@ func (f *Flow) Tasks() {
 		Name: args.Task(),
 	}
 
-	itr.Run(func() {
+	itr.Run(func() bool {
 		f.Index.Subtask = 0
 		f.Index.Pipe = 0
 		f.Index.Task = itr.Index
 		f.Subtask()
+
+		return false
 	})
 
 	log.Info(fmt.Sprintf(

@@ -14,12 +14,15 @@ func (f *Flow) Subtask() {
 		Name: args.Subtask(),
 	}
 
-	itr.Run(func() {
+	itr.Run(func() bool {
 		f.Index.Pipe = 0
 		f.Index.Subtask = itr.Index
+		f.Skip = false
+
 		if err := f.AutoIncrement(); err != nil {
 			log.Error(err.Error(), nil)
 		}
+		return false
 	})
 
 	log.Info(

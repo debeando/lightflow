@@ -9,15 +9,16 @@ import (
 )
 
 type Flow struct {
-	Index     Index
 	Config    config.Structure
+	Index     Index
+	Skip      bool
 	Variables variables.List
 }
 
 type Index struct {
-	Task int
+	Pipe    int
 	Subtask int
-	Pipe int
+	Task    int
 }
 
 func (f *Flow) Run() {

@@ -10,7 +10,8 @@ A flexible, light, easy to use, automation framework for typical data manipulati
 	- **AutoIncrement:** For the moment only apply for date, you can define range.
 	- **Chunks:** Split pipe in many chunks.
 	- **Register:** You can save stdout into variable, and if JSON you can convert all first level into variables.
-	- **Retry:** Specific pipe when satisfy a condition to continue or not.
+	- **Retry:** Specific pipe when satisfy a condition to continue or not the pipe.
+  - **Skip:** Specific pipe when satisfy a condition to continue or not the subtask.
 - **Variables:** You can use environment variables or define own variables to use in the template, subtask and pipes and between them.
 - **Template:** You can build a command with many variables, defined in the subtask, pipes or register.
 

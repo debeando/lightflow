@@ -24,7 +24,7 @@ func (t *Iterator) Exist(name string) bool {
 	return false
 }
 
-func (t *Iterator) Run(fn func()) {
+func (t *Iterator) Run(fn func() bool) {
 	t.ExecutionTime = duration.Start(func() {
 		t.Loops(fn)
 	})
@@ -44,7 +44,7 @@ func (t *Iterator) Next() (<-chan int) {
 	return chnl
 }
 
-func (t *Iterator) Loops(fn func()) {
+func (t *Iterator) Loops(fn func() bool) {
 	for t.Index = range t.Next() {
 		t.Key = t.key(t.Index)
 
@@ -62,7 +62,9 @@ func (t *Iterator) Loops(fn func()) {
 			}
 		}
 
-		fn()
+		if fn() {
+			break
+		}
 	}
 }
 

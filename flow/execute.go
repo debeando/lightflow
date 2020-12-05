@@ -43,6 +43,11 @@ func (f *Flow) Execute() {
 				})
 			}
 
+			if f.EvalSkip() {
+				f.Skip = true
+				return false
+			}
+
 			return f.EvalRetry()
 		})
 	}
@@ -121,6 +126,14 @@ func (f *Flow) EvalRetry() bool {
 	return false
 }
 
+func (f *Flow) EvalSkip() bool {
+	if f.Variables.Get(f.GetSkipVariable()) == f.GetSkipEquals() {
+		return true
+	}
+
+	return false
+}
+
 func (f *Flow) GetExecute() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Execute
 }
@@ -134,4 +147,12 @@ func (f *Flow) GetFormat() config.Format {
 
 func (f *Flow) GetRegister() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Register
+}
+
+func (f *Flow) GetSkipVariable() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Skip.Variable
+}
+
+func (f *Flow) GetSkipEquals() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Skip.Equals
 }
