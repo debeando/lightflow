@@ -8,6 +8,7 @@ import (
 	"github.com/debeando/lightflow/flow/autoincrement"
 )
 
+// AutoIncrement is the handle method for generic AI package.
 func (f *Flow) AutoIncrement() error {
 	f.SetDefaults()
 

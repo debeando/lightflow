@@ -4,14 +4,18 @@ import (
 	"math"
 )
 
+// Chunk save the common settings:
 type Chunk struct {
-	Total int
-	Limit int
+	Total int // Total of items.
+	Limit int // Items for each chunk.
 }
 
+// Chunk is the main handler for loop .
 func (c *Chunk) Chunk(fn func(step int, chunks int, offset int, percentage int)) {
+	// Calc total number of iterations:
 	chunks := int(math.Ceil(float64(c.Total) / float64(c.Limit)))
 
+	// Generic iteration like Yield:
 	for step := 0; step <= chunks; step++ {
 		offset := (step * c.Limit)
 		pct := percentage(c.Total, offset)
@@ -19,6 +23,7 @@ func (c *Chunk) Chunk(fn func(step int, chunks int, offset int, percentage int))
 	}
 }
 
+// percentage get the overall process chunk in percentage format.
 func percentage(total int, position int) int {
 	pct := ((100 * position) / total)
 

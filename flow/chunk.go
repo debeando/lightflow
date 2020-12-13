@@ -8,6 +8,7 @@ import (
 	"github.com/debeando/lightflow/flow/chunk"
 )
 
+// Chunks is the handle method for generic Chunk package.
 func (f *Flow) Chunks() {
 	if f.IsValidChunk() {
 		c := chunk.Chunk{
@@ -36,11 +37,11 @@ func (f *Flow) Chunks() {
 	}
 }
 
+// GetChunkTotal get the total of chunks from config or variables.
 func (f *Flow) GetChunkTotal() int {
-	// Aqui hay que poner un interface to int.
+	// Aqui hay que poner un interface to int y nos ahorramos validaciones.
 	if total := f.Variables.Get("chunk.total"); total != nil {
 		if value, ok := total.(string); ok {
-			// fmt.Println(total)
 			if value := common.StringToInt(value); value > 0 {
 				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total = value
 			}
@@ -50,6 +51,7 @@ func (f *Flow) GetChunkTotal() int {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total
 }
 
+// GetChunkLimit get the limit of chunks from config or variables.
 func (f *Flow) GetChunkLimit() int {
 	limit := f.Variables.Get("chunk.limit")
 
@@ -64,6 +66,7 @@ func (f *Flow) GetChunkLimit() int {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit
 }
 
+// IsValidChunk is the sanity check for settings.
 func (f *Flow) IsValidChunk() bool {
 	if f.GetChunkTotal() < 2 {
 		return false
