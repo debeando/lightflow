@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/debeando/lightflow/cli/args"
+	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/variables"
 )
@@ -25,6 +26,8 @@ func (f *Flow) Run() {
 	f.Config = *config.Load()
 	f.Variables = *variables.Load()
 
+	PrintArgumentVariables()
+
 	if args.List() {
 		f.List()
 	} else {
@@ -41,5 +44,12 @@ func (f *Flow) List() {
 				fmt.Println("    - Pipe:", f.Config.Tasks[task_index].Pipes[pipe_index].Name)
 			}
 		}
+	}
+}
+
+// PrintArgumentVariables print the variables passed via arguments on the terminal.
+func PrintArgumentVariables() {
+	if len(args.Variables()) > 0 {
+		log.Info("Argument variables", args.Variables())
 	}
 }

@@ -19,3 +19,5 @@ tasks:
     pipes:
     - name: print
       execute: echo -n "{{ .foo }} {{ .bar }} {{ .baz }} {{ .case_a }}"
+    - name: print2
+      execute: echo -n "{{ .abc }}"

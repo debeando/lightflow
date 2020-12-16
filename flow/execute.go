@@ -58,9 +58,7 @@ func (f *Flow) RenderCommand() string {
 
 	for _, variable := range template.Variables(cmd) {
 		if f.Variables.Exist(variable) == false {
-			log.Warning("Variable not defined", map[string]interface{}{
-				"Variable Name": variable,
-			})
+			log.Warning(fmt.Sprintf("Variable not defined: %s", variable), nil)
 		}
 	}
 
