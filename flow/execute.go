@@ -3,6 +3,7 @@ package flow
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common"
@@ -35,6 +36,8 @@ func (f *Flow) Execute() {
 			if err := f.ParseStdout(); err != nil {
 				log.Error(err.Error(), nil)
 			}
+
+			f.Print()
 
 			//f.Variables deberia tener un debug.
 			for variable, value := range f.Variables.Items {
@@ -132,6 +135,28 @@ func (f *Flow) EvalSkip() bool {
 	return false
 }
 
+// Print specific variable with value.
+func (f *Flow) Print() {
+	names := f.GetPrint()
+	if names != nil {
+		vars := make(map[string]interface{})
+
+		for _, name := range names {
+			vars[name] = f.Variables.Get(name)
+		}
+
+		log.Info(
+			fmt.Sprintf(
+				"TASK[%s] SUB TASK[%s] PIPE[%s] PRINT:",
+				f.TaskName(),
+				f.SubTaskName(),
+				f.PipeName(),
+			),
+			vars,
+		)
+	}
+}
+
 func (f *Flow) GetExecute() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Execute
 }
@@ -153,4 +178,12 @@ func (f *Flow) GetSkipVariable() string {
 
 func (f *Flow) GetSkipEquals() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Skip.Equals
+}
+
+func (f *Flow) GetPrint() []string {
+	if len(f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Print) == 0 {
+		return nil
+	}
+
+	return strings.Split(f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Print, ",")
 }

@@ -9,11 +9,11 @@ import (
 )
 
 func (f *Flow) Pipes() {
-	for _, pipe_name := range args.Pipes() {
-		if f.Valid(pipe_name) {
+	for _, pipeName := range args.Pipes() {
+		if f.Valid(pipeName) {
 			itr := iterator.Iterator{
 				Items: f.Config.Tasks[f.Index.Task].Pipes,
-				Name: pipe_name,
+				Name:  pipeName,
 			}
 
 			itr.Run(func() bool {
@@ -45,6 +45,6 @@ func (f *Flow) Pipes() {
 	}
 }
 
-func (f *Flow) Valid(pipe_name string) bool {
-	return (len(args.Pipes()) > 0 && len(pipe_name) > 0) || (len(args.Pipe()) == 0)
+func (f *Flow) Valid(pipeName string) bool {
+	return (len(args.Pipes()) > 0 && len(pipeName) > 0) || (len(args.Pipe()) == 0)
 }

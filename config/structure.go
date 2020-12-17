@@ -16,7 +16,7 @@ type Structure struct {
 	}
 	Variables map[string]interface{} `yaml:"variables"` // Lista global de variables para usar en los pipes.
 	Tasks     []struct {
-		Name  string     `yaml:"name"` // Nombre de la task.
+		Name    string     `yaml:"name"` // Nombre de la task.
 		Subtask []struct { // Subtask
 			Name      string                 `yaml:"name"`      // Nombre del loop, cada loop ejecuta el grupo de pipes.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables para usar en los pipes.
@@ -27,10 +27,11 @@ type Structure struct {
 			Execute   string                 `yaml:"execute"`   // Comando a ejecutar. Si hay que limpiar el stdout en formato JSON, usar tool jq.
 			Register  string                 `yaml:"register"`  // Nombre de la variable donde se guarda el stdout/stderr solo cuando el formato es TEXT, se usa para guardar un valor de un pipe y usarlo en otro pipe.
 			Format    Format                 `yaml:"format"`    // Formato de la variable, por defecto TEXT, si es JSON, un MySQL stdout, CSV, etc... que se anade luego a las variables.
+			Print     string                 `yaml:"print"`     // Print specific variables, each variables are comma separated.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
-			Skip      struct {                                  // Skip own pipe block when specific condition, use the variable definied in the Register to compare, by default use stdout variable to compare. And only compare string value.
-				Variable string              `yaml:"variable"`  // Variable name to take value and compare.
-				Equals   string              `yaml:"equals"`    // Condition to evaluate equal value registered to allow skip.
+			Skip      struct {               // Skip own pipe block when specific condition, use the variable definied in the Register to compare, by default use stdout variable to compare. And only compare string value.
+				Variable string `yaml:"variable"` // Variable name to take value and compare.
+				Equals   string `yaml:"equals"`   // Condition to evaluate equal value registered to allow skip.
 			}
 			Retry struct { // Retry execution command when it fail, retry found inside Chunk.
 				Status   string `yaml:"status"`    //
