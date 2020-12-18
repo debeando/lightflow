@@ -16,6 +16,7 @@ func (f *Flow) AutoIncrement() error {
 		args.AutoIncrementStartDate(f.Variables.GetDate()),
 		args.AutoIncrementEndDate(f.Variables.GetDate()),
 		func(date string) {
+			f.Skip = false
 			f.SetDefaults()
 			if f.Variables.SetDate(date) {
 				log.Info(

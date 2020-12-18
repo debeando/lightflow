@@ -38,13 +38,7 @@ func (f *Flow) Execute() {
 			}
 
 			f.Print()
-
-			//f.Variables deberia tener un debug.
-			for variable, value := range f.Variables.Items {
-				log.Debug(f.GetTitle(), map[string]interface{}{
-					variable: value,
-				})
-			}
+			f.Debug()
 
 			if f.EvalSkip() {
 				f.Skip = true
@@ -127,8 +121,9 @@ func (f *Flow) EvalRetry() bool {
 	return false
 }
 
+// EvalSkip evaluate condition to set skip flag.
 func (f *Flow) EvalSkip() bool {
-	if f.Variables.Get(f.GetSkipVariable()) == f.GetSkipEquals() {
+	if common.InterfaceToString(f.Variables.Get(f.GetSkipVariable())) == f.GetSkipEquals() {
 		return true
 	}
 
@@ -154,6 +149,16 @@ func (f *Flow) Print() {
 			),
 			vars,
 		)
+	}
+}
+
+// Debug print all variables in debug mode.
+func (f *Flow) Debug() {
+	//f.Variables deberia tener un debug.
+	for variable, value := range f.Variables.Items {
+		log.Debug(f.GetTitle(), map[string]interface{}{
+			variable: value,
+		})
 	}
 }
 

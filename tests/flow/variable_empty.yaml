@@ -1,0 +1,13 @@
+---
+general:
+  tmp_dir: /tmp
+tasks:
+  - name: demo
+    subtask:
+      - name: A1
+        variables:
+          empty1: ''
+          empty2:
+    pipes:
+      - name: print
+        execute: echo -e "({{ .empty1 }}-{{ .empty2 }})"

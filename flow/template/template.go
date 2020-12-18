@@ -10,7 +10,7 @@ import (
 func Render(text_template string, variables map[string]interface{}) (string, error) {
 	var b bytes.Buffer
 
-	t, err := template.New("").Parse(text_template)
+	t, err := template.New("").Option("missingkey=zero").Parse(text_template)
 	if err != nil {
 		return "", err
 	}
