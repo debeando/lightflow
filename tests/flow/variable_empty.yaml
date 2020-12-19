@@ -1,4 +1,5 @@
 ---
+# ./lightflow --config tests/flow/variable_empty.yaml --dry-run
 general:
   tmp_dir: /tmp
 tasks:
@@ -10,4 +11,4 @@ tasks:
           empty2:
     pipes:
       - name: print
-        execute: echo -e "({{ .empty1 }}-{{ .empty2 }})"
+        execute: echo -e "({{ .empty1 }}-{{ .empty2 }}-{{ .notexist }})"

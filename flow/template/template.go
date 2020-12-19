@@ -7,28 +7,41 @@ import (
 	"text/template"
 )
 
-func Render(text_template string, variables map[string]interface{}) (string, error) {
+// Render any string with variables.
+func Render(textTemplate string, variables map[string]interface{}) (string, error) {
 	var b bytes.Buffer
 
-	t, err := template.New("").Option("missingkey=zero").Parse(text_template)
+	t, err := template.New("").Option("missingkey=zero").Parse(textTemplate)
 	if err != nil {
 		return "", err
 	}
 
-	if err := t.Execute(&b, variables); err != nil {
+	if err := t.Execute(&b, ClearEmptyNil(variables)); err != nil {
 		return "", err
 	}
 
 	return b.String(), nil
 }
 
-func Variables(text_template string) (variables []string) {
+// Variables is a method to return a list of variables defined into template.
+func Variables(textTemplate string) (variables []string) {
 	r := regexp.MustCompile(`{{\s*\.([^{}]*)\s*}}`)
-	m := r.FindAllStringSubmatch(text_template, -1)
+	m := r.FindAllStringSubmatch(textTemplate, -1)
 	for _, name := range m {
 		if len(name) == 2 {
 			variables = append(variables, strings.TrimSpace(name[1]))
 		}
 	}
 	return
+}
+
+// ClearEmptyNil set nil interface to empty.
+func ClearEmptyNil(variables map[string]interface{}) map[string]interface{} {
+	for k, v := range variables {
+		if _, ok := v.(string); !ok {
+			variables[k] = ""
+		}
+	}
+
+	return variables
 }
