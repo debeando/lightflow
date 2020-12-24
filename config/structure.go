@@ -19,6 +19,7 @@ type Structure struct {
 		Name    string     `yaml:"name"` // Nombre de la task.
 		Subtask []struct { // Subtask
 			Name      string                 `yaml:"name"`      // Nombre del loop, cada loop ejecuta el grupo de pipes.
+			Ignore    bool                   `yaml:"ignore"`    // Ignore this subtask.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables para usar en los pipes.
 		}
 		Pipes []struct { // Pipes is a common collection for subtask.

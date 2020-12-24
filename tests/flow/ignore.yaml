@@ -12,11 +12,17 @@ tasks:
   - name: T2
     subtask:
       - name: T2L1
+        ignore: true
+      - name: T2L2
+        variables:
+          pipeName: T2P2
+      - name: T2L3
     pipes:
       - name: T2P1
         execute: sleep 0.1
       - execute: sleep 0.2
         name: T2P2
         ignore: true
+        execute: echo "{{ .pipeName }}"
       - name: T2P3
         execute: sleep 0.1
