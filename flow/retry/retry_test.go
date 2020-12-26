@@ -9,9 +9,12 @@ import (
 func TestRetryOK(t *testing.T) {
 	var counter = 0
 
-	retry.Retry(
-		3,
-		1,
+	r := retry.Retry{
+		Attempt: 3,
+		Wait:    1,
+	}
+
+	r.Retry(
 		func() bool {
 			counter++
 			return true
@@ -25,9 +28,12 @@ func TestRetryOK(t *testing.T) {
 func TestRetryKO(t *testing.T) {
 	var counter = 0
 
-	retry.Retry(
-		3,
-		1,
+	r := retry.Retry{
+		Attempt: 3,
+		Wait:    1,
+	}
+
+	r.Retry(
 		func() bool {
 			counter++
 			return false

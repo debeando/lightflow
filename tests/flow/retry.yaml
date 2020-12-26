@@ -11,7 +11,7 @@ tasks:
           wait: 1
           exit_code: 0
       - name: T1P2
-        execute: exit 1
+        execute: exit 0
         retry:
           attempts: 3
           wait: 1

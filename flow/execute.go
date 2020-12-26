@@ -45,6 +45,8 @@ func (f *Flow) Execute() {
 				return false
 			}
 
+			f.PrintRetry()
+
 			return f.EvalRetry()
 		})
 	}
@@ -129,6 +131,23 @@ func (f *Flow) EvalSkip() bool {
 	}
 
 	return false
+}
+
+// PrintRetry show the retry progress.
+func (f *Flow) PrintRetry() {
+	if f.GetRetryAttempts() < 1 {
+		return
+	}
+
+	log.Info(
+		fmt.Sprintf(
+			"TASK[%s] SUB TASK[%s] PIPE[%s] RETRY[%d/%d]",
+			f.TaskName(),
+			f.SubTaskName(),
+			f.PipeName(),
+			f.Attempt,
+			f.GetRetryAttempts(),
+		), nil)
 }
 
 // Print specific variable with value.

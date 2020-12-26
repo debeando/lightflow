@@ -5,10 +5,14 @@ import (
 )
 
 func (f *Flow) Retry(fn func() bool) {
-	retry.Retry(
-		f.GetRetryAttempts(),
-		f.GetRetryWait(),
+	r := retry.Retry{
+		Attempt: f.GetRetryAttempts(),
+		Wait:    f.GetRetryWait(),
+	}
+
+	r.Retry(
 		func() bool {
+			f.Attempt = f.GetRetryAttempts() - r.Attempt + 1
 			return fn()
 		})
 }
