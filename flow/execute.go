@@ -21,18 +21,12 @@ func (f *Flow) Execute() {
 		fmt.Println(cmd)
 	} else {
 		f.Retry(func() bool {
-			stdout, exit_code := execute.Execute(cmd)
+			stdout, exitCode := execute.Execute(cmd)
 
 			f.Variables.Set(map[string]interface{}{
-				"exit_code": exit_code,
+				"exit_code": exitCode,
 				"stdout":    stdout,
 			})
-
-			if exit_code > 0 && f.GetRetryExitCode() == 0 {
-				log.Error(f.GetTitle(), map[string]interface{}{
-					"Exit Code": exit_code,
-				})
-			}
 
 			if err := f.ParseStdout(); err != nil {
 				log.Error(err.Error(), nil)
@@ -45,10 +39,7 @@ func (f *Flow) Execute() {
 				f.Skip = true
 				return false
 			}
-
-			f.PrintRetry()
-
-			return f.EvalRetry()
+			return false
 		})
 	}
 }
@@ -94,37 +85,6 @@ func (f *Flow) ParseStdout() error {
 	return nil
 }
 
-func (f *Flow) EvalRetry() bool {
-	if f.GetRetryWait() == 0 {
-		return false
-	}
-
-	if f.GetRetryAttempts() == 0 {
-		return false
-	}
-
-	// EvalRetryByExitCode
-	exit_code := f.Variables.Get("exit_code").(int)
-	status := common.InterfaceToString(f.Variables.Get(f.GetRetryStatus()))
-	error := common.InterfaceToString(f.Variables.Get(f.GetRetryError()))
-
-	if f.GetRetryExitCode() != exit_code {
-		return true
-	}
-
-	// EvalRetryByStatus
-	if exit_code == 0 && len(error) == 0 && len(status) > 0 && len(f.GetRetryDone()) > 0 && f.GetRetryDone() != status {
-		return true
-	}
-
-	// meter esto en el debug variables
-	if len(error) > 0 {
-		log.Error(common.InterfaceToString(error), nil)
-	}
-
-	return false
-}
-
 // EvalSkip evaluate condition to set skip flag.
 func (f *Flow) EvalSkip() bool {
 	expression, err := template.Render(f.GetSkip(), f.Variables.Items)
@@ -133,23 +93,6 @@ func (f *Flow) EvalSkip() bool {
 	}
 
 	return evaluate.Expression(expression)
-}
-
-// PrintRetry show the retry progress.
-func (f *Flow) PrintRetry() {
-	if f.GetRetryAttempts() < 1 {
-		return
-	}
-
-	log.Info(
-		fmt.Sprintf(
-			"TASK[%s] SUB TASK[%s] PIPE[%s] RETRY[%d/%d]",
-			f.TaskName(),
-			f.SubTaskName(),
-			f.PipeName(),
-			f.Attempt,
-			f.GetRetryAttempts(),
-		), nil)
 }
 
 // Print specific variable with value.

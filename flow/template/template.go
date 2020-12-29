@@ -38,7 +38,7 @@ func Variables(textTemplate string) (variables []string) {
 // ClearEmptyNil set nil interface to empty.
 func ClearEmptyNil(variables map[string]interface{}) map[string]interface{} {
 	for k, v := range variables {
-		if _, ok := v.(string); !ok {
+		if v == nil {
 			variables[k] = ""
 		}
 	}
