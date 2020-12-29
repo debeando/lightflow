@@ -9,6 +9,7 @@ import (
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
+	"github.com/debeando/lightflow/flow/evaluate"
 	"github.com/debeando/lightflow/flow/execute"
 	"github.com/debeando/lightflow/flow/template"
 )
@@ -126,11 +127,12 @@ func (f *Flow) EvalRetry() bool {
 
 // EvalSkip evaluate condition to set skip flag.
 func (f *Flow) EvalSkip() bool {
-	if common.InterfaceToString(f.Variables.Get(f.GetSkipVariable())) == f.GetSkipEquals() {
-		return true
+	expression, err := template.Render(f.GetSkip(), f.Variables.Items)
+	if err != nil {
+		log.Warning(err.Error(), nil)
 	}
 
-	return false
+	return evaluate.Expression(expression)
 }
 
 // PrintRetry show the retry progress.
@@ -197,12 +199,8 @@ func (f *Flow) GetRegister() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Register
 }
 
-func (f *Flow) GetSkipVariable() string {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Skip.Variable
-}
-
-func (f *Flow) GetSkipEquals() string {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Skip.Equals
+func (f *Flow) GetSkip() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Skip
 }
 
 func (f *Flow) GetPrint() []string {
