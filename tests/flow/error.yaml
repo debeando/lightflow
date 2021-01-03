@@ -10,3 +10,5 @@ tasks:
       - name: T1P2
         execute: exit 1
         error: "{{ .exit_code }} != 0"
+      - name: T1P3
+        execute: exit 1

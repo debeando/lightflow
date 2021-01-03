@@ -9,7 +9,7 @@ import (
 	"github.com/debeando/lightflow/flow/template"
 )
 
-func (f *Flow) Retry(fn func() bool) {
+func (f *Flow) Retry(fn func()) {
 	r := retry.Retry{
 		Attempt: f.GetRetryAttempts(),
 		Wait:    f.GetRetryWait(),

@@ -14,38 +14,26 @@ import (
 	"github.com/debeando/lightflow/flow/template"
 )
 
+// Execute is a method to render and execute command and save result into
+// variables and then are interpreted to take other decisions.
 func (f *Flow) Execute() {
-	cmd := f.RenderCommand()
+	cmd := f.renderCommand()
 
 	if args.DryRun() {
 		fmt.Println(cmd)
 	} else {
-		f.Retry(func() bool {
-			stdout, exitCode := execute.Execute(cmd)
-
-			f.Variables.Set(map[string]interface{}{
-				"exit_code": exitCode,
-				"stdout":    stdout,
-			})
-
-			if err := f.ParseStdout(); err != nil {
-				log.Error(err.Error(), nil)
-			}
-
-			f.Error()
-			f.Print()
-			f.Debug()
-
-			if f.EvalSkip() {
-				f.Skip = true
-				return false
-			}
-			return false
+		f.Retry(func() {
+			f.execute(cmd)
+			f.parse()
+			f.error()
+			f.print()
+			f.debug()
+			f.skip()
 		})
 	}
 }
 
-func (f *Flow) RenderCommand() string {
+func (f *Flow) renderCommand() string {
 	var cmd = f.GetProperty("Execute")
 
 	for _, variable := range template.Variables(cmd) {
@@ -55,7 +43,7 @@ func (f *Flow) RenderCommand() string {
 		}
 	}
 
-	cmd, err := template.Render(cmd, f.Variables.Items)
+	cmd, err := template.Render(cmd, f.Variables.GetItems())
 	if err != nil {
 		log.Warning(err.Error(), nil)
 	}
@@ -63,7 +51,22 @@ func (f *Flow) RenderCommand() string {
 	return common.TrimNewlines(cmd)
 }
 
-func (f *Flow) ParseStdout() error {
+func (f *Flow) execute(cmd string) {
+	stdout, exitCode := execute.Execute(cmd)
+
+	f.Variables.Set(map[string]interface{}{
+		"exit_code": exitCode,
+		"stdout":    stdout,
+	})
+}
+
+func (f *Flow) parse() {
+	if err := f.parseStdout(); err != nil {
+		log.Error(err.Error(), nil)
+	}
+}
+
+func (f *Flow) parseStdout() error {
 	switch f.GetFormat() {
 	case config.TEXT:
 		if reg := f.GetProperty("Register"); len(reg) > 0 {
@@ -86,32 +89,40 @@ func (f *Flow) ParseStdout() error {
 	return nil
 }
 
-// EvalSkip evaluate condition to set skip flag.
-func (f *Flow) EvalSkip() bool {
+// Skip evaluate condition to set skip flag.
+func (f *Flow) skip() {
 	expression, err := template.Render(f.GetProperty("Skip"), f.Variables.Items)
 	if err != nil {
 		log.Warning(err.Error(), nil)
 	}
 
-	return evaluate.Expression(expression)
+	f.Skip = evaluate.Expression(expression)
 }
 
 // Error evaluate expression to identify any error or suggest error.
-func (f *Flow) Error() {
-	expression, err := template.Render(f.GetProperty("Error"), f.Variables.GetItems())
+func (f *Flow) error() {
+	error := f.GetProperty("Error")
+	if len(error) == 0 {
+		error = "{{ .exit_code }} != 0"
+	}
+
+	expression, err := template.Render(error, f.Variables.GetItems())
 	if err != nil {
 		log.Warning(err.Error(), nil)
 	}
 
 	if evaluate.Expression(expression) {
 		log.Error(f.GetTitle(), map[string]interface{}{
-			"ErrorExpression": fmt.Sprintf("%s => %s", f.GetProperty("Error"), expression),
+			"Expression": error,
+			"Rendered":   expression,
+			"StdOut":     f.GetVariable("stdout"),
+			"ExitCode":   f.GetVariable("exit_code"),
 		})
 	}
 }
 
 // Print specific variable with value.
-func (f *Flow) Print() {
+func (f *Flow) print() {
 	names := f.GetProperty("Print")
 	if len(names) > 0 {
 		vars := make(map[string]interface{})
@@ -134,7 +145,7 @@ func (f *Flow) Print() {
 }
 
 // Debug print all variables in debug mode.
-func (f *Flow) Debug() {
+func (f *Flow) debug() {
 	//f.Variables deberia tener un debug.
 	for variable, value := range f.Variables.Items {
 		log.Debug(f.GetTitle(), map[string]interface{}{
