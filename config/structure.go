@@ -30,7 +30,8 @@ type Structure struct {
 			Format    Format                 `yaml:"format"`    // Formato de la variable, por defecto TEXT, si es JSON, un MySQL stdout, CSV, etc... que se anade luego a las variables.
 			Print     string                 `yaml:"print"`     // Print specific variables, each variables are comma separated.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
-			Skip      string                 // Skip own pipe block when specific expression condition, use the variable definied in the Register to compare
+			Skip      string                 // Skip own pipe block when specific expression condition, use the variable definied in the Register to compare.
+			Error     string                 // Show error when specific expression condition, use the variable definied in the Register to compare. By default is exit_code != 0.
 			Retry     struct {               // Retry execution command when it fail, retry found inside Chunk.
 				Attempts   int    `yaml:"attempts"`   // Cuantas veces se reintenta el comando.
 				Wait       int    `yaml:"wait"`       // Cuando tiempo debe transcurrir entre reintentos.

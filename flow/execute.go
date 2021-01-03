@@ -28,17 +28,11 @@ func (f *Flow) Execute() {
 				"stdout":    stdout,
 			})
 
-			if exitCode > 0 {
-				log.Error(f.GetTitle(), map[string]interface{}{
-					"Exit Code": exitCode,
-					"StdOut":    stdout,
-				})
-			}
-
 			if err := f.ParseStdout(); err != nil {
 				log.Error(err.Error(), nil)
 			}
 
+			f.Error()
 			f.Print()
 			f.Debug()
 
@@ -100,6 +94,20 @@ func (f *Flow) EvalSkip() bool {
 	}
 
 	return evaluate.Expression(expression)
+}
+
+// Error evaluate expression to identify any error or suggest error.
+func (f *Flow) Error() {
+	expression, err := template.Render(f.GetProperty("Error"), f.Variables.GetItems())
+	if err != nil {
+		log.Warning(err.Error(), nil)
+	}
+
+	if evaluate.Expression(expression) {
+		log.Error(f.GetTitle(), map[string]interface{}{
+			"ErrorExpression": fmt.Sprintf("%s => %s", f.GetProperty("Error"), expression),
+		})
+	}
 }
 
 // Print specific variable with value.

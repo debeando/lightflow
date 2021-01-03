@@ -1,0 +1,12 @@
+---
+tasks:
+  - name: T1
+    subtask:
+      - name: T1L1
+    pipes:
+      - name: T1P1
+        execute: echo $(( RANDOM % 2 ))
+        error: "{{ .stdout }} != 0"
+      - name: T1P2
+        execute: exit 1
+        error: "{{ .exit_code }} != 0"
