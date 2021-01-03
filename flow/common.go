@@ -17,64 +17,23 @@ func (f *Flow) GetTitle() string {
 }
 
 func (f *Flow) TaskName() string {
-	f.setTaskName()
-	return f.getTaskName()
-}
-
-func (f *Flow) getTaskName() string {
-	return f.Config.Tasks[f.Index.Task].Name
-}
-
-func (f *Flow) setTaskName() {
-	f.Variables.Set(map[string]interface{}{
-		"task_name": f.getTaskName(),
-	})
+	return f.setName("task_name", f.getTaskName())
 }
 
 func (f *Flow) SubTaskName() string {
-	f.setSubTaskName()
-	return f.getSubTaskName()
-}
-
-func (f *Flow) setSubTaskName() {
-	f.Variables.Set(map[string]interface{}{
-		"subtask_name": f.getSubTaskName(),
-	})
-}
-
-func (f *Flow) getSubTaskName() string {
-	return f.Config.Tasks[f.Index.Task].Subtask[f.Index.Subtask].Name
+	return f.setName("subtask_name", f.getSubTaskName())
 }
 
 func (f *Flow) PipeName() string {
-	f.setPipeName()
-	return f.getPipeName()
+	return f.setName("pipe_name", f.GetProperty("Name"))
 }
 
-func (f *Flow) setPipeName() {
-	f.Variables.Set(map[string]interface{}{
-		"pipe_name": f.getPipeName(),
-	})
-}
-
-func (f *Flow) getPipeName() string {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Name
-}
-
-func (f *Flow) GetStdOut() interface{} {
-	return f.Variables.Items["stdout"]
+func (f *Flow) GetVariable(name string) interface{} {
+	return f.Variables.Items[name]
 }
 
 func (f *Flow) GetGlobalVariables() map[string]interface{} {
 	return f.Config.Variables
-}
-
-func (f *Flow) GetSubTaskVariables() map[string]interface{} {
-	return f.Config.Tasks[f.Index.Task].Subtask[f.Index.Subtask].Variables
-}
-
-func (f *Flow) GetPipeVariables() map[string]interface{} {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Variables
 }
 
 func (f *Flow) SetDefaults() {
@@ -82,13 +41,22 @@ func (f *Flow) SetDefaults() {
 	f.Variables.Set(f.GetGlobalVariables())
 	f.Variables.Set(f.GetPipeVariables())
 	f.Variables.Set(f.GetSubTaskVariables())
+	f.Variables.Set(map[string]interface{}{
+		"error":     "",
+		"exit_code": 0,
+		"limit":     0,
+		"offset":    0,
+		"path":      config.Load().General.Temporary_Directory,
+		"status":    "",
+		"stdout":    "",
+	})
 	f.Variables.SetDate(args.VariableDate())
+}
 
-	f.Variables.Items["error"] = ""
-	f.Variables.Items["exit_code"] = 0
-	f.Variables.Items["limit"] = 0
-	f.Variables.Items["offset"] = 0
-	f.Variables.Items["path"] = config.Load().General.Temporary_Directory
-	f.Variables.Items["status"] = ""
-	f.Variables.Items["stdout"] = ""
+func (f *Flow) setName(key string, value string) string {
+	f.Variables.Set(map[string]interface{}{
+		key: value,
+	})
+
+	return value
 }

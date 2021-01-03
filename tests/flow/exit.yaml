@@ -1,0 +1,8 @@
+---
+tasks:
+  - name: T1
+    subtask:
+      - name: T1L1
+    pipes:
+      - name: T1P1
+        execute: exit 1

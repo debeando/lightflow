@@ -58,15 +58,3 @@ func (f *Flow) EvalRetry() bool {
 
 	return evaluate.Expression(expression)
 }
-
-func (f *Flow) GetRetryAttempts() int {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Attempts
-}
-
-func (f *Flow) GetRetryWait() int {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Wait
-}
-
-func (f *Flow) GetRetryExpression() string {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Expression
-}

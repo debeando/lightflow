@@ -28,6 +28,13 @@ func (f *Flow) Execute() {
 				"stdout":    stdout,
 			})
 
+			if exitCode > 0 {
+				log.Error(f.GetTitle(), map[string]interface{}{
+					"Exit Code": exitCode,
+					"StdOut":    stdout,
+				})
+			}
+
 			if err := f.ParseStdout(); err != nil {
 				log.Error(err.Error(), nil)
 			}
@@ -45,7 +52,7 @@ func (f *Flow) Execute() {
 }
 
 func (f *Flow) RenderCommand() string {
-	var cmd = f.GetExecute()
+	var cmd = f.GetProperty("Execute")
 
 	for _, variable := range template.Variables(cmd) {
 		if f.Variables.Exist(variable) == false {
@@ -65,12 +72,12 @@ func (f *Flow) RenderCommand() string {
 func (f *Flow) ParseStdout() error {
 	switch f.GetFormat() {
 	case config.TEXT:
-		if reg := f.GetRegister(); len(reg) > 0 {
-			f.Variables.Set(map[string]interface{}{reg: f.GetStdOut()})
+		if reg := f.GetProperty("Register"); len(reg) > 0 {
+			f.Variables.Set(map[string]interface{}{reg: f.GetVariable("stdout")})
 		}
 	case config.JSON:
 		//f.Variables puede tener un metodo para salvar en json de forma automatica?
-		raw, err := common.StringToJSON(common.InterfaceToString(f.GetStdOut()))
+		raw, err := common.StringToJSON(common.InterfaceToString(f.GetVariable("stdout")))
 		if err != nil {
 			return err
 		}
@@ -87,7 +94,7 @@ func (f *Flow) ParseStdout() error {
 
 // EvalSkip evaluate condition to set skip flag.
 func (f *Flow) EvalSkip() bool {
-	expression, err := template.Render(f.GetSkip(), f.Variables.Items)
+	expression, err := template.Render(f.GetProperty("Skip"), f.Variables.Items)
 	if err != nil {
 		log.Warning(err.Error(), nil)
 	}
@@ -97,12 +104,13 @@ func (f *Flow) EvalSkip() bool {
 
 // Print specific variable with value.
 func (f *Flow) Print() {
-	names := f.GetPrint()
-	if names != nil {
+	names := f.GetProperty("Print")
+	if len(names) > 0 {
 		vars := make(map[string]interface{})
 
-		for _, name := range names {
-			vars[name] = f.Variables.Get(name)
+		for _, name := range strings.Split(names, ",") {
+			key := strings.Trim(name, " ")
+			vars[key] = f.Variables.Get(key)
 		}
 
 		log.Info(
@@ -125,31 +133,4 @@ func (f *Flow) Debug() {
 			variable: value,
 		})
 	}
-}
-
-func (f *Flow) GetExecute() string {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Execute
-}
-
-func (f *Flow) GetFormat() config.Format {
-	if len(f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Format) == 0 {
-		return config.TEXT
-	}
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Format
-}
-
-func (f *Flow) GetRegister() string {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Register
-}
-
-func (f *Flow) GetSkip() string {
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Skip
-}
-
-func (f *Flow) GetPrint() []string {
-	if len(f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Print) == 0 {
-		return nil
-	}
-
-	return strings.Split(f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Print, ",")
 }
