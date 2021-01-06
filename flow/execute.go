@@ -111,13 +111,18 @@ func (f *Flow) error() {
 		log.Warning(err.Error(), nil)
 	}
 
+	vars := template.Variables(error)
+
+	debug_vars := make(map[string]interface{}) 
+	for _,v := range vars {
+    	debug_vars[v] = f.GetVariable(v)
+	}
+
+    debug_vars["Expression"] = error
+    debug_vars["Rendered"]   = expression
+
 	if evaluate.Expression(expression) {
-		log.Error(f.GetTitle(), map[string]interface{}{
-			"Expression": error,
-			"Rendered":   expression,
-			"StdOut":     f.GetVariable("stdout"),
-			"ExitCode":   f.GetVariable("exit_code"),
-		})
+		log.Error(f.GetTitle(), debug_vars)
 	}
 }
 

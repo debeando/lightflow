@@ -12,3 +12,6 @@ tasks:
         error: "{{ .exit_code }} != 0"
       - name: T1P3
         execute: exit 1
+      - name: T1P4
+        execute: echo "foo"
+        error: "0 == 1"
