@@ -14,10 +14,13 @@ A flexible, light, easy to use, automation framework for typical data manipulati
 	- **Register:** You can save stdout into variable, and if JSON you can convert all first level into variables.
 	- **Retry:** Specific pipe when satisfy a condition expression to continue or not the pipe.
   - **Skip:** Specific pipe when satisfy a condition expression to continue or not the subtask.
+  - **Error:** You can define custom expression to evaluate pipe variables are error or not.
 - **Variables:** You can use environment variables or define own variables to use in the template, subtask and pipes and between them.
 - **Template:** You can build a command with many variables, defined in the subtask, pipes or register.
 
 ## Configuration:
+
+Your's tasks are definied in YAML format in one configuration file: 
 
 ```yaml
 ---
