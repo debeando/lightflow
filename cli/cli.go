@@ -25,6 +25,7 @@ Usage:
 Options:
 
   --ai-date    Auto Increment date, not compatible with --variables.
+  --ad-date    Auto Decrement date, not compatible with --variables.
   --config     Using specific config file.
   --debug      Enable debug mode.
   --dry-run    No execute commands.
@@ -57,7 +58,9 @@ func Run() {
 	_ = flag.String("pipes", "", "")
 	_ = flag.String("subtask", "", "")
 	_ = flag.String("task", "", "")
+
 	fAIDate := flag.String("ai-date", "", "")
+	fADDate := flag.String("ad-date", "", "")
 	fConfig := flag.String("config", "", "")
 	fDryRun := flag.Bool("dry-run", false, "")
 	fExample := flag.Bool("example", false, "")
@@ -77,6 +80,10 @@ func Run() {
 	case *fExample:
 		fmt.Printf(example.GetConfigFile())
 	case len(*fAIDate) > 0 && len(*fVariables) > 0:
+		help(0)
+	case len(*fADDate) > 0 && len(*fVariables) > 0:
+		help(0)
+	case len(*fAIDate) > 0 && len(*fADDate) > 0:
 		help(0)
 	case *fDryRun == true:
 		log.Warning("Running in safe mode, not execute any commands, only print commands.", nil)

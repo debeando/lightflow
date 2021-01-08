@@ -1,4 +1,4 @@
-package autoincrement
+package date
 
 import (
 	"errors"
@@ -15,7 +15,7 @@ type Duration struct {
 	Date time.Time
 }
 
-func Date(start string, end string, fn func(string)) error {
+func Increment(start string, end string, fn func(string)) error {
 	d := Duration{}
 
 	if ok := d.ValidDate(start); !ok {
@@ -47,6 +47,37 @@ func Date(start string, end string, fn func(string)) error {
 	return nil
 }
 
+func Decrement(start string, end string, fn func(string)) error {
+	d := Duration{}
+
+	if ok := d.ValidDate(start); !ok {
+		return errors.New("Invalid start date.")
+	}
+
+	if ok := d.ValidDate(end); !ok {
+		return errors.New("Invalid end date.")
+	}
+
+	if err := d.Parse(start); err != nil {
+		return err
+	}
+
+	if d.LessThanDate(start, end) {
+		return errors.New("Start date should be less than end date.")
+	}
+
+	for {
+		fn(d.ToDate())
+
+		if d.ToDate() == end {
+			break
+		}
+
+		d.Decrement(IntervalbyHours)
+	}
+
+	return nil
+}
 func (d *Duration) ValidDate(date string) bool {
 	if _, err := time.Parse(DateFormat, date); err != nil {
 		return false
@@ -65,8 +96,23 @@ func (d *Duration) GreaterThanDate(start string, end string) bool {
 	return false
 }
 
+func (d *Duration) LessThanDate(start string, end string) bool {
+	s, _ := time.Parse(DateFormat, start)
+	e, _ := time.Parse(DateFormat, end)
+
+	if e.Sub(s).Minutes() > 0 {
+		return true
+	}
+
+	return false
+}
+
 func (d *Duration) Increment(hour time.Duration) {
 	d.Date = d.Date.Add(hour * time.Hour)
+}
+
+func (d *Duration) Decrement(hour time.Duration) {
+	d.Date = d.Date.Add(-time.Hour * hour)
 }
 
 func (d *Duration) ToDate() string {
