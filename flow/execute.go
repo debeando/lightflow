@@ -35,7 +35,9 @@ func (f *Flow) Execute() {
 
 func (f *Flow) renderCommand() string {
 	var cmd = f.GetProperty("Execute")
+	var vars = f.Variables.GetItems()
 
+	// Find unknown variables:
 	for _, variable := range template.Variables(cmd) {
 		if f.Variables.Exist(variable) == false {
 			log.Warning(fmt.Sprintf("Register empty variable: %s", variable), nil)
@@ -43,7 +45,22 @@ func (f *Flow) renderCommand() string {
 		}
 	}
 
-	cmd, err := template.Render(cmd, f.Variables.GetItems())
+	// Find template variables to render:
+	for variable, value := range f.Variables.Items {
+		value_template := template.Variables(common.InterfaceToString(value))
+
+		if len(value_template) > 0 {
+			cmd, err := template.Render(common.InterfaceToString(value), vars)
+			if err != nil {
+				log.Warning(err.Error(), nil)
+			}
+
+			vars[variable] = cmd
+		}
+	}
+
+	// Render template:
+	cmd, err := template.Render(cmd, vars)
 	if err != nil {
 		log.Warning(err.Error(), nil)
 	}
@@ -113,7 +130,7 @@ func (f *Flow) error() {
 
 	vars := template.Variables(error)
 
-	debug_vars := make(map[string]interface{}) 
+	debug_vars := make(map[string]interface{})
 	for _,v := range vars {
     	debug_vars[v] = f.GetVariable(v)
 	}
