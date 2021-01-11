@@ -54,7 +54,26 @@ func Variables() map[string]interface{} {
 	return nil
 }
 
-func AutoIncrementStartDate(default_date string) string {
+func IntervalAIDate() bool {
+	aidate := common.GetArgVal("ai-date").(string)
+
+	if len(aidate) > 0 {
+		return true
+	}
+	return false
+}
+
+func IntervalADDate() bool {
+	addate := common.GetArgVal("ad-date").(string)
+
+	if len(addate) > 0 {
+		return true
+	}
+
+	return false
+}
+
+func IntervalAIStartDate(default_date string) string {
 	val, _ := common.GetArgValJSON("ai-date", "start")
 
 	if len(val) == 0 {
@@ -64,7 +83,7 @@ func AutoIncrementStartDate(default_date string) string {
 	return val
 }
 
-func AutoIncrementEndDate(default_date string) string {
+func IntervalAIEndDate(default_date string) string {
 	val, _ := common.GetArgValJSON("ai-date", "end")
 
 	if len(val) == 0 {
@@ -74,6 +93,25 @@ func AutoIncrementEndDate(default_date string) string {
 	return val
 }
 
+func IntervalADStartDate(default_date string) string {
+	val, _ := common.GetArgValJSON("ad-date", "start")
+
+	if len(val) == 0 {
+		return default_date
+	}
+
+	return val
+}
+
+func IntervalADEndDate(default_date string) string {
+	val, _ := common.GetArgValJSON("ad-date", "end")
+
+	if len(val) == 0 {
+		return default_date
+	}
+
+	return val
+}
 func VariableDate() string {
 	if date, _ := common.GetArgValJSON("variables", "date"); len(date) > 0 {
 		return date

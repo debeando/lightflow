@@ -19,7 +19,7 @@ func (f *Flow) Subtask() {
 		f.Index.Subtask = itr.Index
 		f.Skip = false
 
-		if err := f.AutoIncrement(); err != nil {
+		if err := f.Date(); err != nil {
 			log.Error(err.Error(), nil)
 		}
 		return false

@@ -1,9 +1,9 @@
-package autoincrement_test
+package date_test
 
 import (
 	"testing"
 
-	"github.com/debeando/lightflow/flow/autoincrement"
+	"github.com/debeando/lightflow/flow/date"
 )
 
 func TestValidDate(t *testing.T) {
@@ -12,7 +12,7 @@ func TestValidDate(t *testing.T) {
 		Valid bool
 	}
 
-	var ai = autoincrement.Duration{}
+	var ai = date.Duration{}
 	var testDates = map[int]TestDate{}
 
 	testDates[0] = TestDate{Date: "2019-12-31", Valid: true}
@@ -27,7 +27,7 @@ func TestValidDate(t *testing.T) {
 	}
 }
 
-func TestAutoincrement(t *testing.T) {
+func TestIncrement(t *testing.T) {
 	var counter = 0
 	var dates = [...]string{
 		"2019-12-30",
@@ -38,9 +38,30 @@ func TestAutoincrement(t *testing.T) {
 		"2020-01-04",
 	}
 
-	autoincrement.Date(
+	date.Increment(
 		"2019-12-30",
 		"2020-01-04",
+		func(date string) {
+			if dates[counter] != date {
+				t.Errorf("Expected %s, got %s.", dates[counter], date)
+			}
+			counter++
+		})
+}
+
+func TestDecrement(t *testing.T) {
+	var counter = 0
+	var dates = [...]string{
+		"2020-01-02",
+		"2020-01-01",
+		"2019-12-31",
+		"2019-12-30",
+		"2019-12-29",
+	}
+
+	date.Decrement(
+		"2020-01-02",
+		"2019-12-29",
 		func(date string) {
 			if dates[counter] != date {
 				t.Errorf("Expected %s, got %s.", dates[counter], date)
@@ -55,7 +76,7 @@ func TestNoAutoincrement(t *testing.T) {
 		"2019-12-30",
 	}
 
-	autoincrement.Date(
+	date.Increment(
 		"2019-12-30",
 		"2019-12-30",
 		func(date string) {
@@ -73,7 +94,7 @@ func TestGreaterThanDate(t *testing.T) {
 		Valid bool
 	}
 
-	var ai = autoincrement.Duration{}
+	var ai = date.Duration{}
 	var testGreaterThanDates = map[int]TestGreaterThanDate{}
 
 	testGreaterThanDates[0] = TestGreaterThanDate{Start: "2019-12-31", End: "2019-12-31", Valid: false}
@@ -81,10 +102,29 @@ func TestGreaterThanDate(t *testing.T) {
 	testGreaterThanDates[2] = TestGreaterThanDate{Start: "2019-10-10", End: "2018-10-10", Valid: true}
 
 	for index, _ := range testGreaterThanDates {
-		ai.GreaterThanDate("2010-12-31","2019-12-31")
-
 		if v := ai.GreaterThanDate(testGreaterThanDates[index].Start, testGreaterThanDates[index].End); v != testGreaterThanDates[index].Valid {
 			t.Errorf("Expected %t, got %t.", testGreaterThanDates[index].Valid, v)
+		}
+	}
+}
+
+func TestLessThanDate(t *testing.T) {
+	type TestLessThanDate struct {
+		Start string
+		End string
+		Valid bool
+	}
+
+	var ai = date.Duration{}
+	var testLessThanDates = map[int]TestLessThanDate{}
+
+	testLessThanDates[0] = TestLessThanDate{Start: "2019-12-31", End: "2019-12-31", Valid: false}
+	testLessThanDates[1] = TestLessThanDate{Start: "2019-11-30", End: "2019-12-01", Valid: true}
+	testLessThanDates[2] = TestLessThanDate{Start: "2019-10-10", End: "2018-10-10", Valid: false}
+
+	for index, _ := range testLessThanDates {
+		if v := ai.LessThanDate(testLessThanDates[index].Start, testLessThanDates[index].End); v != testLessThanDates[index].Valid {
+			t.Errorf("Expected %t, got %t.", testLessThanDates[index].Valid, v)
 		}
 	}
 }

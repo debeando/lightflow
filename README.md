@@ -9,7 +9,7 @@ A flexible, light, easy to use, automation framework for typical data manipulati
 - **Tasks:** Collections of subtask and pipes.
 - **Subtask:** Collections of pipes with own variables.
 - **Pipes:** Collections of commands to execute in the bash with many abilities;
-	- **AutoIncrement:** For the moment only apply for date, you can define range.
+	- **Interval:** Is auto increment or decrement values, for the moment only apply for date, you can define range.
 	- **Chunks:** Split pipe in many chunks.
 	- **Register:** You can save stdout into variable, and if JSON you can convert all first level into variables.
 	- **Retry:** Specific pipe when satisfy a condition expression to continue or not the pipe.
