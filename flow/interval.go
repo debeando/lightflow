@@ -13,7 +13,6 @@ func (f *Flow) Date() error {
 	f.SetDefaults()
 
 	if args.IntervalAIDate() {
-		fmt.Println("AI")
 		start := args.IntervalAIStartDate(f.Variables.GetDate())
 		end := args.IntervalAIEndDate(f.Variables.GetDate())
 
@@ -24,7 +23,6 @@ func (f *Flow) Date() error {
 				f.dateLoop(date)
 			})
 	} else if args.IntervalADDate() {
-		fmt.Println("AD")
 		start := args.IntervalADStartDate(f.Variables.GetDate())
 		end := args.IntervalADEndDate(f.Variables.GetDate())
 
@@ -56,4 +54,3 @@ func (f *Flow) dateLoop(date string) {
 	}
 	f.Pipes()
 }
-
