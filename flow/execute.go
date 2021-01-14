@@ -11,6 +11,7 @@ import (
 	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/flow/evaluate"
 	"github.com/debeando/lightflow/flow/execute"
+	"github.com/debeando/lightflow/flow/slack"
 	"github.com/debeando/lightflow/flow/template"
 )
 
@@ -29,6 +30,7 @@ func (f *Flow) Execute() {
 			f.print()
 			f.debug()
 			f.skip()
+			f.slack()
 		})
 	}
 }
@@ -123,11 +125,7 @@ func (f *Flow) error() {
 		error = "{{ .exit_code }} != 0"
 	}
 
-	expression, err := template.Render(error, f.Variables.GetItems())
-	if err != nil {
-		log.Warning(err.Error(), nil)
-	}
-
+	expression := f.Render(error)
 	vars := template.Variables(error)
 
 	debug_vars := make(map[string]interface{})
@@ -174,4 +172,39 @@ func (f *Flow) debug() {
 			variable: value,
 		})
 	}
+}
+
+func (f *Flow) slack() {
+	expression := f.Render(f.GetSlackExpression())
+
+	if evaluate.Expression(expression) {
+		title := f.Render(f.GetSlackTitle())
+		message := f.Render(f.GetSlackMessage())
+
+		slack.Token = f.Config.General.Slack.Token
+		slack.Send(
+			f.GetSlackChannel(),
+			title,
+			message,
+			f.GetSlackColor(),
+		)
+
+		log.Info(
+			fmt.Sprintf(
+				"TASK[%s] SUB TASK[%s] PIPE[%s] SM2S!",
+				f.TaskName(),
+				f.SubTaskName(),
+				f.PipeName(),
+			),
+			nil,
+		)
+	}
+}
+
+func (f *Flow) Render(s string) string {
+	r, err := template.Render(s, f.Variables.GetItems())
+	if err != nil {
+		log.Warning(err.Error(), nil)
+	}
+	return r
 }

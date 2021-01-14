@@ -63,3 +63,23 @@ func (f *Flow) GetRetryWait() int {
 func (f *Flow) GetRetryExpression() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Retry.Expression
 }
+
+func (f *Flow) GetSlackChannel() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Slack.Channel
+}
+
+func (f *Flow) GetSlackTitle() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Slack.Title
+}
+
+func (f *Flow) GetSlackMessage() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Slack.Message
+}
+
+func (f *Flow) GetSlackColor() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Slack.Color
+}
+
+func (f *Flow) GetSlackExpression() string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Slack.Expression
+}
