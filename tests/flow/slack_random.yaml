@@ -1,0 +1,22 @@
+---
+general:
+  slack:
+    token: "${SLACK_TOKEN}"
+
+tasks:
+  - name: T1
+    subtask:
+      - name: T1L1
+    pipes:
+      - name: slack
+        slack:
+          channel: testing
+          title: "TEST {{ .date }}"
+          message: >
+            *abc*: a
+
+            ABC
+            - a
+            - {{ .pipe_name }}
+          expression: 'true'
+          color: danger

@@ -13,6 +13,9 @@ type Structure struct {
 	General struct {
 		Debug               bool   `yaml:"debug"`
 		Temporary_Directory string `yaml:"tmp_dir"`
+		Slack struct {
+			Token string `yaml:"token"`
+		}
 	}
 	Variables map[string]interface{} `yaml:"variables"` // Lista global de variables para usar en los pipes.
 	Tasks     []struct {
@@ -35,11 +38,18 @@ type Structure struct {
 			Retry     struct {               // Retry execution command when it fail, retry found inside Chunk.
 				Attempts   int    `yaml:"attempts"`   // Cuantas veces se reintenta el comando.
 				Wait       int    `yaml:"wait"`       // Cuando tiempo debe transcurrir entre reintentos.
-				Expression string `yaml:"expression"` // Expression to evaluate retry.
+				Expression string `yaml:"expression"` // Expression to evaluate condition and retry.
 			}
 			Chunk struct { // Loop own command by chunk logic.
 				Limit int `yaml:"limit"` // Número máximo de elementos por chunk.
 				Total int `yaml:"total"` // Número total de elementos.
+			}
+			Slack struct { // Send message to slack
+				Channel    string `yaml:"channel"`
+				Color      string `yaml:"color"`      // Can either be one of good (green), warning (yellow), danger (red), or any hex color code (eg. #439FE0).
+				Expression string `yaml:"expression"` // Expression to evaluate condition and send message.
+				Message    string `yaml:"message"`
+				Title      string `yaml:"title"`
 			}
 		}
 	}
