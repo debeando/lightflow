@@ -83,3 +83,11 @@ func (f *Flow) GetSlackColor() string {
 func (f *Flow) GetSlackExpression() string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Slack.Expression
 }
+
+func (f *Flow) GetPipePrint() []string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Print
+}
+
+func (f *Flow) GetPipeUnset() []string {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Unset
+}

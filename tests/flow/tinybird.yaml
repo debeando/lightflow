@@ -5,7 +5,9 @@ tasks:
       - name: T1L1
         variables:
           job_url: https://api.tinybird.co/v0/jobs/8ab2c026-6b81-41ba-aca3-38158d3e53b6
-          # job_url: https://api.tinybird.co/v0/jobs/6eda768a-e73b-4846-9051-b77566d57c2a
+      - name: T1L2
+        variables:
+          job_url: https://api.tinybird.co/v0/jobs/6eda768a-e73b-4846-9051-b77566d57c2a
     pipes:
       - name: check
         execute: >
@@ -14,7 +16,11 @@ tasks:
             -H "Authorization: Bearer $TINYBIRD_TOKEN" \
             -X GET "{{ .job_url }}"
         format: JSON
-        print: error,status
+        unset:
+          - error
+        print:
+          - error
+          - status
         error: >
           {{ if .error }}
             {{ len .error }} > 0

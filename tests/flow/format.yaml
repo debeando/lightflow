@@ -9,8 +9,11 @@ tasks:
         format: JSON
       - name: print
         execute: echo -n "{{ .forwarded }}"
-        print: forwarded
+        print:
+          - forwarded
       - name: ip
         execute: curl --silent ifconfig.me/all.json | jq '.ip_addr' -r
         register: ip
-        print: ip, stdout
+        print:
+          - ip
+          - stdout

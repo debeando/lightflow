@@ -3,7 +3,6 @@ package flow
 import (
 	"errors"
 	"fmt"
-	"strings"
 
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common"
@@ -24,6 +23,7 @@ func (f *Flow) Execute() {
 		fmt.Println(cmd)
 	} else {
 		f.Retry(func() {
+			f.unset()
 			f.execute(cmd)
 			f.parse()
 			f.error()
@@ -68,6 +68,14 @@ func (f *Flow) renderCommand() string {
 	}
 
 	return common.TrimNewlines(cmd)
+}
+
+func (f *Flow) unset() {
+    for _, key := range f.GetPipeUnset() {
+    	f.Variables.Set(map[string]interface{}{
+    		key: "",
+    	})
+    }
 }
 
 func (f *Flow) execute(cmd string) {
@@ -116,6 +124,10 @@ func (f *Flow) skip() {
 	}
 
 	f.Skip = evaluate.Expression(expression)
+
+	f.Variables.Set(map[string]interface{}{
+		"skip": f.Skip,
+	})
 }
 
 // Error evaluate expression to identify any error or suggest error.
@@ -143,12 +155,11 @@ func (f *Flow) error() {
 
 // Print specific variable with value.
 func (f *Flow) print() {
-	names := f.GetProperty("Print")
+	names := f.GetPipePrint()
 	if len(names) > 0 {
 		vars := make(map[string]interface{})
 
-		for _, name := range strings.Split(names, ",") {
-			key := strings.Trim(name, " ")
+		for _, key := range names {
 			vars[key] = f.Variables.Get(key)
 		}
 

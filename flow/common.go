@@ -45,6 +45,7 @@ func (f *Flow) SetDefaults() {
 		"exit_code": 0,
 		"limit":     0,
 		"offset":    0,
+		"skip":      false,
 		"path":      config.Load().General.Temporary_Directory,
 		"stdout":    "",
 	})

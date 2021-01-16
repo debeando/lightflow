@@ -16,6 +16,8 @@ A flexible, light, easy to use, automation framework for typical data manipulati
   - **Skip:** Specific pipe when satisfy a condition expression to continue or not the subtask.
   - **Error:** You can define custom expression to evaluate pipe variables are error or not.
   - **Slack:** Send message to slack when satisfy a condition expression.
+  - **Unset:** List of variables to unset every pipe loop.
+  - **Print:** List of variables to print.
 - **Variables:** You can use environment variables or define own variables to use in the template, subtask and pipes and between them.
 - **Template:** You can build a command with many variables, defined in the subtask, pipes or register.
 
