@@ -25,3 +25,4 @@ tasks:
           attempts: 3
           wait: 1
           expression: '"{{ .type }}" != "server"'
+
