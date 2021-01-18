@@ -25,3 +25,4 @@ A flexible, light, easy to use, automation framework for typical data manipulati
 
 Your's tasks are definied in YAML format in one configuration file, please see this [example files](https://github.com/debeando/lightflow/tree/master/tests/flow).
 
+To see all configuration options, please see comments on this [source code](https://github.com/debeando/lightflow/blob/master/config/structure.go).

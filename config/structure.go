@@ -34,6 +34,7 @@ type Structure struct {
 			Print     []string               `yaml:"print"`     // List of variables to print.
 			Unset     []string               `yaml:"unset"`     // List of variables to unset every pipe loop.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
+			Wait 	  uint64                 `yaml:"wait"`      // Sleep for N seconds pipe before start.
 			Skip      string                 // Skip own pipe block when specific expression condition, use the variable definied in the Register to compare.
 			Error     string                 // Show error when specific expression condition, use the variable definied in the Register to compare. By default is exit_code != 0.
 			Retry     struct {               // Retry execution command when it fail, retry found inside Chunk.
