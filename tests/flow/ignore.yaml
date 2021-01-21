@@ -26,3 +26,9 @@ tasks:
         execute: echo "{{ .pipeName }}"
       - name: T2P3
         execute: sleep 0.1
+      - name: T2P4
+        when: "0 > 0"
+        execute: echo "{{ .pipeName }}"
+        register: pn
+        print:
+          - pn

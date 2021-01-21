@@ -22,16 +22,18 @@ func (f *Flow) Execute() {
 	if args.DryRun() {
 		fmt.Println(cmd)
 	} else {
-		f.Retry(func() {
-			f.unset()
-			f.execute(cmd)
-			f.parse()
-			f.error()
-			f.print()
-			f.debug()
-			f.skip()
-			f.slack()
-		})
+		if f.when() {
+			f.Retry(func() {
+				f.unset()
+				f.execute(cmd)
+				f.parse()
+				f.error()
+				f.print()
+				f.debug()
+				f.skip()
+				f.slack()
+			})
+		}
 	}
 }
 
@@ -79,6 +81,10 @@ func (f *Flow) unset() {
 }
 
 func (f *Flow) execute(cmd string) {
+	log.Debug(f.GetTitle(), map[string]interface{}{
+		"Execute": cmd,
+	})
+
 	stdout, exitCode := execute.Execute(cmd)
 
 	f.Variables.Set(map[string]interface{}{
@@ -114,6 +120,40 @@ func (f *Flow) parseStdout() error {
 	}
 
 	return nil
+}
+
+func (f *Flow) when() bool {
+	if len(f.GetProperty("When")) == 0 {
+		return true
+	}
+
+	expression, err := template.Render(f.GetProperty("When"), f.Variables.Items)
+	if err != nil {
+		log.Warning(err.Error(), nil)
+	}
+
+	value := evaluate.Expression(expression)
+
+	debug_vars := make(map[string]interface{})
+    debug_vars["Expression"] = f.GetProperty("When")
+    debug_vars["Rendered"]   = expression
+    debug_vars["Result"]     = value
+
+	log.Debug(f.GetTitle(), debug_vars)
+
+	if !value {
+		log.Info(
+			fmt.Sprintf(
+				"TASK[%s] SUB TASK[%s] PIPE[%s] !WHEN",
+				f.TaskName(),
+				f.SubTaskName(),
+				f.PipeName(),
+			),
+			nil,
+		)
+	}
+
+	return value
 }
 
 // Skip evaluate condition to set skip flag.
