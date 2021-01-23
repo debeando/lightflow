@@ -8,7 +8,7 @@ import (
 
 func TestValidDate(t *testing.T) {
 	type TestDate struct {
-		Date string
+		Date  string
 		Valid bool
 	}
 
@@ -17,7 +17,7 @@ func TestValidDate(t *testing.T) {
 
 	testDates[0] = TestDate{Date: "2019-12-31", Valid: true}
 	testDates[1] = TestDate{Date: "2019-02-31", Valid: false}
-	testDates[2] = TestDate{Date: "2019-2-27",  Valid: false}
+	testDates[2] = TestDate{Date: "2019-2-27", Valid: false}
 
 	for index, _ := range testDates {
 
@@ -90,7 +90,7 @@ func TestNoAutoincrement(t *testing.T) {
 func TestGreaterThanDate(t *testing.T) {
 	type TestGreaterThanDate struct {
 		Start string
-		End string
+		End   string
 		Valid bool
 	}
 
@@ -111,7 +111,7 @@ func TestGreaterThanDate(t *testing.T) {
 func TestLessThanDate(t *testing.T) {
 	type TestLessThanDate struct {
 		Start string
-		End string
+		End   string
 		Valid bool
 	}
 

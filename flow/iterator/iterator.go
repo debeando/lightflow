@@ -30,7 +30,7 @@ func (t *Iterator) Run(fn func() bool) {
 	})
 }
 
-func (t *Iterator) Next() (<-chan int) {
+func (t *Iterator) Next() <-chan int {
 	chnl := make(chan int)
 	go func() {
 		items := reflect.ValueOf(t.Items)
@@ -55,7 +55,7 @@ func (t *Iterator) Loops(fn func() bool) {
 		}
 
 		if len(t.Name) > 0 {
-			if ! t.Exist(t.Name) {
+			if !t.Exist(t.Name) {
 				break
 			} else if t.Exist(t.Name) && t.Key != t.Name {
 				continue
@@ -88,7 +88,7 @@ func (t *Iterator) ignore(index int) bool {
 
 	ignore := reflect.Indirect(item).FieldByName("Ignore")
 
-	if ! ignore.IsValid() {
+	if !ignore.IsValid() {
 		return false
 	}
 

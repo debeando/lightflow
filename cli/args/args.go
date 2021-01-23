@@ -29,7 +29,7 @@ func Pipes() []string {
 func DryRun() bool {
 	dryrun := common.GetArgVal("dry-run")
 
-	switch v := dryrun.(type){
+	switch v := dryrun.(type) {
 	case bool:
 		return v
 	default:
@@ -42,7 +42,7 @@ func DryRun() bool {
 func Variables() map[string]interface{} {
 	args_vars := common.GetArgVal("variables")
 
-	switch v := args_vars.(type){
+	switch v := args_vars.(type) {
 	case string:
 		vars, _ := common.StringToJSON(v)
 

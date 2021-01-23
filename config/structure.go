@@ -13,7 +13,7 @@ type Structure struct {
 	General struct {
 		Debug               bool   `yaml:"debug"`
 		Temporary_Directory string `yaml:"tmp_dir"`
-		Slack struct {
+		Slack               struct {
 			Token string `yaml:"token"`
 		}
 	}
@@ -35,7 +35,7 @@ type Structure struct {
 			Print     []string               `yaml:"print"`     // List of variables to print.
 			Unset     []string               `yaml:"unset"`     // List of variables to unset every pipe loop.
 			Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
-			Wait 	  uint64                 `yaml:"wait"`      // Sleep for N seconds pipe before start.
+			Wait      uint64                 `yaml:"wait"`      // Sleep for N seconds pipe before start.
 			Skip      string                 `yaml:"skip"`      // Skip own pipe block when specific expression condition, use the variable definied in the Register to compare. First run pipe and them evaluate skip condition.
 			Error     string                 `yaml:"error"`     // Show error when specific expression condition, use the variable definied in the Register to compare. By default is exit_code != 0.
 			Retry     struct {               // Retry execution command when it fail, retry found inside Chunk.

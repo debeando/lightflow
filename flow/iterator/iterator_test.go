@@ -7,40 +7,40 @@ import (
 )
 
 type List struct {
-	Name string
+	Name   string
 	Ignore bool
-	Items []Item
+	Items  []Item
 }
 
 type Item struct {
-	Name string
+	Name  string
 	Value string
 }
 
 var demo = []List{
 	{
-		Name: "foo",
+		Name:   "foo",
 		Ignore: true,
 		Items: []Item{
-			{ Name: "L1I1"},
-			{ Name: "L1I2"},
-			{ Name: "L1I3"},
-			{ Name: "L1I4"},
+			{Name: "L1I1"},
+			{Name: "L1I2"},
+			{Name: "L1I3"},
+			{Name: "L1I4"},
 		},
 	},
 	{
 		Name: "bar",
 		Items: []Item{
-			{ Name: "L2I1"},
-			{ Name: "L2I2"},
-			{ Name: "L2I3"},
+			{Name: "L2I1"},
+			{Name: "L2I2"},
+			{Name: "L2I3"},
 		},
 	},
 	{
 		Name: "baz",
 		Items: []Item{
-			{ Name: "L3I1"},
-			{ Name: "L3I2"},
+			{Name: "L3I1"},
+			{Name: "L3I2"},
 		},
 	},
 }
@@ -105,13 +105,13 @@ func TestLevelOneMatchItemName(t *testing.T) {
 	counter := 0
 	itrl1 := iterator.Iterator{
 		Items: demo,
-		Name: "bar",
+		Name:  "bar",
 	}
 
 	itrl1.Run(func() {
 		itrl2 := iterator.Iterator{
 			Items: demo[itrl1.Index].Items,
-			Name: "L2I2",
+			Name:  "L2I2",
 		}
 
 		itrl2.Run(func() {
@@ -132,7 +132,7 @@ func TestLevelOneMatchLoopName(t *testing.T) {
 	counter := 0
 	itrl1 := iterator.Iterator{
 		Items: demo,
-		Name: "bar",
+		Name:  "bar",
 	}
 
 	itrl1.Run(func() {
@@ -154,7 +154,7 @@ func TestIgnore(t *testing.T) {
 	counter := 0
 	itrl1 := iterator.Iterator{
 		Items: demo,
-		Name: "foo",
+		Name:  "foo",
 	}
 
 	itrl1.Run(func() {

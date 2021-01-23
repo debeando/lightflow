@@ -19,21 +19,17 @@ import (
 func (f *Flow) Execute() {
 	cmd := f.renderCommand()
 
-	if args.DryRun() {
-		fmt.Println(cmd)
-	} else {
-		if f.when() {
-			f.Retry(func() {
-				f.unset()
-				f.execute(cmd)
-				f.parse()
-				f.error()
-				f.print()
-				f.debug()
-				f.skip()
-				f.slack()
-			})
-		}
+	if f.when() {
+		f.Retry(func() {
+			f.unset()
+			f.execute(cmd)
+			f.parse()
+			f.error()
+			f.print()
+			f.debug()
+			f.skip()
+			f.slack()
+		})
 	}
 }
 
@@ -73,11 +69,11 @@ func (f *Flow) renderCommand() string {
 }
 
 func (f *Flow) unset() {
-    for _, key := range f.GetPipeUnset() {
-    	f.Variables.Set(map[string]interface{}{
-    		key: "",
-    	})
-    }
+	for _, key := range f.GetPipeUnset() {
+		f.Variables.Set(map[string]interface{}{
+			key: "",
+		})
+	}
 }
 
 func (f *Flow) execute(cmd string) {
@@ -85,7 +81,7 @@ func (f *Flow) execute(cmd string) {
 		"Execute": cmd,
 	})
 
-	stdout, exitCode := execute.Execute(cmd)
+	stdout, exitCode := execute.Execute(cmd, args.DryRun())
 
 	f.Variables.Set(map[string]interface{}{
 		"exit_code": exitCode,
@@ -135,9 +131,9 @@ func (f *Flow) when() bool {
 	value := evaluate.Expression(expression)
 
 	debug_vars := make(map[string]interface{})
-    debug_vars["Expression"] = f.GetProperty("When")
-    debug_vars["Rendered"]   = expression
-    debug_vars["Result"]     = value
+	debug_vars["Expression"] = f.GetProperty("When")
+	debug_vars["Rendered"] = expression
+	debug_vars["Result"] = value
 
 	log.Debug(f.GetTitle(), debug_vars)
 
@@ -181,12 +177,12 @@ func (f *Flow) error() {
 	vars := template.Variables(error)
 
 	debug_vars := make(map[string]interface{})
-	for _,v := range vars {
-    	debug_vars[v] = f.GetVariable(v)
+	for _, v := range vars {
+		debug_vars[v] = f.GetVariable(v)
 	}
 
-    debug_vars["Expression"] = error
-    debug_vars["Rendered"]   = expression
+	debug_vars["Expression"] = error
+	debug_vars["Rendered"] = expression
 
 	if evaluate.Expression(expression) {
 		log.Error(f.GetTitle(), debug_vars)

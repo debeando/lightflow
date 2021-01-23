@@ -22,13 +22,13 @@ func (f *Flow) Retry(fn func()) {
 
 			f.PrintRetry()
 			if f.Attempt == f.GetRetryAttempts() && f.EvalRetry() {
-            	log.Info(
-            		fmt.Sprintf(
-            			"TASK[%s] SUB TASK[%s] PIPE[%s] RETRY END[Attempts exhausted]",
-            			f.TaskName(),
-            			f.SubTaskName(),
-            			f.PipeName(),
-            		), nil)
+				log.Info(
+					fmt.Sprintf(
+						"TASK[%s] SUB TASK[%s] PIPE[%s] RETRY END[Attempts exhausted]",
+						f.TaskName(),
+						f.SubTaskName(),
+						f.PipeName(),
+					), nil)
 			}
 			return f.EvalRetry()
 		})

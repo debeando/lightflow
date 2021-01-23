@@ -11,7 +11,7 @@ import (
 func (f *Flow) Tasks() {
 	itr := iterator.Iterator{
 		Items: f.Config.Tasks,
-		Name: args.Task(),
+		Name:  args.Task(),
 	}
 
 	itr.Run(func() bool {
