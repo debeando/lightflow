@@ -1,7 +1,6 @@
 package flow
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/debeando/lightflow/cli/args"
@@ -89,13 +88,8 @@ func (f *Flow) execute(cmd string) {
 	})
 }
 
+// parseStdout verify the formant and store value(s) in variable register.
 func (f *Flow) parse() {
-	if err := f.parseStdout(); err != nil {
-		log.Error(err.Error(), nil)
-	}
-}
-
-func (f *Flow) parseStdout() error {
 	switch f.GetFormat() {
 	case config.TEXT:
 		if reg := f.GetProperty("Register"); len(reg) > 0 {
@@ -105,19 +99,18 @@ func (f *Flow) parseStdout() error {
 		//f.Variables puede tener un metodo para salvar en json de forma automatica?
 		raw, err := common.StringToJSON(common.InterfaceToString(f.GetVariable("stdout")))
 		if err != nil {
-			return err
+			log.Error(err.Error(), nil)
 		}
 
 		for variable, value := range raw {
 			f.Variables.Set(map[string]interface{}{variable: value})
 		}
 	default:
-		return errors.New("Format option is invalid, please use; TEXT (default) or JSON")
+		log.Error("Format option is invalid, please use; TEXT (default) or JSON", nil)
 	}
-
-	return nil
 }
 
+// When a condition is true allow execute pipe.
 func (f *Flow) when() bool {
 	if len(f.GetProperty("When")) == 0 {
 		return true
@@ -183,6 +176,7 @@ func (f *Flow) error() {
 
 	debug_vars["Expression"] = error
 	debug_vars["Rendered"] = expression
+	debug_vars["Stdout"] = f.GetVariable("stdout")
 
 	if evaluate.Expression(expression) {
 		log.Error(f.GetTitle(), debug_vars)
@@ -213,7 +207,6 @@ func (f *Flow) print() {
 
 // Debug print all variables in debug mode.
 func (f *Flow) debug() {
-	//f.Variables deberia tener un debug.
 	for variable, value := range f.Variables.Items {
 		log.Debug(f.GetTitle(), map[string]interface{}{
 			variable: value,
@@ -221,6 +214,7 @@ func (f *Flow) debug() {
 	}
 }
 
+// Slack send custom message.
 func (f *Flow) slack() {
 	expression := f.Render(f.GetSlackExpression())
 
@@ -238,7 +232,7 @@ func (f *Flow) slack() {
 
 		log.Info(
 			fmt.Sprintf(
-				"TASK[%s] SUB TASK[%s] PIPE[%s] SM2S!",
+				"TASK[%s] SUB TASK[%s] PIPE[%s] Send message to slack.",
 				f.TaskName(),
 				f.SubTaskName(),
 				f.PipeName(),
@@ -248,6 +242,7 @@ func (f *Flow) slack() {
 	}
 }
 
+// Render a template with variables.
 func (f *Flow) Render(s string) string {
 	r, err := template.Render(s, f.Variables.GetItems())
 	if err != nil {

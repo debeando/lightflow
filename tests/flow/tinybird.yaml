@@ -10,7 +10,7 @@ tasks:
           job_url: https://api.tinybird.co/v0/jobs/6eda768a-e73b-4846-9051-b77566d57c2a
     pipes:
       - name: check
-        wait: 10
+        wait: 1
         execute: >
           curl \
             --silent \

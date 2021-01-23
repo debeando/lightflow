@@ -8,13 +8,14 @@ import (
 )
 
 func Execute(cmd string, dryrun bool) (stdout string, exitcode int) {
-	// var dryrun_arg string
+	var err error
+	var out []byte
 
 	if dryrun {
-		// dryrun_arg = "-n"
+		out, err = exec.Command("/bin/bash", "-n", "-c", cmd).CombinedOutput()
+	} else {
+		out, err = exec.Command("/bin/bash", "-c", cmd).CombinedOutput()
 	}
-
-	out, err := exec.Command("/bin/bash", "-c", cmd).CombinedOutput()
 
 	if err != nil {
 		if exitError, ok := err.(*exec.ExitError); ok {
@@ -22,6 +23,7 @@ func Execute(cmd string, dryrun bool) (stdout string, exitcode int) {
 			exitcode = ws.ExitStatus()
 		}
 	}
+
 	stdout = string(out[:])
 	stdout = common.TrimNewlines(stdout)
 

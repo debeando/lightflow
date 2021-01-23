@@ -86,7 +86,7 @@ func Run() {
 	case len(*fAIDate) > 0 && len(*fADDate) > 0:
 		help(0)
 	case *fDryRun == true:
-		log.Warning("Running in safe mode, not execute any commands, only print commands.", nil)
+		log.Warning("Running in safe mode, no execute commands.", nil)
 	}
 
 	if err := config.Load().Read(*fConfig); err != nil {
