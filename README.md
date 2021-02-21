@@ -21,8 +21,24 @@ A flexible, light, easy to use, automation framework for typical data manipulati
 - **Variables:** You can use environment variables or define own variables to use in the template, subtask and pipes and between them.
 - **Template:** You can build a command with many variables, defined in the subtask, pipes or register.
 
+## Install tool:
+
+For the moment, this tool only run in any Linux distribution with 64 bits. Paste that at a Terminal prompt:
+
+```bash
+bash < <(curl -s https://raw.githubusercontent.com/debeando/lightflow/master/scripts/install.sh)
+```
+
 ## Configuration:
 
 Your's tasks are definied in YAML format in one configuration file, please see this [example files](https://github.com/debeando/lightflow/tree/master/tests/flow).
 
 To see all configuration options, please see comments on this [source code](https://github.com/debeando/lightflow/blob/master/config/structure.go).
+
+## How to use it:
+
+See usage with:
+
+```
+lightflow --help
+```
