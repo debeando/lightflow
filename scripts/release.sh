@@ -32,7 +32,7 @@ export BUILD_DATE
 
 go generate ./...
 mkdir -p pkg/linux_amd64/
-GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X github.com/debeando/lightflow/command.BuildTime=${BUILD_DATE}" -o pkg/linux_amd64/lightflow main.go
+GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X github.com/debeando/lightflow/cli.BuildTime=${BUILD_DATE}" -o pkg/linux_amd64/lightflow main.go
 tar -czf pkg/linux_amd64/lightflow-linux_amd64.tar.gz -C pkg/linux_amd64/ lightflow
 
 curl -# \
