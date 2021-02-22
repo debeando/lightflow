@@ -42,11 +42,12 @@ func (f *Flow) SetDefaults() {
 	f.Variables.Set(f.GetPipeVariables())
 	f.Variables.Set(f.GetSubTaskVariables())
 	f.Variables.Set(map[string]interface{}{
+		"error":	 "",
 		"exit_code": 0,
 		"limit":     0,
 		"offset":    0,
-		"skip":      false,
 		"path":      config.Load().General.Temporary_Directory,
+		"skip":      false,
 		"stdout":    "",
 	})
 	f.Variables.SetDate(args.VariableDate())

@@ -163,7 +163,7 @@ func (f *Flow) skip() {
 func (f *Flow) error() {
 	error := f.GetProperty("Error")
 	if len(error) == 0 {
-		error = "{{ .exit_code }} != 0"
+		error = "{{ .exit_code }} != 0 || {{ len .error }} > 0"
 	}
 
 	expression := f.Render(error)
