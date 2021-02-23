@@ -46,6 +46,7 @@ func (f *Flow) SetDefaults() {
 		"chunk_offset": 0,
 		"chunk_step":   0,
 		"chunk_total":  0,
+		"chunk_end":    0,
 		"error":	    "",
 		"exit_code":    0,
 		"path":         config.Load().General.Temporary_Directory,
