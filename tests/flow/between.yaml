@@ -1,0 +1,11 @@
+---
+tasks:
+  - name: T1
+    subtask:
+      - name: T1L1
+    pipes:
+      - name: T1P1
+        execute: echo -e "id BETWEEN {{ .chunk_offset }} AND {{ .chunk_end }};"
+        chunk:
+          total: 9
+          limit: 2

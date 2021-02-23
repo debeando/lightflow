@@ -26,8 +26,11 @@ func (f *Flow) Chunks() {
 				), nil)
 
 			f.Variables.Set(map[string]interface{}{
-				"offset": offset,
-				"limit":  c.Limit,
+				"chunk_limit": c.Limit,
+				"chunk_total": c.Total,
+				"chunk_offset": offset,
+				"chunk_end": offset + c.Limit,
+				"chunk_step": step,
 			})
 
 			f.Execute()

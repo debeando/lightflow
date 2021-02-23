@@ -8,9 +8,9 @@ tasks:
       - name: T1L2
     pipes:
       - name: T1P1
-        execute: echo -e "LIMIT {{ .offset }},{{ .limit }};"
+        execute: echo -e "LIMIT {{ .chunk_offset }},{{ .chunk_limit }};"
         chunk:
           total: 9
           limit: 2
       - name: T1P2
-        execute: echo -e "LIMIT {{ .offset }},{{ .limit }};"
+        execute: echo -e "LIMIT {{ .chunk_offset }},{{ .chunk_limit }};"
