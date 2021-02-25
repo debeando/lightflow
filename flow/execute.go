@@ -93,6 +93,10 @@ func (f *Flow) parse() {
 	switch f.GetFormat() {
 	case config.TEXT:
 		if reg := f.GetProperty("Register"); len(reg) > 0 {
+			if reg == "date" {
+				f.Variables.SetDate(common.InterfaceToString(f.GetVariable("stdout")))
+			}
+
 			f.Variables.Set(map[string]interface{}{reg: f.GetVariable("stdout")})
 		}
 	case config.JSON:
