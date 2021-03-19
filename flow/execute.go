@@ -211,11 +211,7 @@ func (f *Flow) print() {
 
 // Debug print all variables in debug mode.
 func (f *Flow) debug() {
-	for variable, value := range f.Variables.Items {
-		log.Debug(f.GetTitle(), map[string]interface{}{
-			variable: value,
-		})
-	}
+	log.Debug(f.GetTitle(), f.Variables.Items)
 }
 
 // Slack send custom message.
