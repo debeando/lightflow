@@ -42,7 +42,7 @@ func (f *Flow) PrintRetry() {
 
 	log.Info(
 		fmt.Sprintf(
-			"%s/%s/%s %d/%d",
+			"%s/%s/%s Retry %d/%d",
 			f.TaskName(),
 			f.SubTaskName(),
 			f.PipeName(),

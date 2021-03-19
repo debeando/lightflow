@@ -1,14 +1,10 @@
 package log
 
-// NOTES:
-// - Quitar el flag y usar el common.IsArgDefined()
-
 import (
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 
 	"github.com/debeando/lightflow/config"
 	"github.com/sirupsen/logrus"
@@ -24,19 +20,45 @@ func (f *myFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 
 	if len(entry.Data) > 0 {
 		for k, v := range entry.Data {
+			var level string
+
+			switch entry.Level.String() {
+			case "info":
+				level = "I"
+			case "debug":
+				level = "D"
+			case "warning":
+				level = "W"
+			case "error":
+				level = "E"
+			}
+
 			data += fmt.Sprintf(
-				"%s | %s | %s%s\n",
+				"%s %s %s%s\n",
 				entry.Time.Format("2006-01-02 15:04:05"),
-				strings.ToUpper(entry.Level.String()),
+				level,
 				entry.Message,
 				fmt.Sprintf(" %s: %#v", k, v),
 			)
 		}
 	} else {
+		var level string
+
+		switch entry.Level.String() {
+		case "info":
+			level = "I"
+		case "debug":
+			level = "D"
+		case "warning":
+			level = "W"
+		case "error":
+			level = "E"
+		}
+
 		data = fmt.Sprintf(
-			"%s | %s | %s\n",
+			"%s %s %s\n",
 			entry.Time.Format("2006-01-02 15:04:05"),
-			strings.ToUpper(entry.Level.String()),
+			level,
 			entry.Message,
 		)
 	}
