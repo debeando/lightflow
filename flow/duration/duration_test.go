@@ -12,7 +12,7 @@ func TestDuration(t *testing.T) {
 		time.Sleep(3 * time.Second)
 	})
 
-	if et != "3" {
-		t.Errorf("Expected %s, got %s.", "3", et)
+	if et != "00:00:03" {
+		t.Errorf("Expected %s, got %s.", "00:00:03", et)
 	}
 }
