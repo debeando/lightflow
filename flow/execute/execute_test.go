@@ -19,7 +19,7 @@ func TestExecute(t *testing.T) {
 	testExecutes[2] = TestExecutes{Command: "a", Stdout: "/bin/bash: a: command not found", ExitCode: 127}
 
 	for index, _ := range testExecutes {
-		stdout, exit_code := execute.Execute(testExecutes[index].Command)
+		stdout, exit_code := execute.Execute(testExecutes[index].Command, false)
 
 		if stdout != testExecutes[index].Stdout {
 			t.Errorf("Expected %s, got %s.", testExecutes[index].Stdout, stdout)
