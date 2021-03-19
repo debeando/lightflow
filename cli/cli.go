@@ -35,7 +35,7 @@ Options:
   --pipes      Filter by one or many pipe name.
   --subtask    Filter by subtask name.
   --task       Filter by task name.
-  --variables  Passing variables on tasks, not compatible with --ai-date.
+  --variables  Passing variables in JSON format, is not compatible with --ai-date.
   --version    Print version numbers.
 
 Default variables:

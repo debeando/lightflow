@@ -5,27 +5,54 @@ package log
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"github.com/debeando/lightflow/config"
-
 	"github.com/sirupsen/logrus"
 )
 
 var debug bool
 
+type myFormatter struct {
+}
+
+func (f *myFormatter) Format(entry *logrus.Entry) ([]byte, error) {
+	var data string
+
+	if len(entry.Data) > 0 {
+		for k, v := range entry.Data {
+			data += fmt.Sprintf(
+				"%s | %s | %s%s\n",
+				entry.Time.Format("2006-01-02 15:04:05"),
+				strings.ToUpper(entry.Level.String()),
+				entry.Message,
+				fmt.Sprintf(" %s: %#v", k, v),
+			)
+		}
+	} else {
+		data = fmt.Sprintf(
+			"%s | %s | %s\n",
+			entry.Time.Format("2006-01-02 15:04:05"),
+			strings.ToUpper(entry.Level.String()),
+			entry.Message,
+		)
+	}
+
+	return []byte(data), nil
+}
+
 func init() {
+	logrus.SetFormatter(new(myFormatter))
+
 	logrus.SetLevel(logrus.ErrorLevel)
-	logrus.SetFormatter(&logrus.TextFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
-		FullTimestamp:   true,
-	})
 
 	if flag.Lookup("test.v") != nil {
 		logrus.SetOutput(ioutil.Discard)
 	} else {
-		logrus.SetOutput(os.Stdout)
+		logrus.SetOutput(os.Stderr)
 	}
 
 	logrus.SetLevel(logrus.InfoLevel)

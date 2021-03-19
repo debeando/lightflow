@@ -12,6 +12,10 @@ help: ## Show this help.
 test: ## Run the tests of the project.
 	go test ./...
 
+deps: ## Install dependencies
+	go get -u github.com/go-yaml/yaml
+	go get -u github.com/sirupsen/logrus
+
 build: ## Build binary for local operating system
 	go generate ./...
 	go build -ldflags "-s -w -X github.com/debeando/lightflow/cli.BuildTime=$(BUILD_DATE)" -o lightflow main.go
