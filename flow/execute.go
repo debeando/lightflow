@@ -134,17 +134,17 @@ func (f *Flow) when() bool {
 
 	log.Debug(f.GetTitle(), debug_vars)
 
-	if !value {
-		log.Info(
-			fmt.Sprintf(
-				"TASK[%s] SUB TASK[%s] PIPE[%s] !WHEN",
-				f.TaskName(),
-				f.SubTaskName(),
-				f.PipeName(),
-			),
-			nil,
-		)
-	}
+	log.Info(
+		fmt.Sprintf(
+			"%s/%s/%s When %s => %#v",
+			f.TaskName(),
+			f.SubTaskName(),
+			f.PipeName(),
+			debug_vars["Rendered"],
+			debug_vars["Result"],
+		),
+		nil,
+	)
 
 	return value
 }
@@ -199,7 +199,7 @@ func (f *Flow) print() {
 
 		log.Info(
 			fmt.Sprintf(
-				"TASK[%s] SUB TASK[%s] PIPE[%s] PRINT:",
+				"%s/%s/%s",
 				f.TaskName(),
 				f.SubTaskName(),
 				f.PipeName(),
@@ -232,7 +232,7 @@ func (f *Flow) slack() {
 
 		log.Info(
 			fmt.Sprintf(
-				"TASK[%s] SUB TASK[%s] PIPE[%s] Send message to slack.",
+				"%s/%s/%s Send message to slack.",
 				f.TaskName(),
 				f.SubTaskName(),
 				f.PipeName(),

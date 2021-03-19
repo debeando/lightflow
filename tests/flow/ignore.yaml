@@ -32,3 +32,9 @@ tasks:
         register: pn
         print:
           - pn
+      - name: T2P5
+        when: "1 == 1"
+        execute: echo "{{ .pipeName }}"
+        register: pn
+        print:
+          - pn
