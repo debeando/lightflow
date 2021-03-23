@@ -1,9 +1,7 @@
 # Interval date means a Auto Increment or Decrement date:
 #
-# ./lightflow --config tests/flow/ai-date.yaml --ai-date='{"start": "2020-11-18", "end": "2020-11-20"}' --dry-run | grep echo
+# ./lightflow --config tests/flow/interval-date.yaml --ai-date='{"start": "2020-11-18", "end": "2020-11-20"}' --dry-run | grep echo
 ---
-general:
-  tmp_dir: /tmp
 tasks:
   - name: T1
     subtask:

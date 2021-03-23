@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/config/example"
@@ -79,12 +80,23 @@ func Run() {
 		help(0)
 	case *fExample:
 		fmt.Printf(example.GetConfigFile())
+	case len(*fVariables) > 0 && isValidJSON("variables") == false:
+		log.Error("Problem to parse JSON in argument --variables", nil)
+		os.Exit(1)
 	case len(*fAIDate) > 0 && len(*fVariables) > 0:
 		help(0)
 	case len(*fADDate) > 0 && len(*fVariables) > 0:
 		help(0)
 	case len(*fAIDate) > 0 && len(*fADDate) > 0:
 		help(0)
+	case len(*fAIDate) > 0 && len(*fADDate) > 0:
+		os.Exit(1)
+	case len(*fAIDate) > 0 && isValidJSON("ai-date") == false:
+		log.Error("Problem to parse JSON in argument --ai-date", nil)
+		os.Exit(1)
+	case len(*fADDate) > 0 && isValidJSON("ad-date") == false:
+		log.Error("Problem to parse JSON in argument --ad-date", nil)
+		os.Exit(1)
 	case *fDryRun == true:
 		log.Warning("Running in safe mode, no execute commands.", nil)
 	}
@@ -101,4 +113,17 @@ func Run() {
 func help(rc int) {
 	fmt.Printf(USAGE, Version())
 	os.Exit(rc)
+}
+
+func isValidJSON(name string) bool {
+	args_vars := common.GetArgVal(name)
+
+	switch v := args_vars.(type) {
+	case string:
+		_, err := common.StringToJSON(v)
+		if err != nil {
+			return false
+		}
+	}
+	return true
 }
