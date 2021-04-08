@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
@@ -80,9 +81,12 @@ func Run() {
 		help(0)
 	case *fExample:
 		fmt.Printf(example.GetConfigFile())
-	case len(*fVariables) > 0 && isValidJSON("variables") == false:
-		log.Error("Problem to parse JSON in argument --variables", nil)
-		os.Exit(1)
+	case len(*fVariables) > 0:
+		if ok, err := isValidJSON("variables"); ok == false {
+			log.Error("Problem to parse JSON in argument --variables", nil)
+			log.Error(fmt.Sprintf("%s: %s", err, common.GetArgVal("variables")), nil)
+			os.Exit(1)
+		}
 	case len(*fAIDate) > 0 && len(*fVariables) > 0:
 		help(0)
 	case len(*fADDate) > 0 && len(*fVariables) > 0:
@@ -91,12 +95,18 @@ func Run() {
 		help(0)
 	case len(*fAIDate) > 0 && len(*fADDate) > 0:
 		os.Exit(1)
-	case len(*fAIDate) > 0 && isValidJSON("ai-date") == false:
-		log.Error("Problem to parse JSON in argument --ai-date", nil)
-		os.Exit(1)
-	case len(*fADDate) > 0 && isValidJSON("ad-date") == false:
-		log.Error("Problem to parse JSON in argument --ad-date", nil)
-		os.Exit(1)
+	case len(*fAIDate) > 0:
+		if ok, err := isValidJSON("ai-date"); ok == false {
+			log.Error("Problem to parse JSON in argument --ai-date", nil)
+			log.Error(fmt.Sprintf("%s: %s", err, common.GetArgVal("ai-date")), nil)
+			os.Exit(1)
+		}
+	case len(*fADDate) > 0:
+		if ok, err := isValidJSON("ad-date"); ok == false {
+			log.Error("Problem to parse JSON in argument --ad-date", nil)
+			log.Error(fmt.Sprintf("%s: %s", err, common.GetArgVal("ad-date")), nil)
+			os.Exit(1)
+		}
 	case *fDryRun == true:
 		log.Warning("Running in safe mode, no execute commands.", nil)
 	}
@@ -115,15 +125,17 @@ func help(rc int) {
 	os.Exit(rc)
 }
 
-func isValidJSON(name string) bool {
+func isValidJSON(name string) (bool, error) {
 	args_vars := common.GetArgVal(name)
 
 	switch v := args_vars.(type) {
 	case string:
-		_, err := common.StringToJSON(v)
+		c := strings.Trim(v, "'")
+
+		_, err := common.StringToJSON(c)
 		if err != nil {
-			return false
+			return false, err
 		}
 	}
-	return true
+	return true, nil
 }
