@@ -6,10 +6,13 @@ import (
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/flow/chunk"
+	"github.com/debeando/lightflow/flow/duration"
 )
 
 // Chunks is the handle method for generic Chunk package.
 func (f *Flow) Chunks() {
+	var et string
+
 	if f.IsValidChunk() {
 		c := chunk.Chunk{
 			Total: f.GetChunkTotal(),
@@ -19,9 +22,10 @@ func (f *Flow) Chunks() {
 		c.Chunk(func(step int, chunks int, offset int, pct int) {
 			log.Info(
 				fmt.Sprintf(
-					"TASK[%s] SUB TASK[%s] PIPE CHUNK[%d%%]",
+					"%s/%s/%s Progress %d%%",
 					f.TaskName(),
 					f.SubTaskName(),
+					f.PipeName(),
 					pct,
 				), nil)
 
@@ -35,9 +39,21 @@ func (f *Flow) Chunks() {
 
 			f.Execute()
 		})
+		et = c.ExecutionTime
 	} else {
-		f.Execute()
+		et = duration.Start(func() {
+			f.Execute()
+		})
 	}
+
+	log.Info(
+		fmt.Sprintf(
+			"%s/%s/%s Finished %s",
+			f.TaskName(),
+			f.SubTaskName(),
+			f.PipeName(),
+			et,
+		), nil)
 }
 
 // GetChunkTotal get the total of chunks from config or variables.

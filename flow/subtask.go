@@ -27,7 +27,7 @@ func (f *Flow) Subtask() {
 
 	log.Info(
 		fmt.Sprintf(
-			"TASK[%s] SUB TASK ET[%s]", // ET is acronym for execution time.
+			"%s Finished %s", // ET is acronym for execution time.
 			f.TaskName(),
 			itr.ExecutionTime,
 		), nil)

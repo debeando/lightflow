@@ -76,9 +76,17 @@ func (f *Flow) unset() {
 }
 
 func (f *Flow) execute(cmd string) {
-	log.Debug(f.GetTitle(), map[string]interface{}{
-		"Execute": cmd,
-	})
+	log.Debug(
+		fmt.Sprintf(
+			"%s/%s/%s",
+			f.TaskName(),
+			f.SubTaskName(),
+			f.PipeName(),
+		),
+		map[string]interface{}{
+			"Execute": cmd,
+		},
+	)
 
 	stdout, exitCode := execute.Execute(cmd, args.DryRun())
 
@@ -132,19 +140,17 @@ func (f *Flow) when() bool {
 	debug_vars["Rendered"] = expression
 	debug_vars["Result"] = value
 
-	log.Debug(f.GetTitle(), debug_vars)
-
-	if !value {
-		log.Info(
-			fmt.Sprintf(
-				"TASK[%s] SUB TASK[%s] PIPE[%s] !WHEN",
-				f.TaskName(),
-				f.SubTaskName(),
-				f.PipeName(),
-			),
-			nil,
-		)
-	}
+	log.Info(
+		fmt.Sprintf(
+			"%s/%s/%s When %s => %#v",
+			f.TaskName(),
+			f.SubTaskName(),
+			f.PipeName(),
+			debug_vars["Rendered"],
+			debug_vars["Result"],
+		),
+		nil,
+	)
 
 	return value
 }
@@ -183,7 +189,15 @@ func (f *Flow) error() {
 	debug_vars["Stdout"] = f.GetVariable("stdout")
 
 	if evaluate.Expression(expression) {
-		log.Error(f.GetTitle(), debug_vars)
+		log.Error(
+			fmt.Sprintf(
+				"%s/%s/%s",
+				f.TaskName(),
+				f.SubTaskName(),
+				f.PipeName(),
+			),
+			debug_vars,
+		)
 	}
 }
 
@@ -199,7 +213,7 @@ func (f *Flow) print() {
 
 		log.Info(
 			fmt.Sprintf(
-				"TASK[%s] SUB TASK[%s] PIPE[%s] PRINT:",
+				"%s/%s/%s",
 				f.TaskName(),
 				f.SubTaskName(),
 				f.PipeName(),
@@ -211,7 +225,15 @@ func (f *Flow) print() {
 
 // Debug print all variables in debug mode.
 func (f *Flow) debug() {
-	log.Debug(f.GetTitle(), f.Variables.Items)
+	log.Debug(
+		fmt.Sprintf(
+			"%s/%s/%s",
+			f.TaskName(),
+			f.SubTaskName(),
+			f.PipeName(),
+		),
+		f.Variables.Items,
+	)
 }
 
 // Slack send custom message.
@@ -232,7 +254,7 @@ func (f *Flow) slack() {
 
 		log.Info(
 			fmt.Sprintf(
-				"TASK[%s] SUB TASK[%s] PIPE[%s] Send message to slack.",
+				"%s/%s/%s Send message to slack.",
 				f.TaskName(),
 				f.SubTaskName(),
 				f.PipeName(),

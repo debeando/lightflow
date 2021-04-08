@@ -71,8 +71,9 @@ func TestLoopCount(t *testing.T) {
 		Items: demo,
 	}
 
-	itr.Run(func() {
+	itr.Run(func() bool {
 		counter++
+		return false
 	})
 
 	if counter != 2 {
@@ -86,14 +87,17 @@ func TestLevelOne(t *testing.T) {
 		Items: demo,
 	}
 
-	itrl1.Run(func() {
+	itrl1.Run(func() bool {
 		itrl2 := iterator.Iterator{
 			Items: demo[itrl1.Index].Items,
 		}
 
-		itrl2.Run(func() {
+		itrl2.Run(func() bool {
 			counter++
+			return false
 		})
+
+		return false
 	})
 
 	if counter != 5 {
@@ -108,19 +112,23 @@ func TestLevelOneMatchItemName(t *testing.T) {
 		Name:  "bar",
 	}
 
-	itrl1.Run(func() {
+	itrl1.Run(func() bool {
 		itrl2 := iterator.Iterator{
 			Items: demo[itrl1.Index].Items,
 			Name:  "L2I2",
 		}
 
-		itrl2.Run(func() {
+		itrl2.Run(func() bool {
 			counter++
 
 			if itrl2.Index != 1 {
 				t.Errorf("Expected %d, got %d.", 1, itrl2.Index)
 			}
+
+			return true
 		})
+
+		return true
 	})
 
 	if counter != 1 {
@@ -135,14 +143,17 @@ func TestLevelOneMatchLoopName(t *testing.T) {
 		Name:  "bar",
 	}
 
-	itrl1.Run(func() {
+	itrl1.Run(func() bool {
 		itrl2 := iterator.Iterator{
 			Items: demo[itrl1.Index].Items,
 		}
 
-		itrl2.Run(func() {
+		itrl2.Run(func() bool {
 			counter++
+			return false
 		})
+
+		return false
 	})
 
 	if counter != len(demo[1].Items) {
@@ -157,11 +168,12 @@ func TestIgnore(t *testing.T) {
 		Name:  "foo",
 	}
 
-	itrl1.Run(func() {
+	itrl1.Run(func() bool {
 		counter++
+		return false
 	})
 
-	if counter != 0 {
-		t.Errorf("Expected %d, got %d.", 0, counter)
+	if counter != 1 {
+		t.Errorf("Expected %d, got %d.", 1, counter)
 	}
 }

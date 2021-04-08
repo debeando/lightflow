@@ -23,7 +23,10 @@ func TestExpressions(t *testing.T) {
 	testExpressions[6] = TestExpressions{Formula: "(1 + 3) >= 4", Valid: true}
 
 	for index, _ := range testExpressions {
-		t.Log(testExpressions[index].Formula)
-		t.Log(evaluate.Expression(testExpressions[index].Formula))
+		v := evaluate.Expression(testExpressions[index].Formula)
+
+		if v != testExpressions[index].Valid {
+			t.Errorf("Expected %t, got %t.", testExpressions[index].Valid, v)
+		}
 	}
 }

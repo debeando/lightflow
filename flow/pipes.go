@@ -26,7 +26,7 @@ func (f *Flow) Pipes() {
 				if f.Skip {
 					log.Warning(
 						fmt.Sprintf(
-							"TASK[%s] SUB TASK[%s] PIPE[%s] SKIPPED!",
+							"%s/%s/%s",
 							f.TaskName(),
 							f.SubTaskName(),
 							f.PipeName(),
@@ -38,7 +38,7 @@ func (f *Flow) Pipes() {
 
 			log.Info(
 				fmt.Sprintf(
-					"TASK[%s] SUB TASK[%s] PIPES ET[%s]", // ET is acronym for execution time.
+					"%s/%s Finished %s", // ET is acronym for execution time.
 					f.TaskName(),
 					f.SubTaskName(),
 					itr.ExecutionTime,
@@ -53,6 +53,5 @@ func (f *Flow) Valid(pipeName string) bool {
 
 func (f *Flow) Wait() {
 	wait := f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Wait
-
 	time.Sleep(time.Duration(wait) * time.Second)
 }
