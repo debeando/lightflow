@@ -54,6 +54,15 @@ type Structure struct {
 				Message    string `yaml:"message"`
 				Title      string `yaml:"title"`
 			}
+			MySQL struct { // Connect to MySQL server.
+				Host     string `yaml:"host"`
+				Port     int    `yaml:"port"`
+				User     string `yaml:"user"`
+				Password string `yaml:"password"`
+				Schema   string `yaml:"schema"`
+				Query    string `yaml:"query"`
+				Path     string `yaml:"path"` // Path and filename to save result into file.
+			}
 		}
 	}
 }
