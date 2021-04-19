@@ -21,7 +21,7 @@ func (f *Flow) mysql() {
 		Password: f.GetMySQLPassword(),
 		Schema:   f.GetMySQLSchema(),
 		Query:    f.renderQuery(),
-		Path:     f.GetMySQLPath(),
+		Path:     f.Render(f.GetMySQLPath()),
 	}
 
 	log.Info(

@@ -77,6 +77,10 @@ func (f *Flow) unset() {
 }
 
 func (f *Flow) execute(cmd string) {
+	if len(cmd) == 0 {
+		return
+	}
+
 	log.Debug(
 		fmt.Sprintf(
 			"%s/%s/%s",
