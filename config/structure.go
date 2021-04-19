@@ -61,6 +61,7 @@ type Structure struct {
 				Password string `yaml:"password"`
 				Schema   string `yaml:"schema"`
 				Query    string `yaml:"query"`
+				Header   bool   `yaml:"header"`
 				Path     string `yaml:"path"` // Path and filename to save result into file.
 			}
 		}

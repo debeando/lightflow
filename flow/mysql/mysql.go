@@ -16,6 +16,7 @@ type MySQL struct {
 	Password string
 	Schema   string
 	Query    string
+	Header   bool
 	Path     string
 }
 
@@ -119,36 +120,19 @@ func (m *MySQL) SaveCSVRow(columns []string, ch <-chan []string) error {
 	}
 
 	w := csv.NewWriter(f)
-	w.Write(columns)
+
+	// w.Comma = '\t'
+	// w.UseCRLF = true
+
+	if m.Header {
+		w.Write(columns)
+	}
 
 	for row := range ch {
 		w.Write(row)
 	}
 
 	w.Flush()
-	return nil
-}
-
-func (m *MySQL) ToCSV(columns []string, totalValues [][]string) error {
-	f, err := os.Create(m.Path)
-	defer f.Close()
-	if err != nil {
-		return err
-	}
-
-	//f.WriteString("\xEF\xBB\xBF")
-	w := csv.NewWriter(f)
-	for i, row := range totalValues {
-		//First write column name + first row of data
-		if i == 0 {
-			w.Write(columns)
-			w.Write(row)
-		} else {
-			w.Write(row)
-		}
-	}
-	w.Flush()
-
 	return nil
 }
 

@@ -21,6 +21,7 @@ func (f *Flow) mysql() {
 		Password: f.GetMySQLPassword(),
 		Schema:   f.GetMySQLSchema(),
 		Query:    f.renderQuery(),
+		Header:   f.GetMySQLHeader(),
 		Path:     f.Render(f.GetMySQLPath()),
 	}
 
@@ -162,6 +163,10 @@ func (f *Flow) GetMySQLQuery() string {
 	}
 
 	return query
+}
+
+func (f *Flow) GetMySQLHeader() bool {
+	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].MySQL.Header
 }
 
 func (f *Flow) GetMySQLPath() string {

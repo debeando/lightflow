@@ -1,5 +1,6 @@
 *.test
 *.out
+*.csv
 pkg/
 lightflow
 temps/
