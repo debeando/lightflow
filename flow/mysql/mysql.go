@@ -48,10 +48,10 @@ func (m *MySQL) Execute() (int, map[string]string, error) {
 		"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; " +
 		"SET SQL_BUFFER_RESULT=1; " +
 		m.Query)
-	defer rows.Close()
 	if err != nil {
 		return 0, nil, err
 	}
+	defer rows.Close()
 
 	columns, err := rows.Columns()
 	if err != nil {
