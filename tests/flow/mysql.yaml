@@ -1,0 +1,15 @@
+---
+tasks:
+  - name: T1
+    subtask:
+      - name: T1L1
+    pipes:
+      - name: T1P1
+        mysql:
+          host: "127.0.0.1"
+          port: 3306
+          user: "${MYSQL_USER}"
+          password: "${MYSQL_PWD}"
+          schema: demo
+          query: "SELECT * FROM foo"
+          path: /tmp/demo.csv

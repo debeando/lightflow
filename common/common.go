@@ -28,7 +28,11 @@ func IsArgStringDefined(name string) bool {
 }
 
 func InterfaceToString(value interface{}) string {
-	return fmt.Sprintf("%v", value)
+	if value != nil {
+		return fmt.Sprintf("%v", value)	
+	}
+
+	return ""
 }
 
 func TrimNewlines(text string) string {

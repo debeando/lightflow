@@ -22,6 +22,7 @@ func (f *Flow) Execute() {
 		f.Retry(func() {
 			f.unset()
 			f.execute(cmd)
+			f.mysql()
 			f.parse()
 			f.error()
 			f.print()
