@@ -10,8 +10,12 @@ if [ "$EUID" -ne 0 ]; then
   exit
 fi
 
-if ! [[ "${OSTYPE}" == "linux"* ]]; then
-  echo "Only works on Linux amd64."
+if [[ "${OSTYPE}" == "linux"* ]]; then
+  FILE="lightflow-linux_amd64.tar.gz"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  FILE="lightflow-darwin_amd64.tar.gz"
+else
+  echo "Only works on Linux or Darwin amd64."
   exit
 fi
 
@@ -20,7 +24,6 @@ if ! type "wget" > /dev/null; then
   exit
 fi
 
-FILE="lightflow-linux_amd64.tar.gz"
 TAG=$(wget -qO- "https://api.github.com/repos/debeando/lightflow/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
 
 if [ -f /usr/local/bin/lightflow ]; then

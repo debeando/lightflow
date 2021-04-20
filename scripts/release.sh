@@ -35,6 +35,10 @@ mkdir -p pkg/linux_amd64/
 GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X github.com/debeando/lightflow/cli.BuildTime=${BUILD_DATE}" -o pkg/linux_amd64/lightflow main.go
 tar -czf pkg/linux_amd64/lightflow-linux_amd64.tar.gz -C pkg/linux_amd64/ lightflow
 
+mkdir -p pkg/darwin_amd64/
+GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w -X github.com/debeando/lightflow/cli.BuildTime=${BUILD_DATE}" -o pkg/darwin_amd64/lightflow main.go
+tar -czf pkg/darwin_amd64/lightflow-darwin_amd64.tar.gz -C pkg/darwin_amd64/ lightflow
+
 curl -# \
      --silent \
      --output /dev/null \
@@ -43,5 +47,13 @@ curl -# \
      -H "Content-Type:application/octet-stream" \
      --data-binary @pkg/linux_amd64/lightflow-linux_amd64.tar.gz \
      "https://uploads.github.com/repos/debeando/lightflow/releases/${ID}/assets?name=lightflow-linux_amd64.tar.gz"
+curl -# \
+     --silent \
+     --output /dev/null \
+     -XPOST \
+     -H "Authorization:token ${GITHUB_TOKEN}" \
+     -H "Content-Type:application/octet-stream" \
+     --data-binary @pkg/darwin_amd64/lightflow-darwin_amd64.tar.gz \
+     "https://uploads.github.com/repos/debeando/lightflow/releases/${ID}/assets?name=lightflow-darwin_amd64.tar.gz"
 
 echo -e "\r"
