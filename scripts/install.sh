@@ -5,11 +5,6 @@
 
 set -e
 
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root"
-  exit
-fi
-
 if [[ "${OSTYPE}" == "linux"* ]]; then
   FILE="lightflow-linux_amd64.tar.gz"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
