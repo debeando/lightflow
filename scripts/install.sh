@@ -14,7 +14,7 @@ else
   exit
 fi
 
-if ! type "wget" > /dev/null; then
+if ! type "wget" 2> /dev/null; then
   echo "The program 'wget' is currently not installed, please install it to continue."
   exit
 fi
