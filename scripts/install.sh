@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Apache License Version 2.0, January 2004
-# https://github.com/debeando/lightflow/blob/master/LICENSE.md
+# https://github.com/debeando/lightflow/blob/master/LICENSE
 
 set -e
 
