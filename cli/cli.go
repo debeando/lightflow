@@ -81,6 +81,7 @@ func Run() {
 		help(0)
 	case *fExample:
 		fmt.Printf(example.GetConfigFile())
+		os.Exit(0)
 	case len(*fVariables) > 0:
 		if ok, err := isValidJSON("variables"); ok == false {
 			log.Error("Problem to parse JSON in argument --variables", nil)
