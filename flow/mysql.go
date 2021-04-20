@@ -15,11 +15,11 @@ func (f *Flow) mysql() {
 	}
 
 	mysql := mysql.MySQL{
-		Host:     f.GetMySQLHost(),
+		Host:     f.Render(f.GetMySQLHost()),
 		Port:     f.GetMySQLPort(),
-		User:     f.GetMySQLUser(),
-		Password: f.GetMySQLPassword(),
-		Schema:   f.GetMySQLSchema(),
+		User:     f.Render(f.GetMySQLUser()),
+		Password: f.Render(f.GetMySQLPassword()),
+		Schema:   f.Render(f.GetMySQLSchema()),
 		Query:    f.renderQuery(),
 		Header:   f.GetMySQLHeader(),
 		Path:     f.Render(f.GetMySQLPath()),
@@ -38,6 +38,7 @@ func (f *Flow) mysql() {
 
 	rows_count, row, err := mysql.Execute()
 	if err != nil {
+		f.Variables.Set(map[string]interface{}{"exit_code": 1})
 		log.Error(err.Error(), nil)
 	}
 

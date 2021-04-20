@@ -15,6 +15,7 @@ type Flow struct {
 	Skip      bool
 	Variables variables.List
 	Attempt   int
+	Interval  bool
 }
 
 type Index struct {

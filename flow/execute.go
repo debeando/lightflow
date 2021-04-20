@@ -69,6 +69,11 @@ func (f *Flow) renderCommand() string {
 }
 
 func (f *Flow) unset() {
+	f.Variables.Set(map[string]interface{}{
+		"stdout": "",
+		"exit_code": 0,
+	})
+
 	for _, key := range f.GetPipeUnset() {
 		f.Variables.Set(map[string]interface{}{
 			key: "",
@@ -106,7 +111,7 @@ func (f *Flow) parse() {
 	switch f.GetFormat() {
 	case config.TEXT:
 		if reg := f.GetProperty("Register"); len(reg) > 0 {
-			if reg == "date" {
+			if reg == "date" && f.Interval == false {
 				f.Variables.SetDate(common.InterfaceToString(f.GetVariable("stdout")))
 			}
 

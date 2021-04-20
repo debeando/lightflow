@@ -11,6 +11,7 @@ import (
 // Date is the handle method for generic Auto Increment or Decrement package.
 func (f *Flow) Date() error {
 	f.SetDefaults()
+	f.Interval = false
 
 	if args.IntervalAIDate() {
 		start := args.IntervalAIStartDate(f.Variables.GetDate())
@@ -41,6 +42,7 @@ func (f *Flow) Date() error {
 
 func (f *Flow) dateLoop(date string) {
 	f.Skip = false
+	f.Interval = true
 	f.SetDefaults()
 	if f.Variables.SetDate(date) {
 		log.Info(

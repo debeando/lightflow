@@ -33,6 +33,10 @@ func (f *myFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 				level = "E"
 			}
 
+			if v == nil {
+				v = ""
+			}
+
 			data += fmt.Sprintf(
 				"%s %s %s%s\n",
 				entry.Time.Format("2006-01-02 15:04:05"),
