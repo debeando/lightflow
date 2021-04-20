@@ -32,7 +32,7 @@ bash < <(curl -fsSL https://raw.githubusercontent.com/debeando/lightflow/master/
 
 ## Configuration:
 
-Your's tasks are definied in YAML format in one configuration file, please see this [example files](https://github.com/debeando/lightflow/tree/master/tests/flow).
+Your's tasks are definied in YAML format in one configuration file, please see this [example files](https://github.com/debeando/lightflow/tree/master/tests).
 
 To see all configuration options, please see comments on this [source code](https://github.com/debeando/lightflow/blob/master/config/structure.go).
 
