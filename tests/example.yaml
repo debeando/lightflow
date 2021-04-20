@@ -1,6 +1,4 @@
-package example
-
-const ExampleFile = `---
+---
 tasks:
   - name: random
     subtask:
@@ -57,4 +55,3 @@ tasks:
       print:
         - name_test
         - stdout
-`
