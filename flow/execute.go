@@ -152,7 +152,7 @@ func (f *Flow) when() bool {
 
 	log.Info(
 		fmt.Sprintf(
-			"%s/%s/%s When %s => %s => %#v",
+			"%s/%s/%s When: %s => %s => %#v",
 			f.TaskName(),
 			f.SubTaskName(),
 			f.PipeName(),
@@ -189,7 +189,7 @@ func (f *Flow) skip() {
 
 	log.Info(
 		fmt.Sprintf(
-			"%s/%s/%s Skip %s => %s => %#v",
+			"%s/%s/%s Skip: %s => %s => %#v",
 			f.TaskName(),
 			f.SubTaskName(),
 			f.PipeName(),
@@ -223,12 +223,15 @@ func (f *Flow) error() {
 	if evaluate.Expression(expression) {
 		log.Error(
 			fmt.Sprintf(
-				"%s/%s/%s",
+				"%s/%s/%s Error: %s => %s => %#v",
 				f.TaskName(),
 				f.SubTaskName(),
 				f.PipeName(),
+				debug_vars["Expression"],
+				debug_vars["Rendered"],
+				debug_vars["Result"],
 			),
-			debug_vars,
+			nil,
 		)
 	}
 }
