@@ -23,16 +23,6 @@ func (f *Flow) Pipes() {
 				f.Wait()
 				f.Chunks()
 
-				if f.Skip {
-					log.Warning(
-						fmt.Sprintf(
-							"%s/%s/%s",
-							f.TaskName(),
-							f.SubTaskName(),
-							f.PipeName(),
-						), nil)
-				}
-
 				return f.Skip
 			})
 
