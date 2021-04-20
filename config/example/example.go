@@ -1,8 +1,6 @@
 package example
 
 const ExampleFile = `---
-general:
-  tmp_dir: /tmp
 tasks:
   - name: demo
     loops:
@@ -18,7 +16,7 @@ tasks:
         name_test: "{{ .date }}"
     - name: create-register
       command: >
-        echo -e "\n$(date +%Y%m%d%H%M)\n"
+        echo -e "\n$(date +%\Y%\m%\d%\H%\M)\n"
       register: register_test
     - name: print-register
       command: 'echo -e "R: {{ .register_test }}"'
