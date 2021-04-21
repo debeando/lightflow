@@ -4,7 +4,9 @@ import (
 	"fmt"
 
 	"github.com/debeando/lightflow/cli/args"
+	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
+	"github.com/debeando/lightflow/flow/template"
 )
 
 func (f *Flow) GetTitle() string {
@@ -62,4 +64,13 @@ func (f *Flow) setName(key string, value string) string {
 	})
 
 	return value
+}
+
+// Render a template with variables.
+func (f *Flow) Render(s string) string {
+	r, err := template.Render(s, f.Variables.GetItems())
+	if err != nil {
+		log.Warning(err.Error(), nil)
+	}
+	return r
 }
