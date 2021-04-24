@@ -1,7 +1,7 @@
 ---
 tasks:
   - name: T1
-    subtask_include:
+    subtasks_include:
       - tests/include/a.yaml
       - tests/include/b.yaml
     subtasks:
