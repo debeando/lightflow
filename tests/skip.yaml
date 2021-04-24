@@ -11,5 +11,9 @@ tasks:
       - name: T1P1
         execute: echo $(( RANDOM % 2 ))
         skip: "{{ .stdout }} == 0"
+        print:
+          - stdout
       - name: T1P2
         execute: echo -e "Skipped"
+        print:
+          - stdout

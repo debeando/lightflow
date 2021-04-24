@@ -13,6 +13,8 @@ type Flow struct {
 	Config    config.Structure
 	Index     Index
 	Skip      bool
+	When      bool
+	In        bool // Switch to determine is running pipe or not.
 	Variables variables.List
 	Attempt   int
 	Interval  bool

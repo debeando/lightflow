@@ -42,6 +42,8 @@ func (f *Flow) Date() error {
 
 func (f *Flow) dateLoop(date string) {
 	f.Skip = false
+	f.When = true
+	f.In = false
 	f.Interval = true
 	f.SetDefaults()
 	if f.Variables.SetDate(date) {

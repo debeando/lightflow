@@ -1,0 +1,34 @@
+---
+tasks:
+  - name: T1
+    subtask:
+      - name: T1L1
+      - name: T1L2
+      - name: T1L3
+      - name: T1L4
+      - name: T1L5
+    pipes:
+      - name: T1P1
+        execute: echo $(( RANDOM % 3 ))
+        register: rnd
+        print:
+          - rnd
+      - name: T1P2
+        execute: echo -e "Ok"
+        print:
+          - stdout
+        evaluate:
+          # - expression: "{{ .rnd }} == 1"
+          #   action: when
+          #   level: warning
+          - expression: "{{ .rnd }} == 2"
+            action: skip
+            level: error
+          - expression: "{{ .rnd }} == 1"
+            action: terminate
+            level: error
+            exitcode: 2
+      - name: T1P3
+        execute: echo -e "No skipped"
+        print:
+          - stdout

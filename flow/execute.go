@@ -10,26 +10,6 @@ import (
 	"github.com/debeando/lightflow/flow/template"
 )
 
-// Execute is a method to render and execute command and save result into
-// variables and then are interpreted to take other decisions.
-func (f *Flow) Execute() {
-	cmd := f.renderCommand()
-
-	if f.when() {
-		f.Retry(func() {
-			f.unset()
-			f.execute(cmd)
-			f.mysql()
-			f.parse()
-			f.error()
-			f.print()
-			f.debug()
-			f.skip()
-			f.slack()
-		})
-	}
-}
-
 func (f *Flow) renderCommand() string {
 	var cmd = f.GetProperty("Execute")
 	var vars = f.Variables.GetItems()
@@ -65,7 +45,9 @@ func (f *Flow) renderCommand() string {
 	return common.TrimNewlines(cmd)
 }
 
-func (f *Flow) execute(cmd string) {
+func (f *Flow) execute() {
+	cmd := f.renderCommand()
+
 	if len(cmd) == 0 {
 		return
 	}

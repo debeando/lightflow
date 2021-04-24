@@ -45,3 +45,18 @@ func (f *Flow) Wait() {
 	wait := f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Wait
 	time.Sleep(time.Duration(wait) * time.Second)
 }
+
+func (f *Flow) Pipe() {
+	if f.RunPipe() {
+		f.Retry(func() {
+			f.unset()
+			f.execute()
+			f.mysql()
+			f.parse()
+			f.print()
+			f.slack()
+			f.debug()
+			f.evaluate()
+		})
+	}
+}

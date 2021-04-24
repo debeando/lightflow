@@ -18,6 +18,8 @@ func (f *Flow) Subtask() {
 		f.Index.Pipe = 0
 		f.Index.Subtask = itr.Index
 		f.Skip = false
+		f.When = true
+		f.In = false
 
 		if err := f.Date(); err != nil {
 			log.Error(err.Error(), nil)
