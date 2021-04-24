@@ -22,10 +22,12 @@ func Load() *Structure {
 }
 
 func (s *Structure) Read(file_name string) error {
+	// estas son las cosas que usando un metodo que valida y retorna el valor default es más elegante.
 	if len(file_name) == 0 {
 		file_name = "lightflow.yaml"
 	}
 
+	// creo que estos dos ReadFile anidados se pueden optimizar
 	source, err := ioutil.ReadFile(s.Path)
 	if err != nil {
 		source, err = ioutil.ReadFile(file_name)
@@ -42,7 +44,11 @@ func (s *Structure) Read(file_name string) error {
 	source = []byte(os.ExpandEnv(string(source)))
 
 	if err := yaml.Unmarshal(source, &s); err != nil {
-		errors.New(fmt.Sprintf("Imposible to parse config file - %s", err))
+		return errors.New(fmt.Sprintf(
+			"Imposible to parse config file: %s",
+			err,
+			),
+		)
 	}
 
 	return s.Validate()
@@ -60,12 +66,12 @@ func (s *Structure) Validate() error {
 				))
 		}
 
-		for subtask_index := range s.Tasks[task_index].Subtask {
-			if !re.MatchString(s.Tasks[task_index].Subtask[subtask_index].Name) {
+		for subtask_index := range s.Tasks[task_index].Subtasks {
+			if !re.MatchString(s.Tasks[task_index].Subtasks[subtask_index].Name) {
 				return errors.New(
 					fmt.Sprintf(
 						"Invalid sub task name for '%s', only allow 0-9, A-Z, a-z, - and _.",
-						s.Tasks[task_index].Subtask[subtask_index].Name,
+						s.Tasks[task_index].Subtasks[subtask_index].Name,
 					))
 			}
 		}

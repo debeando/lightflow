@@ -1,0 +1,12 @@
+---
+tasks:
+  - name: T1
+    subtask_include:
+      - tests/include/a.yaml
+      - tests/include/b.yaml
+    subtasks:
+    - name: c
+      variables:
+        foo: ccc
+    pipes:
+      - name: T1P1
