@@ -3,8 +3,10 @@ package mysql
 import (
 	"database/sql"
 	"encoding/csv"
+	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -22,6 +24,12 @@ type MySQL struct {
 
 func (m *MySQL) Execute() (int, map[string]string, error) {
 	var err error
+	var RowsCount int
+	var row []string
+	oneRow := map[string]string{}
+
+	ch := make(chan []string)
+	defer close(ch)
 
 	if len(m.Query) == 0 {
 		return 0, nil, nil
@@ -44,7 +52,7 @@ func (m *MySQL) Execute() (int, map[string]string, error) {
 	if err != nil {
 		return 0, nil, err
 	}
-	
+
 	rows, err := db.Query(
 		"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; " +
 		"SET SQL_BUFFER_RESULT=1; " +
@@ -67,12 +75,10 @@ func (m *MySQL) Execute() (int, map[string]string, error) {
 		scanArgs[i] = &values[i]
 	}
 
-	var RowsCount int
-	var row []string
-	oneRow := map[string]string{}
+	if err = m.ValidPath(); err != nil {
+		return 0, nil, err
+	}
 
-	ch := make(chan []string)
-	defer close(ch)
 	go m.SaveCSVRow(columns, ch)
 
 	for rows.Next() {
@@ -90,9 +96,7 @@ func (m *MySQL) Execute() (int, map[string]string, error) {
 		}
 
 		// Send row to save into file:
-		if m.ValidPath() {
-			ch <- row
-		}
+		ch <- row
 	}
 
 	if len(values) > 0 && len(row) == 1 && RowsCount == 1 {
@@ -109,10 +113,6 @@ func (m *MySQL) Execute() (int, map[string]string, error) {
 }
 
 func (m *MySQL) SaveCSVRow(columns []string, ch <-chan []string) error {
-	if m.ValidPath() == false {
-		return nil
-	}
-
 	f, err := os.Create(m.Path)
 	defer f.Close()
 	if err != nil {
@@ -120,9 +120,6 @@ func (m *MySQL) SaveCSVRow(columns []string, ch <-chan []string) error {
 	}
 
 	w := csv.NewWriter(f)
-
-	// w.Comma = '\t'
-	// w.UseCRLF = true
 
 	if m.Header {
 		w.Write(columns)
@@ -136,14 +133,20 @@ func (m *MySQL) SaveCSVRow(columns []string, ch <-chan []string) error {
 	return nil
 }
 
-func (m *MySQL) ValidPath() bool {
-	if len(m.Path) < 5 {
-		return false
+func (m *MySQL) ValidPath() error {
+	dir, err := os.Stat(m.Path)
+
+	if err != nil {
+		return errors.New(fmt.Sprintf("Failed to open file: %s", m.Path))
 	}
 
-	if m.Path == "<no value>" {
-		return false
+	if dir.IsDir() {
+		return errors.New(fmt.Sprintf("The path is a directory and is not valid: %s", m.Path))
 	}
 
-	return true
+	if filepath.Ext(m.Path) != ".csv" {
+		return errors.New(fmt.Sprintf("File extension ins't equal to .csv: %s", m.Path))
+	}
+
+	return err
 }

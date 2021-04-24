@@ -25,7 +25,7 @@ func (f *Flow) mysql() {
 		Path:     f.Render(f.GetMySQLPath()),
 	}
 
-	log.Info(
+	log.Debug(
 		fmt.Sprintf(
 			"%s/%s/%s Query %s",
 			f.TaskName(),
