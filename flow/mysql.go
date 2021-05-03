@@ -36,7 +36,7 @@ func (f *Flow) mysql() {
 		nil,
 	)
 
-	rows_count, row, err := mysql.Execute()
+	rows_count, row, err := mysql.Run()
 	if err != nil {
 		f.Variables.Set(map[string]interface{}{"exit_code": 1})
 		log.Error(err.Error(), nil)
@@ -166,7 +166,7 @@ func (f *Flow) GetMySQLQuery() string {
 	return query
 }
 
-func (f *Flow) GetMySQLHeader() bool {
+func (f *Flow) GetMySQLHeader() []string {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].MySQL.Header
 }
 
