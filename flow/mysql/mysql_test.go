@@ -7,9 +7,9 @@ import (
 )
 
 func TestValidPath(t *testing.T) {
-	m := mysql.MySQL{
-		Path: "/tmp/test.c",
-	}
+	// m := mysql.MySQL{
+	// 	Path: "/tmp/test.c",
+	// }
 
-	t.Errorf("%s", m.ValidPath())
+	// t.Errorf("%s", m.ValidPath())
 }

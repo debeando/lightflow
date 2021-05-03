@@ -2,37 +2,82 @@ package mysql
 
 import (
 	"database/sql"
-	"encoding/csv"
 	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
+
+	"github.com/debeando/lightflow/flow/mysql/csv"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
 type MySQL struct {
-	Host     string
-	Port     int
-	User     string
-	Password string
-	Schema   string
-	Query    string
-	Header   bool
-	Path     string
+	Host         string
+	Port         int
+	User         string
+	Password     string
+	Schema       string
+	Query        string
+	Header     []string
+	Path         string
+	Connection  *sql.DB
+	Columns    []string
+	Row          map[string]string
 }
 
-func (m *MySQL) Execute() (int, map[string]string, error) {
+func (m *MySQL) Run() (int, map[string]string, error) {
 	var err error
-	var RowsCount int
-	var row []string
+	var export bool
+	var rowsCount int
+
 	oneRow := map[string]string{}
 
-	ch := make(chan []string)
-	defer close(ch)
+	file := csv.CSV {
+		Header: m.Header,
+		Path: m.Path,
+	}
 
-	if len(m.Query) == 0 {
-		return 0, nil, nil
+	if err := file.IsValidPath(); err != nil {
+		if err.Error() != "File name is empty." {
+			return rowsCount, nil, err
+		}
+	} else {
+		if err := file.Create(); err != nil {
+			return rowsCount, nil, err
+		} else {
+			export = true
+		}		
+	}
+
+	if err := m.connect(); err != nil {
+		return rowsCount, nil, err
+	}
+
+	if ! export {
+		rowsCount, oneRow, err = m.row()
+	} else {
+		chCSV := make(chan []string)
+		defer close(chCSV)
+
+		go func() {
+			err = file.Write(chCSV)
+			if err != nil {
+				panic(err)
+			}
+		}()
+
+		rowsCount, err = m.dump(chCSV)
+	}
+
+	if err != nil {
+		return rowsCount, nil, err
+	}
+
+	return rowsCount, oneRow, nil
+}
+
+func (m *MySQL) connect() error {
+	if m.Connection != nil {
+		return nil
 	}
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&multiStatements=true",
@@ -43,110 +88,102 @@ func (m *MySQL) Execute() (int, map[string]string, error) {
 		m.Schema,
 	)
 
-	db, err := sql.Open("mysql", dsn)
+	conn, err := sql.Open("mysql", dsn)
 	if err != nil {
-		return 0, nil, err
+		return err
 	}
 
-	err = db.Ping()
+	err = conn.Ping()
 	if err != nil {
-		return 0, nil, err
+		return err
 	}
 
-	rows, err := db.Query(
+	m.Connection = conn
+
+	return nil
+}
+
+func (m *MySQL) execute(fn func(int,[]string) bool) (err error) {
+	var rowCount int
+	var row []string
+
+	if len(m.Query) == 0 {
+		return errors.New("Query is empty.")
+	}
+
+	rows, err := m.Connection.Query(
 		"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; " +
 		"SET SQL_BUFFER_RESULT=1; " +
 		m.Query)
 	if err != nil {
-		return 0, nil, err
+		return err
 	}
 	defer rows.Close()
 
-	columns, err := rows.Columns()
+	m.Columns, err = rows.Columns()
 	if err != nil {
-		return 0, nil, err
+		return err
 	}
 
-	//Values: all values of a row. Put each field of each row into values. Values length = = number of columns
-	values := make([]sql.RawBytes, len(columns))
+	// Values: all values of a row. Put each field of each row into values.
+	// Values length == number of columns
+	values := make([]sql.RawBytes, len(m.Columns))
 
 	scanArgs := make([]interface{}, len(values))
 	for i := range values {
 		scanArgs[i] = &values[i]
 	}
 
-	if err = m.ValidPath(); err != nil {
-		return 0, nil, err
-	}
-
-	go m.SaveCSVRow(columns, ch)
-
 	for rows.Next() {
 		row = nil
-		RowsCount += 1
+		rowCount += 1
 
 		//Add the contents of each line to scanArgs, and also to values:
 		err = rows.Scan(scanArgs...)
 		if err != nil {
-			return 0, nil, err
+			return err
 		}
 
 		for _, v := range values {
 			row = append(row, string(v))
 		}
 
-		// Send row to save into file:
-		ch <- row
-	}
-
-	if len(values) > 0 && len(row) == 1 && RowsCount == 1 {
-		for k, v := range columns {
-			oneRow[v] = string(values[k])
+		if fn(rowCount, row) {
+			break
 		}
 	}
 
 	if err = rows.Err(); err != nil {
-		return 0, nil, err
-	}
-
-	return RowsCount, oneRow, nil
-}
-
-func (m *MySQL) SaveCSVRow(columns []string, ch <-chan []string) error {
-	f, err := os.Create(m.Path)
-	defer f.Close()
-	if err != nil {
 		return err
 	}
 
-	w := csv.NewWriter(f)
-
-	if m.Header {
-		w.Write(columns)
-	}
-
-	for row := range ch {
-		w.Write(row)
-	}
-
-	w.Flush()
 	return nil
 }
 
-func (m *MySQL) ValidPath() error {
-	dir, err := os.Stat(m.Path)
+func (m *MySQL) row() (int, map[string]string, error) {
+	oneRow := map[string]string{}
+	rowsCount := 0
 
-	if err != nil {
-		return errors.New(fmt.Sprintf("Failed to open file: %s", m.Path))
-	}
+	err := m.execute(func(rowCount int, row[]string) bool {
+		for k, v := range m.Columns {
+			oneRow[v] = string(row[k])
+		}
+		rowsCount = rowCount
+		return true
+	})
 
-	if dir.IsDir() {
-		return errors.New(fmt.Sprintf("The path is a directory and is not valid: %s", m.Path))
-	}
+	return rowsCount, oneRow, err
+}
 
-	if filepath.Ext(m.Path) != ".csv" {
-		return errors.New(fmt.Sprintf("File extension ins't equal to .csv: %s", m.Path))
-	}
+func (m *MySQL) dump(chOut chan<- []string) (int, error) {
+	rowsCount := 0
 
-	return err
+	err := m.execute(func(rowCount int, row[]string) bool {
+		rowsCount = rowCount
+		chOut <- row
+
+		return false
+	})
+
+	return rowsCount, err
 }
