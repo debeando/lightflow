@@ -37,7 +37,7 @@ func (f *Flow) GetFormat() config.Format {
 }
 
 func (f *Flow) GetSubTaskVariables() map[string]interface{} {
-	return f.Config.Tasks[f.Index.Task].Subtask[f.Index.Subtask].Variables
+	return f.Config.Tasks[f.Index.Task].Subtasks[f.Index.Subtask].Variables
 }
 
 func (f *Flow) GetPipeVariables() map[string]interface{} {
@@ -45,7 +45,7 @@ func (f *Flow) GetPipeVariables() map[string]interface{} {
 }
 
 func (f *Flow) getSubTaskName() string {
-	return f.Config.Tasks[f.Index.Task].Subtask[f.Index.Subtask].Name
+	return f.Config.Tasks[f.Index.Task].Subtasks[f.Index.Subtask].Name
 }
 
 func (f *Flow) getTaskName() string {

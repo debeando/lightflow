@@ -26,7 +26,7 @@ func (f *Flow) slack() {
 
 		log.Info(
 			fmt.Sprintf(
-				"%s/%s/%s Send message to slack.",
+				"%s/%s/%s Message sent to Slack",
 				f.TaskName(),
 				f.SubTaskName(),
 				f.PipeName(),

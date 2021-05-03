@@ -37,12 +37,12 @@ func (f *Flow) Chunks() {
 				"chunk_step": step,
 			})
 
-			f.Execute()
+			f.Pipe()
 		})
 		et = c.ExecutionTime
 	} else {
 		et = duration.Start(func() {
-			f.Execute()
+			f.Pipe()
 		})
 	}
 

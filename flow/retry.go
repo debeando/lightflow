@@ -18,6 +18,7 @@ func (f *Flow) Retry(fn func()) {
 	r.Retry(
 		func() bool {
 			f.Attempt = f.GetRetryAttempts() - r.Attempt + 1
+
 			fn()
 
 			f.PrintRetry()
