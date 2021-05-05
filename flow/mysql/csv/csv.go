@@ -9,8 +9,7 @@ import (
 )
 
 type CSV struct {
-	Header []string
-	Path     string
+	Path string
 }
 
 func (c *CSV) IsValidPath() error {
@@ -47,10 +46,6 @@ func (c *CSV) Write(chIn <-chan []string) error {
 	}
 
 	w := csv.NewWriter(f)
-
-	if len(c.Header) > 0 {
-		w.Write(c.Header)
-	}
 
 	for row := range chIn {
 		w.Write(row)

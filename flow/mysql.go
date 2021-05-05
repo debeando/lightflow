@@ -166,7 +166,7 @@ func (f *Flow) GetMySQLQuery() string {
 	return query
 }
 
-func (f *Flow) GetMySQLHeader() []string {
+func (f *Flow) GetMySQLHeader() bool {
 	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].MySQL.Header
 }
 

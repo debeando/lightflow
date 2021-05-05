@@ -17,7 +17,7 @@ type MySQL struct {
 	Password     string
 	Schema       string
 	Query        string
-	Header     []string
+	Header       bool
 	Path         string
 	Connection  *sql.DB
 	Columns    []string
@@ -32,7 +32,6 @@ func (m *MySQL) Run() (int, map[string]string, error) {
 	oneRow := map[string]string{}
 
 	file := csv.CSV {
-		Header: m.Header,
 		Path: m.Path,
 	}
 
@@ -103,8 +102,9 @@ func (m *MySQL) connect() error {
 	return nil
 }
 
-func (m *MySQL) execute(fn func(int,[]string) bool) (err error) {
+func (m *MySQL) execute(fn func(int,[]string,[]string) bool) (err error) {
 	var rowCount int
+	var columns []string
 	var row []string
 
 	if len(m.Query) == 0 {
@@ -120,14 +120,14 @@ func (m *MySQL) execute(fn func(int,[]string) bool) (err error) {
 	}
 	defer rows.Close()
 
-	m.Columns, err = rows.Columns()
+	columns, err = rows.Columns()
 	if err != nil {
 		return err
 	}
 
 	// Values: all values of a row. Put each field of each row into values.
 	// Values length == number of columns
-	values := make([]sql.RawBytes, len(m.Columns))
+	values := make([]sql.RawBytes, len(columns))
 
 	scanArgs := make([]interface{}, len(values))
 	for i := range values {
@@ -148,7 +148,7 @@ func (m *MySQL) execute(fn func(int,[]string) bool) (err error) {
 			row = append(row, string(v))
 		}
 
-		if fn(rowCount, row) {
+		if fn(rowCount, columns, row) {
 			break
 		}
 	}
@@ -164,8 +164,8 @@ func (m *MySQL) row() (int, map[string]string, error) {
 	oneRow := map[string]string{}
 	rowsCount := 0
 
-	err := m.execute(func(rowCount int, row[]string) bool {
-		for k, v := range m.Columns {
+	err := m.execute(func(rowCount int, columns []string, row []string) bool {
+		for k, v := range columns {
 			oneRow[v] = string(row[k])
 		}
 		rowsCount = rowCount
@@ -176,10 +176,15 @@ func (m *MySQL) row() (int, map[string]string, error) {
 }
 
 func (m *MySQL) dump(chOut chan<- []string) (int, error) {
-	rowsCount := 0
+	var rowsCount int
 
-	err := m.execute(func(rowCount int, row[]string) bool {
+	err := m.execute(func(rowCount int, columns []string, row []string) bool {
 		rowsCount = rowCount
+
+		if rowsCount == 1 {
+			chOut <- columns
+		}
+
 		chOut <- row
 
 		return false
