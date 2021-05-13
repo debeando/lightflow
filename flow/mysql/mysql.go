@@ -22,6 +22,8 @@ type MySQL struct {
 	Connection  *sql.DB
 	Columns    []string
 	Row          map[string]string
+	Extension    string
+	Separator    rune
 }
 
 func (m *MySQL) Run() (int, map[string]string, error) {
@@ -33,6 +35,8 @@ func (m *MySQL) Run() (int, map[string]string, error) {
 
 	file := csv.CSV {
 		Path: m.Path,
+		Extension: m.Extension,
+		Separator: m.Separator,
 	}
 
 	if err := file.IsValidPath(); err != nil {
@@ -181,7 +185,7 @@ func (m *MySQL) dump(chOut chan<- []string) (int, error) {
 	err := m.execute(func(rowCount int, columns []string, row []string) bool {
 		rowsCount = rowCount
 
-		if rowsCount == 1 {
+		if rowsCount == 1 && m.Header {
 			chOut <- columns
 		}
 

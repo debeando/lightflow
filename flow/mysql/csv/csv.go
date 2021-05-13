@@ -10,6 +10,8 @@ import (
 
 type CSV struct {
 	Path string
+	Extension string
+	Separator rune
 }
 
 func (c *CSV) IsValidPath() error {
@@ -21,8 +23,8 @@ func (c *CSV) IsValidPath() error {
 		return errors.New(fmt.Sprintf("File name is short: %s", c.Path))
 	}
 
-	if filepath.Ext(c.Path) != ".csv" {
-		return errors.New(fmt.Sprintf("File extension ins't equal to .csv: %s", c.Path))
+	if filepath.Ext(c.Path) != c.Extension {
+		return errors.New(fmt.Sprintf("File extension ins't equal to %s: %s", c.Extension, c.Path))
 	}
 
 	return nil
@@ -46,6 +48,7 @@ func (c *CSV) Write(chIn <-chan []string) error {
 	}
 
 	w := csv.NewWriter(f)
+	w.Comma = c.Separator
 
 	for row := range chIn {
 		w.Write(row)

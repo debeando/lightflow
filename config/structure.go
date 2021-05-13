@@ -55,14 +55,16 @@ type Structure struct {
 				Title      string `yaml:"title"`
 			}
 			MySQL struct { // Connect to MySQL server.
-				Host     string `yaml:"host"`
-				Port     int    `yaml:"port"`
-				User     string `yaml:"user"`
-				Password string `yaml:"password"`
-				Schema   string `yaml:"schema"`
-				Query    string `yaml:"query"`
-				Header   bool   `yaml:"header"`
-				Path     string `yaml:"path"` // Path and filename to save result into file.
+				Host      string `yaml:"host"`
+				Port      int    `yaml:"port"`
+				User      string `yaml:"user"`
+				Password  string `yaml:"password"`
+				Schema    string `yaml:"schema"`
+				Query     string `yaml:"query"`
+				Header    bool   `yaml:"header"`
+				Path      string `yaml:"path"` // Path and filename with extension to save results.
+				Separator string `yaml:"separator"` // comma (default) or tab.
+				Extension string `yaml:"extension"`
 			}
 		}
 	}

@@ -15,14 +15,16 @@ func (f *Flow) mysql() {
 	}
 
 	mysql := mysql.MySQL{
-		Host:     f.Render(f.GetMySQLHost()),
-		Port:     f.GetMySQLPort(),
-		User:     f.Render(f.GetMySQLUser()),
-		Password: f.Render(f.GetMySQLPassword()),
-		Schema:   f.Render(f.GetMySQLSchema()),
-		Query:    f.renderQuery(),
-		Header:   f.GetMySQLHeader(),
-		Path:     f.Render(f.GetMySQLPath()),
+		Host:      f.Render(f.GetMySQLHost()),
+		Port:      f.GetMySQLPort(),
+		User:      f.Render(f.GetMySQLUser()),
+		Password:  f.Render(f.GetMySQLPassword()),
+		Schema:    f.Render(f.GetMySQLSchema()),
+		Query:     f.renderQuery(),
+		Header:    f.GetMySQLHeader(),
+		Path:      f.Render(f.GetMySQLPath()),
+		Separator: f.GetMySQLSeparator(),
+		Extension: f.GetMySQLExtension(),
 	}
 
 	log.Debug(
@@ -178,4 +180,24 @@ func (f *Flow) GetMySQLPath() string {
 	}
 
 	return path
+}
+
+func (f *Flow) GetMySQLSeparator() rune {
+	separator := f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].MySQL.Separator
+
+	if separator == "tab" {
+		return rune('\t')
+	}
+
+	return rune(',')
+}
+
+func (f *Flow) GetMySQLExtension() string {
+	extension := f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].MySQL.Extension
+
+	if len(extension) == 0 {
+		return ".csv"
+	}
+
+	return extension
 }
