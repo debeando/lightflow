@@ -1,5 +1,10 @@
 package config
 
+import (
+	"github.com/debeando/lightflow/plugins/csv"
+	"github.com/debeando/lightflow/plugins/mysql"
+)
+
 type Format string
 
 const (
@@ -54,18 +59,8 @@ type Structure struct {
 				Message    string `yaml:"message"`
 				Title      string `yaml:"title"`
 			}
-			MySQL struct { // Connect to MySQL server.
-				Host      string `yaml:"host"`
-				Port      int    `yaml:"port"`
-				User      string `yaml:"user"`
-				Password  string `yaml:"password"`
-				Schema    string `yaml:"schema"`
-				Query     string `yaml:"query"`
-				Header    bool   `yaml:"header"`
-				Path      string `yaml:"path"` // Path and filename with extension to save results.
-				Separator string `yaml:"separator"` // comma (default) or tab.
-				Extension string `yaml:"extension"`
-			}
+			MySQL mysql.MySQL
+			CSV csv.CSV
 			AWS struct { // Connect to MySQL server.
 				S3 struct {
 					Bucket string `yaml:"bucket"`
