@@ -12,10 +12,8 @@ help: ## Show this help.
 test: ## Run the tests of the project.
 	go test ./...
 
-deps: ## Install dependencies
-	go get -u github.com/go-sql-driver/mysql
-	go get -u github.com/go-yaml/yaml
-	go get -u github.com/sirupsen/logrus
+deps: ## Download dependencies
+	go mod download
 
 build: ## Build binary for local operating system
 	go generate ./...

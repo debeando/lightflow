@@ -66,6 +66,12 @@ type Structure struct {
 				Separator string `yaml:"separator"` // comma (default) or tab.
 				Extension string `yaml:"extension"`
 			}
+			AWS struct { // Connect to MySQL server.
+				S3 struct {
+					Bucket string `yaml:"bucket"`
+					Prefix string `yaml:"prefix"`
+				}
+			}
 		}
 	}
 }
