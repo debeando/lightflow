@@ -7,11 +7,11 @@ import (
 )
 
 type S3 struct {
-	Bucket string
-	Prefix string
+	Bucket string `yaml:"bucket"`
+	Prefix string `yaml:"prefix"`
 }
 
-func (s *S3) Size() (uint64, error) {
+func (s *S3) Size() (int, error) {
 	s3svc := s3.New(session.New())
 
 	input := s3.ListObjectsInput {
@@ -24,10 +24,10 @@ func (s *S3) Size() (uint64, error) {
 		return 0, err
 	}
 
-	var size uint64
+	var size int
 
 	for _, object := range result.Contents {
-		size += uint64(*(object.Size))
+		size += int(*(object.Size))
 	}
 
 	return size, nil

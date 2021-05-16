@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/debeando/lightflow/plugins/aws"
 	"github.com/debeando/lightflow/plugins/csv"
 	"github.com/debeando/lightflow/plugins/mysql"
 )
@@ -61,12 +62,7 @@ type Structure struct {
 			}
 			MySQL mysql.MySQL
 			CSV csv.CSV
-			AWS struct { // Connect to MySQL server.
-				S3 struct {
-					Bucket string `yaml:"bucket"`
-					Prefix string `yaml:"prefix"`
-				}
-			}
+			AWS aws.AWS
 		}
 	}
 }
