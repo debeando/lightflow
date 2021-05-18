@@ -12,7 +12,7 @@ func (f *Flow) mysql() {
 
 	defer close(chData)
 
-	c := plugins.PluginCSV {
+	c := plugins.PluginCSV{
 		Config: f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].CSV,
 	}
 	writeToCSV, err := c.Load()
@@ -47,7 +47,7 @@ func (f *Flow) mysql() {
 		}()
 	}
 
-	p := plugins.PluginMySQL {
+	p := plugins.PluginMySQL{
 		Config: f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].MySQL,
 	}
 

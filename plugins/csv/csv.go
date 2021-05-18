@@ -14,13 +14,13 @@ type Separator string
 const (
 	dotCSV Extension = ".csv"
 	dotTSV           = ".tsv"
-	TAB   Separator = "TAB"
-	COMMA           = "COMMA"
+	TAB    Separator = "TAB"
+	COMMA            = "COMMA"
 )
 
-var Extensions = map[string]bool {
-    ".csv": true,
-    ".tsv": true,
+var Extensions = map[string]bool{
+	".csv": true,
+	".tsv": true,
 }
 
 type CSV struct {
@@ -42,7 +42,7 @@ func (c *CSV) IsValid() error {
 				c.Path))
 	}
 
-	if ! Extensions[string(c.Extension)] {
+	if !Extensions[string(c.Extension)] {
 		return errors.New(
 			fmt.Sprintf(
 				"File extension is not valid: %s",

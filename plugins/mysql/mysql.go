@@ -9,16 +9,16 @@ import (
 )
 
 type MySQL struct {
-	Host        string `yaml:"host"`
-	Port        int    `yaml:"port"`
-	User        string `yaml:"user"`
-	Password    string `yaml:"password"`
-	Schema      string `yaml:"schema"`
-	Query       string `yaml:"query"`
+	Host       string `yaml:"host"`
+	Port       int    `yaml:"port"`
+	User       string `yaml:"user"`
+	Password   string `yaml:"password"`
+	Schema     string `yaml:"schema"`
+	Query      string `yaml:"query"`
 	Connection *sql.DB
 }
 
-func (m *MySQL) Execute(fn func(int,[]string, []string) bool) (error) {
+func (m *MySQL) Execute(fn func(int, []string, []string) bool) error {
 	var err error
 
 	if err = m.connect(); err != nil {
@@ -64,7 +64,7 @@ func (m *MySQL) connect() error {
 	return nil
 }
 
-func (m *MySQL) execute(fn func(int,[]string,[]string) bool) (err error) {
+func (m *MySQL) execute(fn func(int, []string, []string) bool) (err error) {
 	var rowCount int
 	var columns []string
 	var row []string
@@ -75,8 +75,8 @@ func (m *MySQL) execute(fn func(int,[]string,[]string) bool) (err error) {
 
 	rows, err := m.Connection.Query(
 		"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED; " +
-		"SET SQL_BUFFER_RESULT=1; " +
-		m.Query)
+			"SET SQL_BUFFER_RESULT=1; " +
+			m.Query)
 	if err != nil {
 		return err
 	}

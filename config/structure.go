@@ -61,8 +61,8 @@ type Structure struct {
 				Title      string `yaml:"title"`
 			}
 			MySQL mysql.MySQL
-			CSV csv.CSV
-			AWS aws.AWS
+			CSV   csv.CSV
+			AWS   aws.AWS
 		}
 	}
 }

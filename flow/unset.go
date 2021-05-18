@@ -2,7 +2,7 @@ package flow
 
 func (f *Flow) unset() {
 	f.Variables.Set(map[string]interface{}{
-		"stdout": "",
+		"stdout":    "",
 		"exit_code": 0,
 	})
 

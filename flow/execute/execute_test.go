@@ -18,7 +18,7 @@ func TestExecute(t *testing.T) {
 	testExecutes[1] = TestExecutes{Command: "echo -e 'test' && exit 123", Stdout: "test", ExitCode: 123}
 	testExecutes[2] = TestExecutes{Command: "a", Stdout: "/bin/bash: a: command not found", ExitCode: 127}
 
-	for index, _ := range testExecutes {
+	for index := range testExecutes {
 		stdout, exit_code := execute.Execute(testExecutes[index].Command, false)
 
 		if stdout != testExecutes[index].Stdout {

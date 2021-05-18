@@ -5,7 +5,7 @@ import (
 )
 
 func (f *Flow) aws() {
-	aws := plugins.PluginAWS {
+	aws := plugins.PluginAWS{
 		Config: f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].AWS,
 	}
 	aws.Load()

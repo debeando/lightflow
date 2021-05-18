@@ -44,16 +44,16 @@ func (f *Flow) SetDefaults() {
 	f.Variables.Set(f.GetPipeVariables())
 	f.Variables.Set(f.GetSubTaskVariables())
 	f.Variables.Set(map[string]interface{}{
-		"chunk_limit": 0,
-		"chunk_offset": 0,
-		"chunk_step": 0,
-		"chunk_total": 0,
-		"chunk_end": 0,
-		"error": "",
-		"exit_code": 0,
-		"path": config.Load().General.Temporary_Directory,
-		"skip": false,
-		"stdout": "",
+		"chunk_limit":         0,
+		"chunk_offset":        0,
+		"chunk_step":          0,
+		"chunk_total":         0,
+		"chunk_end":           0,
+		"error":               "",
+		"exit_code":           0,
+		"path":                config.Load().General.Temporary_Directory,
+		"skip":                false,
+		"stdout":              "",
 		"aws_s3_objects_size": 0,
 	})
 	f.Variables.SetDate(args.VariableDate())

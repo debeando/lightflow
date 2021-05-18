@@ -3,18 +3,18 @@ package plugins
 import (
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/plugins/mysql"
 	"github.com/debeando/lightflow/flow/template"
+	"github.com/debeando/lightflow/plugins/mysql"
 	"github.com/debeando/lightflow/variables"
 )
 
 type PluginMySQL struct {
-	Config mysql.MySQL
+	Config    mysql.MySQL
 	Variables variables.List
 }
 
 func (p *PluginMySQL) Retrieve(fn func(rowCount int, columns []string, row []string) bool) {
-	if ! p.isValid() {
+	if !p.isValid() {
 		return
 	}
 
@@ -25,12 +25,12 @@ func (p *PluginMySQL) Retrieve(fn func(rowCount int, columns []string, row []str
 	})
 
 	mysql := mysql.MySQL{
-		Host:      p.Render(p.Host()),
-		Port:      p.Port(),
-		User:      p.Render(p.User()),
-		Password:  p.Render(p.Password()),
-		Schema:    p.Render(p.Schema()),
-		Query:     p.QueryRendered(),
+		Host:     p.Render(p.Host()),
+		Port:     p.Port(),
+		User:     p.Render(p.User()),
+		Password: p.Render(p.Password()),
+		Schema:   p.Render(p.Schema()),
+		Query:    p.QueryRendered(),
 	}
 
 	err := mysql.Execute(func(rowCount int, columns []string, row []string) bool {
@@ -39,7 +39,7 @@ func (p *PluginMySQL) Retrieve(fn func(rowCount int, columns []string, row []str
 		})
 
 		if rowCount == 1 {
-			for k,v := range row {
+			for k, v := range row {
 				p.Variables.Set(map[string]interface{}{
 					columns[k]: string(v),
 				})

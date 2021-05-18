@@ -29,7 +29,7 @@ func IsArgStringDefined(name string) bool {
 
 func InterfaceToString(value interface{}) string {
 	if value != nil {
-		return fmt.Sprintf("%v", value)	
+		return fmt.Sprintf("%v", value)
 	}
 
 	return ""

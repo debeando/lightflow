@@ -1,8 +1,8 @@
 package duration_test
 
 import (
-	"time"
 	"testing"
+	"time"
 
 	"github.com/debeando/lightflow/flow/duration"
 )

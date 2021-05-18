@@ -1,8 +1,8 @@
 package s3
 
 import (
-    "github.com/aws/aws-sdk-go/aws"
-    "github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
@@ -14,9 +14,9 @@ type S3 struct {
 func (s *S3) Size() (int, error) {
 	s3svc := s3.New(session.New())
 
-	input := s3.ListObjectsInput {
-    	Bucket: aws.String(s.Bucket),
-    	Prefix: aws.String(s.Prefix),
+	input := s3.ListObjectsInput{
+		Bucket: aws.String(s.Bucket),
+		Prefix: aws.String(s.Prefix),
 	}
 
 	result, err := s3svc.ListObjects(&input)

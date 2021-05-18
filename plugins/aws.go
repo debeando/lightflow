@@ -10,7 +10,7 @@ import (
 )
 
 type PluginAWS struct {
-	Config aws.AWS
+	Config    aws.AWS
 	Variables variables.List
 }
 
@@ -19,7 +19,7 @@ func (p *PluginAWS) Load() {
 	p.Config.S3.Bucket = p.Render(p.Config.S3.Bucket)
 	p.Config.S3.Prefix = p.Render(p.Config.S3.Prefix)
 
-	if ! p.isValid() {
+	if !p.isValid() {
 		return
 	}
 
@@ -46,7 +46,7 @@ func (c *PluginAWS) Render(s string) string {
 	return r
 }
 
-func (c *PluginAWS) isValid() bool { 
+func (c *PluginAWS) isValid() bool {
 	if len(c.Bucket()) == 0 {
 		return false
 	}

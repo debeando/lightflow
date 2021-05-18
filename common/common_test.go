@@ -18,7 +18,7 @@ func TestTrimNewlines(t *testing.T) {
 	testTexts[2] = TestTexts{Text: "\n\nabc123\n\n", Result: "abc123"}
 	testTexts[3] = TestTexts{Text: "\n\nabc\n123\n\n", Result: "abc\n123"}
 
-	for index, _ := range testTexts {
+	for index := range testTexts {
 		if common.TrimNewlines(testTexts[index].Text) != testTexts[index].Result {
 			t.Errorf("Expected %s, got %s.", testTexts[index].Result, common.TrimNewlines(testTexts[index].Text))
 		}

@@ -19,7 +19,7 @@ func TestValidDate(t *testing.T) {
 	testDates[1] = TestDate{Date: "2019-02-31", Valid: false}
 	testDates[2] = TestDate{Date: "2019-2-27", Valid: false}
 
-	for index, _ := range testDates {
+	for index := range testDates {
 
 		if v := ai.ValidDate(testDates[index].Date); v != testDates[index].Valid {
 			t.Errorf("Expected %t, got %t.", testDates[index].Valid, v)
@@ -101,7 +101,7 @@ func TestGreaterThanDate(t *testing.T) {
 	testGreaterThanDates[1] = TestGreaterThanDate{Start: "2019-11-30", End: "2019-12-01", Valid: false}
 	testGreaterThanDates[2] = TestGreaterThanDate{Start: "2019-10-10", End: "2018-10-10", Valid: true}
 
-	for index, _ := range testGreaterThanDates {
+	for index := range testGreaterThanDates {
 		if v := ai.GreaterThanDate(testGreaterThanDates[index].Start, testGreaterThanDates[index].End); v != testGreaterThanDates[index].Valid {
 			t.Errorf("Expected %t, got %t.", testGreaterThanDates[index].Valid, v)
 		}
@@ -122,7 +122,7 @@ func TestLessThanDate(t *testing.T) {
 	testLessThanDates[1] = TestLessThanDate{Start: "2019-11-30", End: "2019-12-01", Valid: true}
 	testLessThanDates[2] = TestLessThanDate{Start: "2019-10-10", End: "2018-10-10", Valid: false}
 
-	for index, _ := range testLessThanDates {
+	for index := range testLessThanDates {
 		if v := ai.LessThanDate(testLessThanDates[index].Start, testLessThanDates[index].End); v != testLessThanDates[index].Valid {
 			t.Errorf("Expected %t, got %t.", testLessThanDates[index].Valid, v)
 		}

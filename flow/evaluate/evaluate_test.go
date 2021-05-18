@@ -22,7 +22,7 @@ func TestExpressions(t *testing.T) {
 	testExpressions[5] = TestExpressions{Formula: "(1 + 3) > 5", Valid: false}
 	testExpressions[6] = TestExpressions{Formula: "(1 + 3) >= 4", Valid: true}
 
-	for index, _ := range testExpressions {
+	for index := range testExpressions {
 		v := evaluate.Expression(testExpressions[index].Formula)
 
 		if v != testExpressions[index].Valid {
