@@ -20,7 +20,7 @@ func (f *Flow) Execute() {
 			f.unset()
 			f.execute(cmd)
 			f.mysql()
-			f.aws_s3()
+			f.aws()
 			f.parse()
 			f.error()
 			f.print()
