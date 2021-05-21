@@ -2,6 +2,7 @@ package flow
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common"
@@ -18,6 +19,7 @@ func (f *Flow) Execute() {
 	if f.when() {
 		f.Retry(func() {
 			f.unset()
+			f.wait()
 			f.execute(cmd)
 			f.mysql()
 			f.aws()
@@ -89,4 +91,9 @@ func (f *Flow) execute(cmd string) {
 		"exit_code": exitCode,
 		"stdout":    stdout,
 	})
+}
+
+func (f *Flow) wait() {
+	wait := f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Wait
+	time.Sleep(time.Duration(wait) * time.Second)
 }

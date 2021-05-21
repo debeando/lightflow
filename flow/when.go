@@ -23,6 +23,17 @@ func (f *Flow) when() bool {
 
 	log.Info(
 		fmt.Sprintf(
+			"%s/%s/%s When: %#v",
+			f.TaskName(),
+			f.SubTaskName(),
+			f.PipeName(),
+			debug_vars["Result"],
+		),
+		nil,
+	)
+
+	log.Debug(
+		fmt.Sprintf(
 			"%s/%s/%s When: %s => %s => %#v",
 			f.TaskName(),
 			f.SubTaskName(),

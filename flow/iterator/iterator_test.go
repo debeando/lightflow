@@ -177,3 +177,43 @@ func TestIgnore(t *testing.T) {
 		t.Errorf("Expected %d, got %d.", 1, counter)
 	}
 }
+
+func TestLoopMany(t *testing.T) {
+	counter := 0
+	itrl1 := iterator.Iterator{
+		Items: []Item{
+			{Name: "L2I1"},
+			{Name: "L2I2"},
+			{Name: "L2I3"},
+		},
+	}
+
+	itrl1.Run(func() bool {
+		counter++
+		return false
+	})
+
+	if counter != 3 {
+		t.Errorf("Expected %d, got %d.", 3, counter)
+	}
+}
+
+func TestLoopOne(t *testing.T) {
+	counter := 0
+	itrl1 := iterator.Iterator{
+		Items: []Item{
+			{Name: "L2I1"},
+			{Name: "L2I2"},
+			{Name: "L2I3"},
+		},
+	}
+
+	itrl1.Run(func() bool {
+		counter++
+		return true
+	})
+
+	if counter != 1 {
+		t.Errorf("Expected %d, got %d.", 1, counter)
+	}
+}
