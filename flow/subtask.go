@@ -10,7 +10,7 @@ import (
 
 func (f *Flow) Subtask() {
 	itr := iterator.Iterator{
-		Items: f.Config.Tasks[f.Index.Task].Subtask,
+		Items: f.Config.Tasks[f.Index.Task].Subtasks,
 		Name:  args.Subtask(),
 	}
 
