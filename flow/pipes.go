@@ -8,7 +8,7 @@ import (
 	"github.com/debeando/lightflow/flow/iterator"
 )
 
-func (f *Flow) Pipes() {
+func (f *Flow) PipesInArgs() {
 	for _, pipeName := range args.Pipes() {
 		if f.Valid(pipeName) {
 			itr := iterator.Iterator{

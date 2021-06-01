@@ -2,13 +2,16 @@
 tasks:
   - name: T1
     subtasks_include:
-      - tests/include/a.yaml
-      - tests/include/b.yaml
-      - tests/include/d.yaml
+      - tests/include/sa.yaml
+      - tests/include/sb.yaml
+      - tests/include/sd.yaml
     subtasks:
     - name: c
       variables:
         foo: ccc
+    pipes_include:
+      - tests/include/pa.yaml
+      - tests/include/pb.yaml
     pipes:
       - name: T1P1
 

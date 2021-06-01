@@ -3,6 +3,7 @@ package flow
 import (
 	"fmt"
 	"os"
+	"reflect"
 
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/config"
@@ -39,8 +40,53 @@ func (f *Flow) Subtask() {
 			os.Exit(1)
 		}
 
-		f.Config.Tasks[f.Index.Task].Subtasks = append(f.Config.Tasks[f.Index.Task].Subtasks, subtask)
+		if ! reflect.DeepEqual(subtask, config.Subtask{}) {
+			f.Config.Tasks[f.Index.Task].Subtasks = append(f.Config.Tasks[f.Index.Task].Subtasks, subtask)
+		}
 	}
+
+
+
+
+
+	for _, inc := range f.Config.Tasks[f.Index.Task].PipesInclude {
+		source, err := ioutil.ReadFile(inc)
+		if err != nil {
+			log.Error(err.Error(), nil)
+		} else {
+			log.Info(
+				fmt.Sprintf(
+					"Include Pipe: %s",
+					inc,
+				), nil)
+		}
+
+		var pipe config.Pipe
+
+		source = []byte(os.ExpandEnv(string(source)))
+
+		if err := yaml.Unmarshal(source, &pipe); err != nil {
+			log.Error(
+				fmt.Sprintf(
+					"Imposible to parse config file: %s",
+					inc,
+				), nil)
+			os.Exit(1)
+		}
+
+		if ! reflect.DeepEqual(pipe, config.Pipe{}) {
+			f.Config.Tasks[f.Index.Task].Pipes = append(f.Config.Tasks[f.Index.Task].Pipes, pipe)
+		}
+	}
+
+
+
+
+
+
+
+
+
 
 	itr := iterator.Iterator{
 		Items: f.Config.Tasks[f.Index.Task].Subtasks,
