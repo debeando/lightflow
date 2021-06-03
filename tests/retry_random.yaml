@@ -1,28 +1,26 @@
 ---
 tasks:
-  - name: T1
-    subtask:
-      - name: T1L1
-        variables:
-          url: https://random-data-api.com/api/computer/random_computer
-    pipes:
-      - name: check
-        execute: >
-          curl \
-            --silent \
-            -X GET "{{ .url }}"
-        format: JSON
-        unset:
-          - error
-        print:
-          - error
-          - type
-        error: >
-          {{ if .error }}
-            {{ len .error }} > 0
-          {{ end }}
-        retry:
-          attempts: 3
-          wait: 1
-          expression: '"{{ .type }}" != "server"'
+  - name: T1L1
+    variables:
+      url: https://random-data-api.com/api/computer/random_computer
+pipes:
+  - name: check
+    execute: >
+      curl \
+        --silent \
+        -X GET "{{ .url }}"
+    format: JSON
+    unset:
+      - error
+    print:
+      - error
+      - type
+    error: >
+      {{ if .error }}
+        {{ len .error }} > 0
+      {{ end }}
+    retry:
+      attempts: 3
+      wait: 1
+      expression: '"{{ .type }}" != "server"'
 
