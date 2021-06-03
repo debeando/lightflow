@@ -1,18 +1,8 @@
 ---
 tasks:
-  - name: T1
-    subtasks:
-      - name: T1ST1
-    pipes:
-    - name: T1ST1P1
-      execute: sleep 1
-    - name: T1ST1P2
-      execute: sleep 0
-  - name: T2
-    subtasks:
-      - name: T2ST1
-    pipes:
-    - name: T2ST1P1
-      execute: sleep 2
-    - name: T2ST1P2
-      execute: sleep 1
+  - name: T1ST1
+pipes:
+  - name: T1ST1P1
+    execute: sleep 1
+  - name: T1ST1P2
+    execute: sleep 0

@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"reflect"
 
 	"github.com/go-yaml/yaml"
 )
@@ -45,10 +46,60 @@ func (s *Structure) Read(file_name string) error {
 		errors.New(fmt.Sprintf("Imposible to parse config file - %s", err))
 	}
 
-	return s.Validate()
+	s.ReadInclude()
+
+	return s.IsValid()
 }
 
-func (s *Structure) Validate() error {
+func (s *Structure) ReadInclude() {
+	for _, inc := range s.TasksInclude {
+		source, err := ioutil.ReadFile(inc)
+		if err != nil {
+			errors.New(err.Error())
+		}
+
+		var task Task
+
+		source = []byte(os.ExpandEnv(string(source)))
+
+		if err := yaml.Unmarshal(source, &task); err != nil {
+			errors.New(
+				fmt.Sprintf(
+					"Imposible to parse config file: %s",
+					inc,
+				))
+		}
+
+		if ! reflect.DeepEqual(task, Task{}) {
+			s.Tasks = append(s.Tasks, task)
+		}
+	}
+
+	for _, inc := range s.PipesInclude {
+		source, err := ioutil.ReadFile(inc)
+		if err != nil {
+			errors.New(err.Error())
+		}
+
+		var pipe Pipe
+
+		source = []byte(os.ExpandEnv(string(source)))
+
+		if err := yaml.Unmarshal(source, &pipe); err != nil {
+			errors.New(
+				fmt.Sprintf(
+					"Imposible to parse config file: %s",
+					inc,
+				))
+		}
+
+		if ! reflect.DeepEqual(pipe, Pipe{}) {
+			s.Pipes = append(s.Pipes, pipe)
+		}
+	}
+}
+
+func (s *Structure) IsValid() error {
 	var re = regexp.MustCompile(`^[0-9A-Za-z\-\_]+$`)
 
 	for task_index := range s.Tasks {
