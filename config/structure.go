@@ -24,19 +24,15 @@ type Structure struct {
 		}
 	}
 	Variables map[string]interface{} `yaml:"variables"` // Lista global de variables para usar en los pipes.
-	Tasks     []struct {
-		Name              string  `yaml:"name"`             // Task name.
-		SubtasksInclude []string  `yaml:"subtasks_include"` // Path list of subtasks.
-		Subtasks        []Subtask `yaml:"subtasks"`         // Subtask is a common collection of pipes.
-		PipesInclude    []string  `yaml:"pipes_include"`    // Path list of pipes.
-		Pipes           []Pipe    `yaml:"pipes"`            // Pipes is a common collection for subtask.
-	}
+	TasksInclude []string `yaml:"subtasks_include"` // Path list of subtasks.
+	Tasks        []Task   `yaml:"subtasks"`         // Subtask is a common collection of pipes.
+	PipesInclude []string `yaml:"pipes_include"`    // Path list of pipes.
+	Pipes        []Pipe   `yaml:"pipes"`            // Pipes is a common collection for subtask.
 }
 
-type Subtask struct {
+type Task struct {
 	Name      string                 `yaml:"name"`
 	Ignore    bool                   `yaml:"ignore"`
-	Variables map[string]interface{} `yaml:"variables"`
 }
 
 type Pipe struct { // Pipes is a common collection for subtask.
