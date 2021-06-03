@@ -10,9 +10,8 @@ import (
 func (f *Flow) debug() {
 	log.Debug(
 		fmt.Sprintf(
-			"%s/%s/%s",
+			"%s/%s",
 			f.TaskName(),
-			f.SubTaskName(),
 			f.PipeName(),
 		),
 		f.Variables.Items,

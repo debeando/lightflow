@@ -24,9 +24,8 @@ func (f *Flow) Retry(fn func()) {
 			if f.Attempt == f.GetRetryAttempts() && f.EvalRetry() {
 				log.Warning(
 					fmt.Sprintf(
-						"%s/%s/%s Retry end, Attempts exhausted",
+						"%s/%s Retry end, Attempts exhausted",
 						f.TaskName(),
-						f.SubTaskName(),
 						f.PipeName(),
 					), nil)
 			}
@@ -42,9 +41,8 @@ func (f *Flow) PrintRetry() {
 
 	log.Info(
 		fmt.Sprintf(
-			"%s/%s/%s Retry %d/%d",
+			"%s/%s Retry %d/%d",
 			f.TaskName(),
-			f.SubTaskName(),
 			f.PipeName(),
 			f.Attempt,
 			f.GetRetryAttempts(),

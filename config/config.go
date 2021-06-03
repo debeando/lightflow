@@ -59,25 +59,15 @@ func (s *Structure) Validate() error {
 					s.Tasks[task_index].Name,
 				))
 		}
+	}
 
-		for subtask_index := range s.Tasks[task_index].Subtasks {
-			if !re.MatchString(s.Tasks[task_index].Subtasks[subtask_index].Name) {
-				return errors.New(
-					fmt.Sprintf(
-						"Invalid sub task name for '%s', only allow 0-9, A-Z, a-z, - and _.",
-						s.Tasks[task_index].Subtasks[subtask_index].Name,
-					))
-			}
-		}
-
-		for pipe_index := range s.Tasks[task_index].Pipes {
-			if !re.MatchString(s.Tasks[task_index].Pipes[pipe_index].Name) {
-				return errors.New(
-					fmt.Sprintf(
-						"Invalid pipe name for '%s', only allow 0-9, A-Z, a-z, - and _.",
-						s.Tasks[task_index].Pipes[pipe_index].Name,
-					))
-			}
+	for pipe_index := range s.Pipes {
+		if !re.MatchString(s.Pipes[pipe_index].Name) {
+			return errors.New(
+				fmt.Sprintf(
+					"Invalid pipe name for '%s', only allow 0-9, A-Z, a-z, - and _.",
+					s.Pipes[pipe_index].Name,
+				))
 		}
 	}
 
