@@ -43,19 +43,22 @@ func (s *Structure) Read(file_name string) error {
 	source = []byte(os.ExpandEnv(string(source)))
 
 	if err := yaml.Unmarshal(source, &s); err != nil {
-		errors.New(fmt.Sprintf("Imposible to parse config file - %s", err))
+		return errors.New(fmt.Sprintf("Imposible to parse config file - %s", err))
 	}
 
-	s.ReadInclude()
+	err = s.ReadInclude()
+	if err != nil {
+		return err
+	}
 
 	return s.IsValid()
 }
 
-func (s *Structure) ReadInclude() {
+func (s *Structure) ReadInclude() error {
 	for _, inc := range s.TasksInclude {
 		source, err := ioutil.ReadFile(inc)
 		if err != nil {
-			errors.New(err.Error())
+			return errors.New(err.Error())
 		}
 
 		var task Task
@@ -63,7 +66,7 @@ func (s *Structure) ReadInclude() {
 		source = []byte(os.ExpandEnv(string(source)))
 
 		if err := yaml.Unmarshal(source, &task); err != nil {
-			errors.New(
+			return errors.New(
 				fmt.Sprintf(
 					"Imposible to parse config file: %s",
 					inc,
@@ -78,7 +81,7 @@ func (s *Structure) ReadInclude() {
 	for _, inc := range s.PipesInclude {
 		source, err := ioutil.ReadFile(inc)
 		if err != nil {
-			errors.New(err.Error())
+			return errors.New(err.Error())
 		}
 
 		var pipe Pipe
@@ -86,7 +89,7 @@ func (s *Structure) ReadInclude() {
 		source = []byte(os.ExpandEnv(string(source)))
 
 		if err := yaml.Unmarshal(source, &pipe); err != nil {
-			errors.New(
+			return errors.New(
 				fmt.Sprintf(
 					"Imposible to parse config file: %s",
 					inc,
@@ -97,6 +100,8 @@ func (s *Structure) ReadInclude() {
 			s.Pipes = append(s.Pipes, pipe)
 		}
 	}
+
+	return nil
 }
 
 func (s *Structure) IsValid() error {

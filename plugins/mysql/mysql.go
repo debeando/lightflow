@@ -70,7 +70,7 @@ func (m *MySQL) execute(fn func(int, []string, []string) bool) (err error) {
 	var row []string
 
 	if len(m.Query) == 0 {
-		return errors.New("Query is empty.")
+		return errors.New("Plugin MySQL: Query is empty.")
 	}
 
 	rows, err := m.Connection.Query(
