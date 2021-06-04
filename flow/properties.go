@@ -40,6 +40,10 @@ func (f *Flow) GetVariables() map[string]interface{} {
 	return f.Config.Variables
 }
 
+func (f *Flow) GetTaskVariables() map[string]interface{} {
+	return f.Config.Tasks[f.Index.Task].Variables
+}
+
 func (f *Flow) GetPipeVariables() map[string]interface{} {
 	return f.Config.Pipes[f.Index.Pipe].Variables
 }

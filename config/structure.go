@@ -33,6 +33,7 @@ type Structure struct {
 type Task struct {
 	Name      string                 `yaml:"name"`
 	Ignore    bool                   `yaml:"ignore"`
+	Variables map[string]interface{} `yaml:"variables"` // Lista de variables para usar en los pipes.
 }
 
 type Pipe struct { // Pipes is a common collection for subtask.

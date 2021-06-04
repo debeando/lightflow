@@ -32,6 +32,7 @@ func (f *Flow) GetVariable(name string) interface{} {
 func (f *Flow) SetDefaults() {
 	f.Variables.Set(args.Variables())
 	f.Variables.Set(f.GetVariables())
+	f.Variables.Set(f.GetTaskVariables())
 	f.Variables.Set(f.GetPipeVariables())
 	f.Variables.Set(map[string]interface{}{
 		"chunk_limit":         0,
