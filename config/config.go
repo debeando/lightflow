@@ -84,11 +84,11 @@ func (s *Structure) ReadInclude() error {
 			return errors.New(err.Error())
 		}
 
-		var pipe Pipe
+		var pipes []Pipe
 
 		source = []byte(os.ExpandEnv(string(source)))
 
-		if err := yaml.Unmarshal(source, &pipe); err != nil {
+		if err := yaml.Unmarshal(source, &pipes); err != nil {
 			return errors.New(
 				fmt.Sprintf(
 					"Imposible to parse config file: %s",
@@ -96,8 +96,10 @@ func (s *Structure) ReadInclude() error {
 				))
 		}
 
-		if ! reflect.DeepEqual(pipe, Pipe{}) {
-			s.Pipes = append(s.Pipes, pipe)
+		for _, pipe := range pipes {
+			if ! reflect.DeepEqual(pipe, Pipe{}) {
+				s.Pipes = append(s.Pipes, pipe)
+			}
 		}
 	}
 
