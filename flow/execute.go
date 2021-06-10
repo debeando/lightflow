@@ -75,9 +75,8 @@ func (f *Flow) execute(cmd string) {
 
 	log.Debug(
 		fmt.Sprintf(
-			"%s/%s/%s",
+			"%s/%s",
 			f.TaskName(),
-			f.SubTaskName(),
 			f.PipeName(),
 		),
 		map[string]interface{}{
@@ -94,6 +93,6 @@ func (f *Flow) execute(cmd string) {
 }
 
 func (f *Flow) wait() {
-	wait := f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Wait
+	wait := f.Config.Pipes[f.Index.Pipe].Wait
 	time.Sleep(time.Duration(wait) * time.Second)
 }

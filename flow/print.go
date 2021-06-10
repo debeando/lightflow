@@ -18,9 +18,8 @@ func (f *Flow) print() {
 
 		log.Info(
 			fmt.Sprintf(
-				"%s/%s/%s",
+				"%s/%s",
 				f.TaskName(),
-				f.SubTaskName(),
 				f.PipeName(),
 			),
 			vars,

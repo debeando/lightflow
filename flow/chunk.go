@@ -22,9 +22,8 @@ func (f *Flow) Chunks() {
 		c.Chunk(func(step int, chunks int, offset int, pct int) {
 			log.Info(
 				fmt.Sprintf(
-					"%s/%s/%s Progress %d%%",
+					"%s/%s Progress %d%%",
 					f.TaskName(),
-					f.SubTaskName(),
 					f.PipeName(),
 					pct,
 				), nil)
@@ -48,9 +47,8 @@ func (f *Flow) Chunks() {
 
 	log.Info(
 		fmt.Sprintf(
-			"%s/%s/%s Finished %s",
+			"%s/%s Finished %s",
 			f.TaskName(),
-			f.SubTaskName(),
 			f.PipeName(),
 			et,
 		), nil)
@@ -62,12 +60,12 @@ func (f *Flow) GetChunkTotal() int {
 	if total := f.Variables.Get("chunk.total"); total != nil {
 		if value, ok := total.(string); ok {
 			if value := common.StringToInt(value); value > 0 {
-				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total = value
+				f.Config.Pipes[f.Index.Pipe].Chunk.Total = value
 			}
 		}
 	}
 
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Total
+	return f.Config.Pipes[f.Index.Pipe].Chunk.Total
 }
 
 // GetChunkLimit get the limit of chunks from config or variables.
@@ -77,12 +75,12 @@ func (f *Flow) GetChunkLimit() int {
 	if limit != nil {
 		if value, ok := limit.(string); ok {
 			if value := common.StringToInt(value); value > 0 {
-				f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit = value
+				f.Config.Pipes[f.Index.Pipe].Chunk.Limit = value
 			}
 		}
 	}
 
-	return f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].Chunk.Limit
+	return f.Config.Pipes[f.Index.Pipe].Chunk.Limit
 }
 
 // IsValidChunk is the sanity check for settings.

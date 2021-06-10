@@ -18,11 +18,11 @@ const USAGE = `lightflow %s.
 Usage:
 
 	lightflow [--help | --version | --example ]
-	lightflow --task=foo
-	lightflow --task=foo --pipes=bar,baz
+	lightflow --tasks=foo
+	lightflow --tasks=foo --pipes=bar,baz
 	lightflow --variables='{"date": "2019-08-01"}'
-	lightflow --task=foo --pipes=bar --variables='{"query": "SELECT * FROM foo", "date": "2019-08-01"}'
-	lightflow --task=foo --pipes=bar --ai-date='{"start": "2019-08-01", "end":"2019-08-31"}'
+	lightflow --tasks=foo --pipes=bar --variables='{"query": "SELECT * FROM foo", "date": "2019-08-01"}'
+	lightflow --tasks=foo --pipes=bar --ai-date='{"start": "2019-08-01", "end":"2019-08-31"}'
 
 Options:
 
@@ -33,10 +33,8 @@ Options:
   --dry-run    No execute commands.
   --example    Print out full sample configuration to stdout.
   --help       Show this help.
-  --list       List tasks, subtask and pipes.
   --pipes      Filter by one or many pipe name.
-  --subtask    Filter by subtask name.
-  --task       Filter by task name.
+  --tasks      Filter by task name.
   --variables  Passing variables in JSON format, is not compatible with --ai-date.
   --version    Print version numbers.
 
@@ -56,10 +54,8 @@ For more help, plese visit: https://github.com/debeando/ligthflow/wiki
 
 func Run() {
 	_ = flag.Bool("debug", false, "")
-	_ = flag.Bool("list", false, "")
 	_ = flag.String("pipes", "", "")
-	_ = flag.String("subtask", "", "")
-	_ = flag.String("task", "", "")
+	_ = flag.String("tasks", "", "")
 
 	fAIDate := flag.String("ai-date", "", "")
 	fADDate := flag.String("ad-date", "", "")

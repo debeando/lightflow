@@ -27,9 +27,8 @@ func (f *Flow) skip() {
 
 	log.Info(
 		fmt.Sprintf(
-			"%s/%s/%s Skip: %#v",
+			"%s/%s Skip: %#v",
 			f.TaskName(),
-			f.SubTaskName(),
 			f.PipeName(),
 			debug_vars["Result"],
 		),
@@ -38,9 +37,8 @@ func (f *Flow) skip() {
 
 	log.Debug(
 		fmt.Sprintf(
-			"%s/%s/%s Skip: %s => %s => %#v",
+			"%s/%s Skip: %s => %s => %#v",
 			f.TaskName(),
-			f.SubTaskName(),
 			f.PipeName(),
 			debug_vars["Expression"],
 			debug_vars["Rendered"],

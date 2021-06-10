@@ -1,3 +1,5 @@
 ---
-name: PA
-wait: 3
+- name: PA1
+  wait: 3
+- name: PA2
+  wait: 1

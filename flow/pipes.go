@@ -12,7 +12,7 @@ func (f *Flow) PipesInArgs() {
 	for _, pipeName := range args.Pipes() {
 		if f.Valid(pipeName) {
 			itr := iterator.Iterator{
-				Items: f.Config.Tasks[f.Index.Task].Pipes,
+				Items: f.Config.Pipes,
 				Name:  pipeName,
 			}
 
@@ -30,9 +30,8 @@ func (f *Flow) PipesInArgs() {
 			if ! f.Skip {
 				log.Info(
 					fmt.Sprintf(
-						"%s/%s Finished %s", // ET is acronym for execution time.
+						"%s Finished %s", // ET is acronym for execution time.
 						f.TaskName(),
-						f.SubTaskName(),
 						itr.ExecutionTime,
 					), nil)
 			}

@@ -25,9 +25,8 @@ func (f *Flow) error() {
 	if result {
 		log.Error(
 			fmt.Sprintf(
-				"%s/%s/%s Error: %s => %s => %#v",
+				"%s/%s Error: %s => %s => %#v",
 				f.TaskName(),
-				f.SubTaskName(),
 				f.PipeName(),
 				debug_vars["Expression"],
 				debug_vars["Rendered"],

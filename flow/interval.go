@@ -47,9 +47,8 @@ func (f *Flow) dateLoop(date string) {
 	if f.Variables.SetDate(date) {
 		log.Info(
 			fmt.Sprintf(
-				"%s/%s Increment %s",
+				"%s Increment %s",
 				f.TaskName(),
-				f.SubTaskName(),
 				date,
 			),
 			nil)

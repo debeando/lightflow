@@ -11,19 +11,14 @@ import (
 
 func (f *Flow) GetTitle() string {
 	return fmt.Sprintf(
-		"%s/%s/%s Starting...",
+		"%s/%s Starting...",
 		f.TaskName(),
-		f.SubTaskName(),
 		f.PipeName(),
 	)
 }
 
 func (f *Flow) TaskName() string {
 	return f.setName("task_name", f.getTaskName())
-}
-
-func (f *Flow) SubTaskName() string {
-	return f.setName("subtask_name", f.getSubTaskName())
 }
 
 func (f *Flow) PipeName() string {
@@ -34,15 +29,11 @@ func (f *Flow) GetVariable(name string) interface{} {
 	return f.Variables.Items[name]
 }
 
-func (f *Flow) GetGlobalVariables() map[string]interface{} {
-	return f.Config.Variables
-}
-
 func (f *Flow) SetDefaults() {
 	f.Variables.Set(args.Variables())
-	f.Variables.Set(f.GetGlobalVariables())
+	f.Variables.Set(f.GetVariables())
+	f.Variables.Set(f.GetTaskVariables())
 	f.Variables.Set(f.GetPipeVariables())
-	f.Variables.Set(f.GetSubTaskVariables())
 	f.Variables.Set(map[string]interface{}{
 		"chunk_limit":         0,
 		"chunk_offset":        0,

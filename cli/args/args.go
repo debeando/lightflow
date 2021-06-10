@@ -11,11 +11,7 @@ func List() bool {
 }
 
 func Task() string {
-	return common.GetArgVal("task").(string)
-}
-
-func Subtask() string {
-	return common.GetArgVal("subtask").(string)
+	return common.GetArgVal("tasks").(string)
 }
 
 func Pipe() string {
