@@ -19,6 +19,11 @@ type PluginAWS struct {
 func (p *PluginAWS) Load() {
 	p.Variables = *variables.Load()
 
+	p.Variables.Set(map[string]interface{}{
+		"aws_s3_objects_size": int64(0),
+		"aws_s3_objects_presign": "",
+	})
+
 	err := p.isValid()
 	if err != nil {
 		return

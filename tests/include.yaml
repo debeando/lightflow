@@ -2,14 +2,14 @@
 tasks_include:
   - tests/include/sa.yaml
   - tests/include/sb.yaml
-  - tests/include/sd.yaml
+  # - tests/include/sd.yaml
 tasks:
   - name: c
     variables:
       foo: ccc
 pipes_include:
   - tests/include/pa.yaml
-  - tests/include/pb.yaml
+  # - tests/include/pb.yaml
 pipes:
   - name: T1P1
 
