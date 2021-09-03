@@ -34,7 +34,7 @@ func (f *Flow) Date() error {
 				f.dateLoop(date)
 			})
 	} else {
-		f.Pipes()
+		f.PipesInArgs()
 	}
 
 	return nil
@@ -54,5 +54,5 @@ func (f *Flow) dateLoop(date string) {
 			),
 			nil)
 	}
-	f.Pipes()
+	f.PipesInArgs()
 }

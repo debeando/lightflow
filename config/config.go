@@ -60,12 +60,12 @@ func (s *Structure) Validate() error {
 				))
 		}
 
-		for subtask_index := range s.Tasks[task_index].Subtask {
-			if !re.MatchString(s.Tasks[task_index].Subtask[subtask_index].Name) {
+		for subtask_index := range s.Tasks[task_index].Subtasks {
+			if !re.MatchString(s.Tasks[task_index].Subtasks[subtask_index].Name) {
 				return errors.New(
 					fmt.Sprintf(
 						"Invalid sub task name for '%s', only allow 0-9, A-Z, a-z, - and _.",
-						s.Tasks[task_index].Subtask[subtask_index].Name,
+						s.Tasks[task_index].Subtasks[subtask_index].Name,
 					))
 			}
 		}
