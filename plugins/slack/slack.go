@@ -3,7 +3,7 @@ package slack
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"net/http"
 )
 
@@ -22,7 +22,11 @@ type Attachment struct {
 }
 
 // Retry is a method to call many times until satify return value.
-func Send(channel, title, message, color string) {
+func Send(channel, title, message, color string) error {
+	if len(Token) == 0 {
+		return errors.New("Plugin Slack: Please define token.")
+	}
+
 	msg := &Message{
 		Text:    title,
 		Channel: channel,
@@ -33,14 +37,15 @@ func Send(channel, title, message, color string) {
 		Text:  message,
 	})
 
-	hook(msg)
+	err, _ := hook(msg)
+	return err
 }
 
 func (m *Message) addAttachment(a *Attachment) {
 	m.Attachments = append(m.Attachments, a)
 }
 
-func hook(msg *Message) int {
+func hook(msg *Message) (error, int) {
 	jsonValues, _ := json.Marshal(msg)
 
 	req, err := http.NewRequest(
@@ -50,7 +55,7 @@ func hook(msg *Message) int {
 	)
 
 	if err != nil {
-		fmt.Print(err)
+		return err, 0
 	}
 
 	req.Header.Set("Content-Type", "application/json")
@@ -59,8 +64,8 @@ func hook(msg *Message) int {
 	resp, err := client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
-		fmt.Print(err)
+		return err, 0
 	}
 
-	return resp.StatusCode
+	return nil, resp.StatusCode
 }

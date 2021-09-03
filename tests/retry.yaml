@@ -1,26 +1,25 @@
 ---
 tasks:
-  - name: T1
-    subtask:
-      - name: T1L1
-    pipes:
-      - name: T1P1
-        execute: exit 1
-        retry:
-          attempts: 3
-          wait: 1
-          expression: "{{ .exit_code }} != 0"
-      - name: T1P2
-        execute: exit 0
-        retry:
-          attempts: 3
-          wait: 1
-          expression: "{{ .exit_code }} != 1"
-      - name: T1P3
-        execute: exit 1
-      - name: T1P4
-        execute: exit 0
-        retry:
-          attempts: 3
-          wait: 1
-          expression: "{{ .exit_code }} != 0"
+  - name: T1L1
+pipes:
+  - name: T1P1
+    execute: exit 1
+    retry:
+      attempts: 3
+      wait: 1
+      expression: "{{ .exit_code }} != 0"
+  - name: T1P2
+    execute: exit 0
+    retry:
+      attempts: 3
+      wait: 1
+      expression: "{{ .exit_code }} != 1"
+  - name: T1P3
+    execute: exit 1
+  - name: T1P4
+    execute: exit 0
+    retry:
+      attempts: 3
+      wait: 1
+      expression: "{{ .exit_code }} != 0"
+

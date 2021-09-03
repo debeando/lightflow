@@ -14,17 +14,25 @@ func (f *Flow) Tasks() {
 		Name:  args.Task(),
 	}
 
+	log.Info(
+		fmt.Sprintf(
+			"Starting...",
+		), nil)
+
 	itr.Run(func() bool {
-		f.Index.Subtask = 0
 		f.Index.Pipe = 0
 		f.Index.Task = itr.Index
-		f.Subtask()
+		f.Skip = false
 
+		if err := f.Date(); err != nil {
+			log.Error(err.Error(), nil)
+		}
 		return false
 	})
 
-	log.Info(fmt.Sprintf(
-		"Finished %s", // ET is acronym for execution time.
-		itr.ExecutionTime,
-	), nil)
+	log.Info(
+		fmt.Sprintf(
+			"Finished %s", // ET is acronym for execution time.
+			itr.ExecutionTime,
+		), nil)
 }

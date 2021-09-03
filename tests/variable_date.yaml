@@ -9,21 +9,19 @@
 
 ---
 tasks:
-  - name: main
-    subtask:
-      - name: Today
-    pipes:
-    - name: date
-      # Mac OS X: date -v-1d +%F
-      execute: date -v-1d +%F
-      # Linux: date +"%Y-%m-%d" --date=yesterday
-      # execute: date +"%Y-%m-%d" --date=yesterday
-      register: date
-    - name: print1
-      execute: echo -n "{{ .date }} {{ .year }} {{ .month }} {{ .day }}"
-      print:
-        - stdout
-    - name: print2
-      execute: echo -n "{{ .date }} {{ .year }} {{ .month }} {{ .day }}"
-      print:
-        - stdout
+  - name: Today
+pipes:
+- name: date
+  # Mac OS X: date -v-1d +%F
+  execute: date -v-1d +%F
+  # Linux: date +"%Y-%m-%d" --date=yesterday
+  # execute: date +"%Y-%m-%d" --date=yesterday
+  register: date
+- name: print1
+  execute: echo -n "{{ .date }} {{ .year }} {{ .month }} {{ .day }}"
+  print:
+    - stdout
+- name: print2
+  execute: echo -n "{{ .date }} {{ .year }} {{ .month }} {{ .day }}"
+  print:
+    - stdout
