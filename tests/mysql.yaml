@@ -2,50 +2,48 @@
 ---
 tasks:
   - name: T1
-    subtask:
-      - name: T1L1
-    pipes:
-      - name: T1P1
-        mysql:
-          host: "127.0.0.1"
-          port: 3306
-          user: "${MYSQL_USER}"
-          password: "${MYSQL_PWD}"
-          schema: demo
-          query: "SELECT count(*) AS count FROM foo"
-        print:
-          - count
-      - name: T1P2
-        mysql:
-          host: "127.0.0.1"
-          port: 3306
-          user: "${MYSQL_USER}"
-          password: "${MYSQL_PWD}"
-          schema: demo
-          query: "SELECT id, now() AS dt FROM foo"
-        csv:
-          path: "/tmp/demo_{{ .day }}_01.csv"
-          header: false
-          separator: COMMA
-          extension: .csv
-        print:
-          - day
-          - mysql_query
-          - mysql_rows_count
-      - name: T1P3
-        mysql:
-          host: "127.0.0.1"
-          port: 3306
-          user: "${MYSQL_USER}"
-          password: "${MYSQL_PWD}"
-          schema: demo
-          query: "SELECT id, now() AS dt FROM foo ORDER BY id DESC"
-        csv:
-          path: "/tmp/demo_{{ .day }}_02.tsv"
-          header: true
-          separator: TAB
-          extension: .tsv
-        print:
-          - day
-          - mysql_query
-          - mysql_rows_count
+pipes:
+  - name: T1P1
+    mysql:
+      host: "127.0.0.1"
+      port: 3306
+      user: "${MYSQL_USER}"
+      password: "${MYSQL_PWD}"
+      schema: demo
+      query: "SELECT count(*) AS count FROM foo"
+    print:
+      - count
+  - name: T1P2
+    mysql:
+      host: "127.0.0.1"
+      port: 3306
+      user: "${MYSQL_USER}"
+      password: "${MYSQL_PWD}"
+      schema: demo
+      query: "SELECT id, now() AS dt FROM foo"
+    csv:
+      path: "/tmp/demo_{{ .day }}_01.csv"
+      header: false
+      separator: COMMA
+      extension: .csv
+    print:
+      - day
+      - mysql_query
+      - mysql_rows_count
+  - name: T1P3
+    mysql:
+      host: "127.0.0.1"
+      port: 3306
+      user: "${MYSQL_USER}"
+      password: "${MYSQL_PWD}"
+      schema: demo
+      query: "SELECT id, now() AS dt FROM foo ORDER BY id DESC"
+    csv:
+      path: "/tmp/demo_{{ .day }}_02.tsv"
+      header: true
+      separator: TAB
+      extension: .tsv
+    print:
+      - day
+      - mysql_query
+      - mysql_rows_count

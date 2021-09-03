@@ -13,15 +13,14 @@ func (f *Flow) mysql() {
 	defer close(chData)
 
 	c := plugins.PluginCSV{
-		Config: f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].CSV,
+		Config: f.Config.Pipes[f.Index.Pipe].CSV,
 	}
 	writeToCSV, err := c.Load()
 	if err != nil {
 		log.Error(
 			fmt.Sprintf(
-				"%s/%s/%s %s",
+				"%s/%s %s",
 				f.TaskName(),
-				f.SubTaskName(),
 				f.PipeName(),
 				err,
 			),
@@ -35,9 +34,8 @@ func (f *Flow) mysql() {
 			if err != nil {
 				log.Error(
 					fmt.Sprintf(
-						"%s/%s/%s %s",
+						"%s/%s %s",
 						f.TaskName(),
-						f.SubTaskName(),
 						f.PipeName(),
 						err,
 					),
@@ -48,7 +46,7 @@ func (f *Flow) mysql() {
 	}
 
 	p := plugins.PluginMySQL{
-		Config: f.Config.Tasks[f.Index.Task].Pipes[f.Index.Pipe].MySQL,
+		Config: f.Config.Pipes[f.Index.Pipe].MySQL,
 	}
 
 	p.Retrieve(func(rowCount int, columns []string, row []string) bool {
