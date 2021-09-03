@@ -20,7 +20,7 @@ pipes:
         {{ len .error }} > 0
       {{ end }}
     retry:
-      attempts: 3
+      attempts: 6
       wait: 1
       expression: '"{{ .type }}" != "server"'
 

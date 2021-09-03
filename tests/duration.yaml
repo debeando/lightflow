@@ -3,6 +3,8 @@ tasks:
   - name: T1ST1
 pipes:
   - name: T1ST1P1
-    execute: sleep 1
+    execute: sleep 3
   - name: T1ST1P2
     execute: sleep 0
+  - name: T1ST1P3
+    execute: sleep 1
