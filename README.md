@@ -6,21 +6,20 @@ A flexible, light, easy to use, automation framework for typical data manipulati
 
 ![Flow](https://raw.githubusercontent.com/debeando/lightflow/master/assets/flow.png)
 
-- **Tasks:** Collections of subtask and pipes.
-- **Subtask:** Collections of pipes with own variables.
+- **Tasks:** Collections of pipes.
 - **Pipes:** Collections of commands to execute in the bash with many abilities;
   - **MySQL:** Allow execute SELECT and save result into csv file.
   - **Interval:** Is auto increment or decrement values, for the moment only apply for date, you can define range.
   - **Chunks:** Split pipe in many chunks.
   - **Register:** You can save stdout into variable, and if JSON you can convert all first level into variables.
   - **Retry:** Specific pipe when satisfy a condition expression to continue or not the pipe.
-  - **Skip:** Specific pipe when satisfy a condition expression to continue or not the subtask.
+  - **Skip:** Specific pipe when satisfy a condition expression to continue or not.
   - **Error:** You can define custom expression to evaluate pipe variables are error or not.
   - **Slack:** Send message to slack when satisfy a condition expression.
   - **Unset:** List of variables to unset every pipe loop.
   - **Print:** List of variables to print.
-- **Variables:** You can use environment variables or define own variables to use in the template, subtask and pipes and between them.
-- **Template:** You can build a command with many variables, defined in the subtask, pipes or register.
+- **Variables:** You can use environment variables or define own variables to use in the template, tasks and pipes and between them.
+- **Template:** You can build a command with many variables, defined in the tasks, pipes or register.
 
 ## Install tool:
 
