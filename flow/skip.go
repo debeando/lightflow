@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/evaluate"
+	"github.com/debeando/lightflow/plugins/evaluate"
 )
 
 // Skip evaluate condition to set skip flag.

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/evaluate"
+	"github.com/debeando/lightflow/plugins/evaluate"
 )
 
 // Error evaluate expression to identify any error or suggest error.

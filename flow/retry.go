@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/evaluate"
+	"github.com/debeando/lightflow/plugins/evaluate"
 	"github.com/debeando/lightflow/plugins/retry"
 	"github.com/debeando/lightflow/plugins/template"
 )
