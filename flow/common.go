@@ -6,7 +6,7 @@ import (
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
-	"github.com/debeando/lightflow/flow/template"
+	"github.com/debeando/lightflow/plugins/template"
 )
 
 func (f *Flow) GetTitle() string {

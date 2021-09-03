@@ -3,8 +3,8 @@ package plugins
 import (
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/template"
 	"github.com/debeando/lightflow/plugins/mysql"
+	"github.com/debeando/lightflow/plugins/template"
 	"github.com/debeando/lightflow/variables"
 )
 

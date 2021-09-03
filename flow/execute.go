@@ -8,7 +8,7 @@ import (
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/flow/execute"
-	"github.com/debeando/lightflow/flow/template"
+	"github.com/debeando/lightflow/plugins/template"
 )
 
 // Execute is a method to render and execute command and save result into

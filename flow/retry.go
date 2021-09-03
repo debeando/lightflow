@@ -6,7 +6,7 @@ import (
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/flow/evaluate"
 	"github.com/debeando/lightflow/flow/retry"
-	"github.com/debeando/lightflow/flow/template"
+	"github.com/debeando/lightflow/plugins/template"
 )
 
 func (f *Flow) Retry(fn func()) {

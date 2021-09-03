@@ -2,8 +2,8 @@ package plugins
 
 import (
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/template"
 	"github.com/debeando/lightflow/plugins/csv"
+	"github.com/debeando/lightflow/plugins/template"
 	"github.com/debeando/lightflow/variables"
 )
 
