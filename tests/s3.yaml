@@ -1,27 +1,25 @@
 ---
 tasks:
   - name: T1
-    subtask:
-      - name: T1L1
-    pipes:
-      - name: T1P1
-        aws:
-          s3:
-            bucket: thn-tinybird
-            prefix: demo/
-        print:
-          - aws_s3_objects_size
-      - name: T1P2
-        aws:
-          s3:
-            bucket: thn-tinybird
-            prefix: demo/wpv.parquet
-        print:
-          - aws_s3_objects_size
-      - name: T1P3
-        aws:
-          s3:
-            bucket: thn-tinybird
-            prefix: demo/wpv.csv
-        print:
-          - aws_s3_objects_size
+pipes:
+  - name: T1P1
+    aws:
+      s3:
+        bucket: thn-tinybird
+        prefix: demo/
+    print:
+      - aws_s3_objects_size
+  - name: T1P2
+    aws:
+      s3:
+        bucket: thn-tinybird
+        prefix: demo/wpv.parquet
+    print:
+      - aws_s3_objects_size
+  - name: T1P3
+    aws:
+      s3:
+        bucket: thn-tinybird
+        prefix: demo/wpv.csv
+    print:
+      - aws_s3_objects_size

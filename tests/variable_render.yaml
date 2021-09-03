@@ -4,25 +4,23 @@ variables:
   bar: 2
   baz: 3
 tasks:
-  - name: main
-    subtask:
-      - name: Case_I
-        variables:
-          case_a: A
-      - name: Case_II
-        variables:
-          case_a: A
-          baz: 12345
-      - name: Case_III
-        variables:
-          case_a: C
-          case_z: "{{ .date }} {{ .foo }}"
-    pipes:
-    - name: print
-      execute: echo -n "{{ .foo }} {{ .bar }} {{ .baz }} {{ .case_a }}"
-    - name: print2
-      execute: echo -n "{{ .abc }}"
-    - name: print3
-      execute: echo -n "{{ .date }}"
-    - name: print4
-      execute: echo -n "{{ .case_z }}"
+  - name: Case_I
+    variables:
+      case_a: A
+  - name: Case_II
+    variables:
+      case_a: A
+      baz: 12345
+  - name: Case_III
+    variables:
+      case_a: C
+      case_z: "{{ .date }} {{ .foo }}"
+pipes:
+- name: print
+  execute: echo -n "{{ .foo }} {{ .bar }} {{ .baz }} {{ .case_a }}"
+- name: print2
+  execute: echo -n "{{ .abc }}"
+- name: print3
+  execute: echo -n "{{ .date }}"
+- name: print4
+  execute: echo -n "{{ .case_z }}"
