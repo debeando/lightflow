@@ -5,7 +5,7 @@ import (
 
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/flow/evaluate"
-	"github.com/debeando/lightflow/flow/slack"
+	"github.com/debeando/lightflow/plugins/slack"
 )
 
 // Slack send custom message.
@@ -17,12 +17,15 @@ func (f *Flow) slack() {
 		message := f.Render(f.GetSlackMessage())
 
 		slack.Token = f.Config.General.Slack.Token
-		slack.Send(
+		err := slack.Send(
 			f.GetSlackChannel(),
 			title,
 			message,
 			f.GetSlackColor(),
 		)
+		if err != nil {
+			log.Error(err.Error(), nil)
+		}
 
 		log.Info(
 			fmt.Sprintf(
