@@ -1,4 +1,4 @@
-package flow
+package core
 
 import (
 	"fmt"
@@ -7,46 +7,46 @@ import (
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/execute"
+	"github.com/debeando/lightflow/plugins/execute"
 	"github.com/debeando/lightflow/plugins/template"
 )
 
 // Execute is a method to render and execute command and save result into
 // variables and then are interpreted to take other decisions.
-func (f *Flow) Execute() {
-	cmd := f.renderCommand()
+func (core *Core) Execute() {
+	cmd := core.renderCommand()
 
-	if f.when() {
-		f.Retry(func() {
-			f.unset()
-			f.wait()
-			f.execute(cmd)
-			f.mysql()
-			f.aws()
-			f.parse()
-			f.error()
-			f.print()
-			f.debug()
-			f.skip()
-			f.slack()
+	if core.when() {
+		core.Retry(func() {
+			core.unset()
+			core.wait()
+			core.execute(cmd)
+			core.mysql()
+			core.aws()
+			core.parse()
+			core.error()
+			core.print()
+			core.debug()
+			core.skip()
+			core.slack()
 		})
 	}
 }
 
-func (f *Flow) renderCommand() string {
-	var cmd = f.GetProperty("Execute")
-	var vars = f.Variables.GetItems()
+func (core *Core) renderCommand() string {
+	var cmd = core.GetProperty("Execute")
+	var vars = core.Variables.GetItems()
 
 	// Find unknown variables:
 	for _, variable := range template.Variables(cmd) {
-		if f.Variables.Exist(variable) == false {
+		if core.Variables.Exist(variable) == false {
 			log.Warning(fmt.Sprintf("Register empty variable: %s", variable), nil)
-			f.Variables.Set(map[string]interface{}{variable: ""})
+			core.Variables.Set(map[string]interface{}{variable: ""})
 		}
 	}
 
 	// Find template variables to render:
-	for variable, value := range f.Variables.Items {
+	for variable, value := range core.Variables.Items {
 		value_template := template.Variables(common.InterfaceToString(value))
 
 		if len(value_template) > 0 {
@@ -68,7 +68,7 @@ func (f *Flow) renderCommand() string {
 	return common.TrimNewlines(cmd)
 }
 
-func (f *Flow) execute(cmd string) {
+func (core *Core) execute(cmd string) {
 	if len(cmd) == 0 {
 		return
 	}
@@ -76,8 +76,8 @@ func (f *Flow) execute(cmd string) {
 	log.Debug(
 		fmt.Sprintf(
 			"%s/%s",
-			f.TaskName(),
-			f.PipeName(),
+			core.TaskName(),
+			core.PipeName(),
 		),
 		map[string]interface{}{
 			"Execute": cmd,
@@ -86,13 +86,13 @@ func (f *Flow) execute(cmd string) {
 
 	stdout, exitCode := execute.Execute(cmd, args.DryRun())
 
-	f.Variables.Set(map[string]interface{}{
+	core.Variables.Set(map[string]interface{}{
 		"exit_code": exitCode,
 		"stdout":    stdout,
 	})
 }
 
-func (f *Flow) wait() {
-	wait := f.Config.Pipes[f.Index.Pipe].Wait
+func (core *Core) wait() {
+	wait := core.Config.Pipes[core.Index.Pipe].Wait
 	time.Sleep(time.Duration(wait) * time.Second)
 }

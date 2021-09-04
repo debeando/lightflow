@@ -1,4 +1,4 @@
-package flow
+package core
 
 import (
 	"fmt"
@@ -9,19 +9,19 @@ import (
 )
 
 // Slack send custom message.
-func (f *Flow) slack() {
-	expression := f.Render(f.GetSlackExpression())
+func (core *Core) slack() {
+	expression := core.Render(core.GetSlackExpression())
 
 	if evaluate.Expression(expression) {
-		title := f.Render(f.GetSlackTitle())
-		message := f.Render(f.GetSlackMessage())
+		title := core.Render(core.GetSlackTitle())
+		message := core.Render(core.GetSlackMessage())
 
-		slack.Token = f.Config.General.Slack.Token
+		slack.Token = core.Config.General.Slack.Token
 		err := slack.Send(
-			f.GetSlackChannel(),
+			core.GetSlackChannel(),
 			title,
 			message,
-			f.GetSlackColor(),
+			core.GetSlackColor(),
 		)
 		if err != nil {
 			log.Error(err.Error(), nil)
@@ -30,8 +30,8 @@ func (f *Flow) slack() {
 		log.Info(
 			fmt.Sprintf(
 				"%s/%s Send message to slack.",
-				f.TaskName(),
-				f.PipeName(),
+				core.TaskName(),
+				core.PipeName(),
 			),
 			nil,
 		)

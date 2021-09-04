@@ -1,4 +1,4 @@
-package flow
+package core
 
 import (
 	"fmt"
@@ -8,28 +8,28 @@ import (
 )
 
 // Skip evaluate condition to set skip flag.
-func (f *Flow) skip() {
-	if len(f.GetProperty("Skip")) == 0 {
+func (core *Core) skip() {
+	if len(core.GetProperty("Skip")) == 0 {
 		return
 	}
 
-	expression := f.Render(f.GetProperty("Skip"))
+	expression := core.Render(core.GetProperty("Skip"))
 
-	f.Skip = evaluate.Expression(expression)
+	core.Skip = evaluate.Expression(expression)
 	debug_vars := make(map[string]interface{})
-	debug_vars["Expression"] = f.GetProperty("Skip")
+	debug_vars["Expression"] = core.GetProperty("Skip")
 	debug_vars["Rendered"] = expression
-	debug_vars["Result"] = f.Skip
+	debug_vars["Result"] = core.Skip
 
-	f.Variables.Set(map[string]interface{}{
-		"skip": f.Skip,
+	core.Variables.Set(map[string]interface{}{
+		"skip": core.Skip,
 	})
 
 	log.Info(
 		fmt.Sprintf(
 			"%s/%s Skip: %#v",
-			f.TaskName(),
-			f.PipeName(),
+			core.TaskName(),
+			core.PipeName(),
 			debug_vars["Result"],
 		),
 		nil,
@@ -38,8 +38,8 @@ func (f *Flow) skip() {
 	log.Debug(
 		fmt.Sprintf(
 			"%s/%s Skip: %s => %s => %#v",
-			f.TaskName(),
-			f.PipeName(),
+			core.TaskName(),
+			core.PipeName(),
 			debug_vars["Expression"],
 			debug_vars["Rendered"],
 			debug_vars["Result"],

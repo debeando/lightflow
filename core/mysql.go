@@ -1,4 +1,4 @@
-package flow
+package core
 
 import (
 	"fmt"
@@ -7,21 +7,21 @@ import (
 	"github.com/debeando/lightflow/plugins"
 )
 
-func (f *Flow) mysql() {
+func (core *Core) mysql() {
 	var chData = make(chan []string)
 
 	defer close(chData)
 
 	c := plugins.PluginCSV{
-		Config: f.Config.Pipes[f.Index.Pipe].CSV,
+		Config: core.Config.Pipes[core.Index.Pipe].CSV,
 	}
 	writeToCSV, err := c.Load()
 	if err != nil {
 		log.Error(
 			fmt.Sprintf(
 				"%s/%s %s",
-				f.TaskName(),
-				f.PipeName(),
+				core.TaskName(),
+				core.PipeName(),
 				err,
 			),
 			nil,
@@ -35,8 +35,8 @@ func (f *Flow) mysql() {
 				log.Error(
 					fmt.Sprintf(
 						"%s/%s %s",
-						f.TaskName(),
-						f.PipeName(),
+						core.TaskName(),
+						core.PipeName(),
 						err,
 					),
 					nil,
@@ -46,7 +46,7 @@ func (f *Flow) mysql() {
 	}
 
 	p := plugins.PluginMySQL{
-		Config: f.Config.Pipes[f.Index.Pipe].MySQL,
+		Config: core.Config.Pipes[core.Index.Pipe].MySQL,
 	}
 
 	p.Retrieve(func(rowCount int, columns []string, row []string) bool {

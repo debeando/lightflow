@@ -1,4 +1,4 @@
-package flow
+package core
 
 import (
 	"fmt"
@@ -8,13 +8,13 @@ import (
 )
 
 // Error evaluate expression to identify any error or suggest error.
-func (f *Flow) error() {
-	error := f.GetProperty("Error")
+func (core *Core) error() {
+	error := core.GetProperty("Error")
 	if len(error) == 0 {
 		error = "{{ .exit_code }} != 0 || {{ len .error }} > 0"
 	}
 
-	expression := f.Render(error)
+	expression := core.Render(error)
 	result := evaluate.Expression(expression)
 
 	debug_vars := make(map[string]interface{})
@@ -26,8 +26,8 @@ func (f *Flow) error() {
 		log.Error(
 			fmt.Sprintf(
 				"%s/%s Error: %s => %s => %#v",
-				f.TaskName(),
-				f.PipeName(),
+				core.TaskName(),
+				core.PipeName(),
 				debug_vars["Expression"],
 				debug_vars["Rendered"],
 				debug_vars["Result"],

@@ -3,7 +3,7 @@ package chunk
 import (
 	"math"
 
-	"github.com/debeando/lightflow/flow/duration"
+	"github.com/debeando/lightflow/plugins/duration"
 )
 
 // Chunk save the common settings:

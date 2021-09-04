@@ -1,16 +1,16 @@
-package flow
+package core
 
 import (
 	"fmt"
 
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/iterator"
+	"github.com/debeando/lightflow/core/iterator"
 )
 
-func (f *Flow) Tasks() {
+func (core *Core) Tasks() {
 	itr := iterator.Iterator{
-		Items: f.Config.Tasks,
+		Items: core.Config.Tasks,
 		Name:  args.Task(),
 	}
 
@@ -20,11 +20,11 @@ func (f *Flow) Tasks() {
 		), nil)
 
 	itr.Run(func() bool {
-		f.Index.Pipe = 0
-		f.Index.Task = itr.Index
-		f.Skip = false
+		core.Index.Pipe = 0
+		core.Index.Task = itr.Index
+		core.Skip = false
 
-		if err := f.Date(); err != nil {
+		if err := core.Date(); err != nil {
 			log.Error(err.Error(), nil)
 		}
 		return false

@@ -1,4 +1,4 @@
-package flow
+package core
 
 import (
 	"fmt"
@@ -7,13 +7,13 @@ import (
 )
 
 // Debug print all variables in debug mode.
-func (f *Flow) debug() {
+func (core *Core) debug() {
 	log.Debug(
 		fmt.Sprintf(
 			"%s/%s",
-			f.TaskName(),
-			f.PipeName(),
+			core.TaskName(),
+			core.PipeName(),
 		),
-		f.Variables.Items,
+		core.Variables.Items,
 	)
 }

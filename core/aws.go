@@ -1,12 +1,12 @@
-package flow
+package core
 
 import (
 	"github.com/debeando/lightflow/plugins"
 )
 
-func (f *Flow) aws() {
+func (core *Core) aws() {
 	aws := plugins.PluginAWS{
-		Config: f.Config.Pipes[f.Index.Pipe].AWS,
+		Config: core.Config.Pipes[core.Index.Pipe].AWS,
 	}
 	aws.Load()
 }

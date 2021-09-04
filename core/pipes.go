@@ -1,37 +1,37 @@
-package flow
+package core
 
 import (
 	"fmt"
 
 	"github.com/debeando/lightflow/cli/args"
 	"github.com/debeando/lightflow/common/log"
-	"github.com/debeando/lightflow/flow/iterator"
+	"github.com/debeando/lightflow/core/iterator"
 )
 
-func (f *Flow) PipesInArgs() {
+func (core *Core) PipesInArgs() {
 	for _, pipeName := range args.Pipes() {
-		if f.Valid(pipeName) {
+		if core.Valid(pipeName) {
 			itr := iterator.Iterator{
-				Items: f.Config.Pipes,
+				Items: core.Config.Pipes,
 				Name:  pipeName,
 			}
 
 			itr.Run(func() bool {
-				f.Index.Pipe = itr.Index
+				core.Index.Pipe = itr.Index
 
-				if ! f.Skip {
-					log.Info(f.GetTitle(), nil)
-					f.Chunks()
+				if ! core.Skip {
+					log.Info(core.GetTitle(), nil)
+					core.Chunks()
 				}
 
-				return f.Skip
+				return core.Skip
 			})
 
-			if ! f.Skip {
+			if ! core.Skip {
 				log.Info(
 					fmt.Sprintf(
 						"%s Finished %s", // ET is acronym for execution time.
-						f.TaskName(),
+						core.TaskName(),
 						itr.ExecutionTime,
 					), nil)
 			}
@@ -39,6 +39,6 @@ func (f *Flow) PipesInArgs() {
 	}
 }
 
-func (f *Flow) Valid(pipeName string) bool {
+func (core *Core) Valid(pipeName string) bool {
 	return (len(args.Pipes()) > 0 && len(pipeName) > 0) || (len(args.Pipe()) == 0)
 }

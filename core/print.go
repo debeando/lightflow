@@ -1,4 +1,4 @@
-package flow
+package core
 
 import (
 	"fmt"
@@ -7,20 +7,20 @@ import (
 )
 
 // Print specific variable with value.
-func (f *Flow) print() {
-	names := f.GetPipePrint()
+func (core *Core) print() {
+	names := core.GetPipePrint()
 	if len(names) > 0 {
 		vars := make(map[string]interface{})
 
 		for _, key := range names {
-			vars[key] = f.Variables.Get(key)
+			vars[key] = core.Variables.Get(key)
 		}
 
 		log.Info(
 			fmt.Sprintf(
 				"%s/%s",
-				f.TaskName(),
-				f.PipeName(),
+				core.TaskName(),
+				core.PipeName(),
 			),
 			vars,
 		)

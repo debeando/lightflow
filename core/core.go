@@ -1,11 +1,11 @@
-package flow
+package core
 
 import (
 	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/variables"
 )
 
-type Flow struct {
+type Core struct {
 	Config    config.Structure
 	Index     Index
 	Skip      bool
@@ -19,10 +19,10 @@ type Index struct {
 	Task    int
 }
 
-func (f *Flow) Run() {
-	f.Config = *config.Load()
-	f.Variables = *variables.Load()
+func (core *Core) Run() {
+	core.Config = *config.Load()
+	core.Variables = *variables.Load()
 
-	f.Tasks()
+	core.Tasks()
 }
 

@@ -10,7 +10,7 @@ import (
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/config/example"
-	"github.com/debeando/lightflow/flow"
+	"github.com/debeando/lightflow/core"
 )
 
 // USAGE is a const to have help description for CLI.
@@ -113,8 +113,8 @@ func Run() {
 		os.Exit(1)
 	}
 
-	flow := flow.Flow{}
-	flow.Run()
+	core := core.Core{}
+	core.Run()
 }
 
 func help(rc int) {

@@ -3,7 +3,7 @@ package iterator
 import (
 	"reflect"
 
-	"github.com/debeando/lightflow/flow/duration"
+	"github.com/debeando/lightflow/plugins/duration"
 )
 
 type Iterator struct {
