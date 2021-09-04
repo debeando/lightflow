@@ -1,28 +1,26 @@
 package core
 
 import (
+	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
 	"github.com/debeando/lightflow/variables"
 )
 
 type Core struct {
-	Config    config.Structure
-	Index     Index
-	Skip      bool
+	Config config.Structure
 	Variables variables.List
-	Attempt   int
-	Interval  bool
-}
-
-type Index struct {
-	Pipe    int
-	Task    int
 }
 
 func (core *Core) Run() {
 	core.Config = *config.Load()
 	core.Variables = *variables.Load()
 
-	core.Tasks()
+	err := core.Tasks(func() error {
+		return core.Pipes(func(pipe config.Pipe) error {
+			return core.Plugins(pipe)
+		})
+	})
+	if err != nil {
+		log.Error(err.Error(), nil)
+	}
 }
-

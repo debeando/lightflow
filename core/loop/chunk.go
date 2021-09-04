@@ -36,12 +36,12 @@ func (core *Core) Chunks() {
 				"chunk_step":   step,
 			})
 
-			core.Execute()
+			// core.Execute()
 		})
 		et = c.ExecutionTime
 	} else {
 		et = duration.Start(func() {
-			core.Execute()
+			// core.Execute()
 		})
 	}
 

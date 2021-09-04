@@ -43,7 +43,7 @@ func (s *Structure) Read(file_name string) error {
 	source = []byte(os.ExpandEnv(string(source)))
 
 	if err := yaml.Unmarshal(source, &s); err != nil {
-		return errors.New(fmt.Sprintf("Imposible to parse config file - %s", err))
+		return errors.New(fmt.Sprintf("Imposible to parse config file: %s", err))
 	}
 
 	err = s.ReadInclude()

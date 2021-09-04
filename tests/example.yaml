@@ -1,0 +1,34 @@
+---
+tasks:
+  - name: T1
+pipes:
+  - name: P1
+    execute:
+      command: echo "demo"
+      dryrun: false
+    print:
+      - stdout
+      - exit_code
+  - name: P2
+    execute:
+      command: exit 1
+      dryrun: false
+    print:
+      - stdout
+      - exit_code
+    retry:
+      attempts: 3
+      wait: 1
+  - name: P3
+    wait: 1
+    print:
+      - "wait 3 seconds"
+  - name: P4
+    ignore: true
+    wait: 60
+    print:
+      - "this pipe is ignored"
+  - name: P5
+    ignore: false
+    print:
+      - "Register variables"

@@ -8,8 +8,8 @@ import (
 
 // Chunk save the common settings:
 type Chunk struct {
-	Total         int // Total of items.
-	Limit         int // Items for each chunk.
+	Total         int `yaml:"total"` // Total of items.
+	Limit         int `yaml:"limit"` // Items for each chunk.
 	ExecutionTime string
 }
 

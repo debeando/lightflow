@@ -2,22 +2,51 @@ package retry
 
 import (
 	"time"
+	"errors"
+
+	"github.com/debeando/lightflow/plugins/plugin"
+	"github.com/debeando/lightflow/variables"
 )
 
 // Retry save the common variables:
 type Retry struct {
-	Attempt int // Current attempt
-	Wait    int // Wait between attempt
+	Attempt    uint   `yaml:"attempts"`   // Current attempt
+	Wait       uint   `yaml:"wait"`       // Wait between attempt
+	Expression string `yaml:"expression"` // Expression to evaluate condition and retry.
 }
 
-// Retry is a method to call many times until satify return value.
-func (r *Retry) Retry(fn func() bool) bool {
-	if c := fn(); c == true {
-		if r.Attempt--; r.Attempt > 0 {
-			time.Sleep(time.Duration(r.Wait) * time.Second)
-			return r.Retry(fn)
-		}
+func init() {
+	plugin.Add("Retry", func() plugin.Plugin { return &Retry{} })
+}
+
+func (r *Retry) Run(event interface{}) (error, bool) {
+	retry, ok := event.(Retry)
+	if !ok {
+		return errors.New("Invalid struct"), false
 	}
 
-	return false
+	if retry.Attempt == 0 {
+		return errors.New("Retry attempt should be greater equal than 1."), false
+	}
+
+	vars := *variables.Load()
+
+	attempt_tmp := vars.Get("retry_attempt")
+	switch t := attempt_tmp.(type) {
+    case uint:
+    	retry.Attempt = t
+    }
+	retry.Attempt = retry.Attempt - 1
+
+	vars.Set(map[string]interface{}{
+		"retry_attempt": retry.Attempt,
+	})
+
+	time.Sleep(time.Duration(retry.Wait) * time.Second)
+
+	if retry.Attempt == 0 {
+		return nil, false
+	}
+
+	return nil, true
 }

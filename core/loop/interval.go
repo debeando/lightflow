@@ -34,7 +34,7 @@ func (core *Core) Date() error {
 				core.dateLoop(date)
 			})
 	} else {
-		core.PipesInArgs()
+		// core.PipesInArgs()
 	}
 
 	return nil
@@ -53,5 +53,5 @@ func (core *Core) dateLoop(date string) {
 			),
 			nil)
 	}
-	core.PipesInArgs()
+	// core.PipesInArgs()
 }
