@@ -7,6 +7,7 @@ import (
 	_ "github.com/debeando/lightflow/plugins/print"
 	_ "github.com/debeando/lightflow/plugins/register"
 	_ "github.com/debeando/lightflow/plugins/retry"
+	_ "github.com/debeando/lightflow/plugins/unset"
 	_ "github.com/debeando/lightflow/plugins/wait"
 )
 

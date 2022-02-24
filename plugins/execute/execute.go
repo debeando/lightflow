@@ -7,12 +7,16 @@ import (
 
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/plugins/plugin"
+	"github.com/debeando/lightflow/common/template"
 	"github.com/debeando/lightflow/variables"
 )
 
 type Execute struct{
-	Command string `yaml:"command"` // Comando a ejecutar. Si hay que limpiar el stdout en formato JSON, usar tool jq.
-	DryRun  bool   `yaml:"dryrun"`  // If true, is eval mode, not execute.
+	// Comando a ejecutar. Si hay que limpiar el stdout en formato JSON, usar
+	// tool jq.
+	Command string `yaml:"command"`
+	// If true, is eval mode, not execute.
+	DryRun  bool   `yaml:"dryrun"`
 }
 
 func init() {
@@ -31,12 +35,15 @@ func (e *Execute) Run(event interface{}) (error, bool) {
 	}
 
 	vars := *variables.Load()
-	cmd := common.InterfaceToString(execute.Command)
+	execute.Command, err = template.Render(execute.Command, vars.GetItems())
+	if err != nil {
+		return err, true
+	}
 
 	if execute.DryRun {
-		out, err = exec.Command("/bin/bash", "-n", "-c", cmd).CombinedOutput()
+		out, err = exec.Command("/bin/bash", "-n", "-c", execute.Command).CombinedOutput()
 	} else {
-		out, err = exec.Command("/bin/bash", "-c", cmd).CombinedOutput()
+		out, err = exec.Command("/bin/bash", "-c", execute.Command).CombinedOutput()
 	}
 
 	if err != nil {

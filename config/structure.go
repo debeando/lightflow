@@ -2,12 +2,13 @@ package config
 
 import (
 	"github.com/debeando/lightflow/plugins/aws"
-	"github.com/debeando/lightflow/plugins/chunk"
+	// "github.com/debeando/lightflow/plugins/chunk"
 	"github.com/debeando/lightflow/plugins/csv"
+	"github.com/debeando/lightflow/plugins/evaluate"
 	"github.com/debeando/lightflow/plugins/execute"
 	"github.com/debeando/lightflow/plugins/mysql"
 	"github.com/debeando/lightflow/plugins/register"
-	"github.com/debeando/lightflow/plugins/retry"
+	// "github.com/debeando/lightflow/plugins/retry"
 	"github.com/debeando/lightflow/plugins/slack"
 )
 
@@ -33,16 +34,17 @@ type Pipe struct { // Pipes is a common collection for subtask.
 	Name      string                 `yaml:"name"`      // Pipe name.
 	Ignore    bool                   `yaml:"ignore"`    // Ignore this pipe.
 	Unset     []string               `yaml:"unset"`     // List of variables to unset every pipe loop.
-	When      string                 `yaml:"when"`      // Evaluate expression before execute pipe, require true to run.
+	// When      string                 `yaml:"when"`      // Evaluate expression before execute pipe, require true to run.
+	Evaluate  []evaluate.Evaluate
 	Execute   execute.Execute
 	Register  register.Register
 	Print     []string               `yaml:"print"`     // List of variables to print.
 	Wait      uint                   `yaml:"wait"`      // Sleep for N seconds pipe before start.
-	Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
-	Skip      string                 `yaml:"skip"`      // Skip own pipe block when specific expression condition, use the variable definied in the Register to compare. First run pipe and them evaluate skip condition.
+	// Variables map[string]interface{} `yaml:"variables"` // Lista de variables.
+	// Skip      string                 `yaml:"skip"`      // Skip own pipe block when specific expression condition, use the variable definied in the Register to compare. First run pipe and them evaluate skip condition.
 	Error     string                 `yaml:"error"`     // Show error when specific expression condition, use the variable definied in the Register to compare. By default is exit_code != 0.
-	Retry     retry.Retry
-	Chunk     chunk.Chunk
+	// Retry     retry.Retry
+	// Chunk     chunk.Chunk
 	Slack     slack.Slack
 	MySQL     mysql.MySQL
 	CSV       csv.CSV

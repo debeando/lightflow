@@ -15,8 +15,6 @@ El core y tasks es agnostico al loop, el loop repite el manifiesto del core y de
 
 La ruta `core/flow/plugins` es diferente a `plugins/` pq la primera es la implementación del plugin dentro del flow, y la segunda es el plugin puro, encapsulado, sin relacion con el resto.
 
-El generate example esta roto.
-
 Dentro de la config de Task, se pone un struct para los loops, y se da el mismo tratamiento que para los plugins.
 Es que los de tipo loops puede usarse para un pipe como para todos los pipes, si es para todos los pipes deben estar en tasks. Entonces lo del directorio loop dentro de core no hace falta.
 
@@ -25,9 +23,12 @@ Es que los de tipo loops puede usarse para un pipe como para todos los pipes, si
 tasks:
   - name: Today
   	loops:
-  		autoincrement:
+  		increment:
   			type: date
-  		autodecrement:
+        min: 1
+        max: 10
+        offset: 2
+  		decrement:
   			type: number
   			min: 1
   			max: 10

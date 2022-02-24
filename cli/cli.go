@@ -9,7 +9,6 @@ import (
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
 	"github.com/debeando/lightflow/config"
-	"github.com/debeando/lightflow/config/example"
 	"github.com/debeando/lightflow/core"
 )
 
@@ -17,25 +16,21 @@ import (
 const USAGE = `lightflow %s.
 Usage:
 
-	lightflow [--help | --version | --example ]
+	lightflow [--help | --version ]
 	lightflow --tasks=foo
 	lightflow --tasks=foo --pipes=bar,baz
 	lightflow --variables='{"date": "2019-08-01"}'
 	lightflow --tasks=foo --pipes=bar --variables='{"query": "SELECT * FROM foo", "date": "2019-08-01"}'
-	lightflow --tasks=foo --pipes=bar --ai-date='{"start": "2019-08-01", "end":"2019-08-31"}'
 
 Options:
 
-  --ai-date    Auto Increment date, not compatible with --variables.
-  --ad-date    Auto Decrement date, not compatible with --variables.
   --config     Using specific config file.
   --debug      Enable debug mode.
   --dry-run    No execute commands.
-  --example    Print out full sample configuration to stdout.
   --help       Show this help.
   --pipes      Filter by one or many pipe name.
   --tasks      Filter by task name.
-  --variables  Passing variables in JSON format, is not compatible with --ai-date.
+  --variables  Passing variables in JSON format.
   --version    Print version numbers.
 
 Default variables:
@@ -57,11 +52,8 @@ func Run() {
 	_ = flag.String("pipes", "", "")
 	_ = flag.String("tasks", "", "")
 
-	fAIDate := flag.String("ai-date", "", "")
-	fADDate := flag.String("ad-date", "", "")
 	fConfig := flag.String("config", "", "")
 	fDryRun := flag.Bool("dry-run", false, "")
-	fExample := flag.Bool("example", false, "")
 	fHelp := flag.Bool("help", false, "")
 	fVariables := flag.String("variables", "", "")
 	fVersion := flag.Bool("version", false, "")
@@ -75,33 +67,10 @@ func Run() {
 		os.Exit(0)
 	case *fHelp:
 		help(0)
-	case *fExample:
-		fmt.Printf(example.GetConfigFile())
-		os.Exit(0)
 	case len(*fVariables) > 0:
 		if ok, err := isValidJSON("variables"); ok == false {
 			log.Error("Problem to parse JSON in argument --variables", nil)
 			log.Error(fmt.Sprintf("%s: %s", err, common.GetArgVal("variables")), nil)
-			os.Exit(1)
-		}
-	case len(*fAIDate) > 0 && len(*fVariables) > 0:
-		help(0)
-	case len(*fADDate) > 0 && len(*fVariables) > 0:
-		help(0)
-	case len(*fAIDate) > 0 && len(*fADDate) > 0:
-		help(0)
-	case len(*fAIDate) > 0 && len(*fADDate) > 0:
-		os.Exit(1)
-	case len(*fAIDate) > 0:
-		if ok, err := isValidJSON("ai-date"); ok == false {
-			log.Error("Problem to parse JSON in argument --ai-date", nil)
-			log.Error(fmt.Sprintf("%s: %s", err, common.GetArgVal("ai-date")), nil)
-			os.Exit(1)
-		}
-	case len(*fADDate) > 0:
-		if ok, err := isValidJSON("ad-date"); ok == false {
-			log.Error("Problem to parse JSON in argument --ad-date", nil)
-			log.Error(fmt.Sprintf("%s: %s", err, common.GetArgVal("ad-date")), nil)
 			os.Exit(1)
 		}
 	case *fDryRun == true:

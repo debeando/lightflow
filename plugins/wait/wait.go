@@ -12,7 +12,7 @@ func init() {
 	plugin.Add("Wait", func() plugin.Plugin { return &Wait{} })
 }
 
-func (w *Wait) Run(event interface{}) (error, bool) {
+func (w *Wait) Run(event interface{}) (error, uint8) {
  	var wait uint
 
 	switch t := event.(type) {

@@ -1,11 +1,11 @@
-# ./lightflow --config tests/flow/variable_date.yaml --variables '{"date": "2020-12-01"}'
-# ./lightflow --config tests/flow/variable_date.yaml --pipes print1 --variables '{"date": "2020-12-01"}'
+# ./lightflow --config tests/variable_date.yaml --variables '{"date": "2020-12-01"}'
+# ./lightflow --config tests/variable_date.yaml --pipes print1 --variables '{"date": "2020-12-01"}'
 
-# ./lightflow --config tests/flow/variable_date.yaml --pipes print1 --ai-date '{"start": "2020-12-01"}'
+# ./lightflow --config tests/variable_date.yaml --pipes print1 --ai-date '{"start": "2020-12-01"}'
 
 # export LIGHTFLOW_ARGS="--pipes print1 --variables=\'{\"date\": \"2021-03-01\"}\'"
 
-# ./lightflow --config tests/flow/variable_date.yaml ${LIGHTFLOW_ARGS}
+# ./lightflow --config tests/variable_date.yaml ${LIGHTFLOW_ARGS}
 
 ---
 tasks:
@@ -13,7 +13,7 @@ tasks:
 pipes:
 - name: date
   # Mac OS X: date -v-1d +%F
-  execute: date -v-1d +%F
+  execute: "date -v-1d +%F"
   # Linux: date +"%Y-%m-%d" --date=yesterday
   # execute: date +"%Y-%m-%d" --date=yesterday
   register: date

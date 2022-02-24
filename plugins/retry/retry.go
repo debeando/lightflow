@@ -19,7 +19,7 @@ func init() {
 	plugin.Add("Retry", func() plugin.Plugin { return &Retry{} })
 }
 
-func (r *Retry) Run(event interface{}) (error, bool) {
+func (r *Retry) Run(event interface{}) (error, uint8) {
 	retry, ok := event.(Retry)
 	if !ok {
 		return errors.New("Invalid struct"), false

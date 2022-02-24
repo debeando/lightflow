@@ -1,0 +1,5 @@
+---
+name: Vars
+ignore: false
+variables:
+  foo: foo_name

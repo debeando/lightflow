@@ -5,7 +5,7 @@ import (
 )
 
 // Version is a const to have the latest version number for this code.
-const Number string = "1.1.9"
+const Number string = "1.2.0"
 
 // Build date and time when building.
 var BuildTime string

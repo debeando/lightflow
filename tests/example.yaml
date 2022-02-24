@@ -1,8 +1,13 @@
 ---
 tasks:
   - name: T1
+tasks_include:
+  - tests/include/task_variables.yaml
+pipes_include:
+  # - tests/include/pipe_wait.yaml
 pipes:
   - name: P1
+    ignore: true
     execute:
       command: echo "demo"
       dryrun: false
@@ -10,6 +15,7 @@ pipes:
       - stdout
       - exit_code
   - name: P2
+    ignore: true
     execute:
       command: exit 1
       dryrun: false
@@ -20,7 +26,8 @@ pipes:
       attempts: 3
       wait: 1
   - name: P3
-    wait: 1
+    ignore: true
+    wait: 3
     print:
       - "wait 3 seconds"
   - name: P4
@@ -29,6 +36,46 @@ pipes:
     print:
       - "this pipe is ignored"
   - name: P5
-    ignore: false
+    ignore: true
     print:
       - "Register variables"
+  - name: P6
+    ignore: true
+    execute:
+      command: echo -e "demo\"
+      dryrun: true
+    print:
+      - "DryRun bash code"
+      - stdout
+      - exit_code
+  - name: P7
+    ignore: false
+    execute:
+      command: echo $(( RANDOM % 10 ))
+    print:
+      - stdout
+      - rnd
+    register:
+      name: rnd
+      format: TEXT
+  - name: P8
+    ignore: true
+    # unset:
+    #   - rnd
+    execute:
+      command: "echo 'Demo: {{ .rnd }}'"
+    print:
+      - stdout
+      - rnd
+  - name: P9
+    evaluate:
+      - expression: "{{ .rnd }} >= 5"
+        action: when
+      - expression: "{{ .exit_code }} != 0"
+        action: skip
+    execute:
+      command: "echo 'eval demo: {{ .rnd }}'"
+    print:
+      - stdout
+      - rnd
+      - pipe

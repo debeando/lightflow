@@ -5,9 +5,9 @@ import (
 
 	"github.com/debeando/lightflow/common"
 	"github.com/debeando/lightflow/common/log"
+	"github.com/debeando/lightflow/common/template"
 	"github.com/debeando/lightflow/plugins/aws"
 	"github.com/debeando/lightflow/plugins/aws/s3"
-	"github.com/debeando/lightflow/plugins/template"
 	"github.com/debeando/lightflow/variables"
 )
 
