@@ -4,7 +4,23 @@ A flexible, light, easy to use, automation framework for typical data manipulati
 
 ## Components:
 
-![Flow](https://raw.githubusercontent.com/debeando/lightflow/master/assets/flow.png)
+```mermaid
+  graph LR;
+      A[Task]-->B[Interval];
+      A-->C[Pipe];
+			B-->C;
+			C-->B;
+      C-->A;
+      C-->D[Chunk];
+      D-->E[Plugins];
+			E-->D;
+			E-->A;
+			E<-->F[Retry];
+			E-->H[Template];
+			E-->I[Register];
+			I-->H;
+			H-->E
+```
 
 - **Tasks:** Collections of pipes.
 - **Pipes:** Collections of commands to execute in the bash with many abilities;
