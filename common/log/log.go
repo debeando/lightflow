@@ -83,7 +83,7 @@ func init() {
 
 	logrus.SetLevel(logrus.InfoLevel)
 
-	if config.Load().General.Debug {
+	if config.Load().Debug {
 		logrus.SetLevel(logrus.DebugLevel)
 	}
 }

@@ -9,6 +9,14 @@ import (
 
 var Token string
 
+type Slack struct {
+	Channel    string `yaml:"channel"`
+	Color      string `yaml:"color"`      // Can either be one of good (green), warning (yellow), danger (red), or any hex color code (eg. #439FE0).
+	Expression string `yaml:"expression"` // Expression to evaluate condition and send message.
+	Message    string `yaml:"message"`
+	Title      string `yaml:"title"`
+}
+
 type Message struct {
 	Text        string        `json:"text"`
 	Channel     string        `json:"channel,omitempty"`

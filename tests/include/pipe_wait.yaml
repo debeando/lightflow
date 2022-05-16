@@ -1,0 +1,11 @@
+---
+- name: PA1
+  ignore: true
+  wait: 3
+  print:
+    - "wait 3 seconds"
+- name: PA2
+  ignore: false
+  wait: 1
+  print:
+    - "wait 1 seconds"

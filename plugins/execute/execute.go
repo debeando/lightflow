@@ -1,20 +1,49 @@
 package execute
 
 import (
+	"errors"
 	"os/exec"
 	"syscall"
 
 	"github.com/debeando/lightflow/common"
+	"github.com/debeando/lightflow/plugins/plugin"
+	"github.com/debeando/lightflow/common/template"
+	"github.com/debeando/lightflow/variables"
 )
 
-func Execute(cmd string, dryrun bool) (stdout string, exitcode int) {
+type Execute struct{
+	// Comando a ejecutar. Si hay que limpiar el stdout en formato JSON, usar
+	// tool jq.
+	Command string `yaml:"command"`
+	// If true, is eval mode, not execute.
+	DryRun  bool   `yaml:"dryrun"`
+}
+
+func init() {
+	plugin.Add("Execute", func() plugin.Plugin { return &Execute{} })
+}
+
+func (e *Execute) Run(event interface{}) (error, bool) {
+	var stdout string
+	var exitcode int
 	var err error
 	var out []byte
 
-	if dryrun {
-		out, err = exec.Command("/bin/bash", "-n", "-c", cmd).CombinedOutput()
+	execute, ok := event.(Execute)
+	if !ok {
+		return errors.New("Invalid struct"), false
+	}
+
+	vars := *variables.Load()
+	execute.Command, err = template.Render(execute.Command, vars.GetItems())
+	if err != nil {
+		return err, true
+	}
+
+	if execute.DryRun {
+		out, err = exec.Command("/bin/bash", "-n", "-c", execute.Command).CombinedOutput()
 	} else {
-		out, err = exec.Command("/bin/bash", "-c", cmd).CombinedOutput()
+		out, err = exec.Command("/bin/bash", "-c", execute.Command).CombinedOutput()
 	}
 
 	if err != nil {
@@ -27,5 +56,10 @@ func Execute(cmd string, dryrun bool) (stdout string, exitcode int) {
 	stdout = string(out[:])
 	stdout = common.TrimNewlines(stdout)
 
-	return
+	vars.Set(map[string]interface{}{
+		"exit_code": exitcode,
+		"stdout": stdout,
+	})
+
+	return nil, false
 }
